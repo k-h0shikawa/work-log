@@ -133,8 +133,8 @@ class CreatePDFButton extends StatelessWidget {
                   ),
                   child: pw.Padding(
                       padding: const pw.EdgeInsets.only(left: 5.0),
-                      child:
-                          pw.Text('合計作業時間', style: pw.TextStyle(font: ttf)))),
+                      child: pw.Text('合計作業時間 : 176h',
+                          style: pw.TextStyle(font: ttf)))),
               pw.SizedBox(height: 10), // スペースを作成
               pw.Container(
                 // 長方形を作成
