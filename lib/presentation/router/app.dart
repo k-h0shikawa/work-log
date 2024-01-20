@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:work_log/presentation/pages/project-list.dart';
+import 'package:work_log/presentation/pages/product_list.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ProjectList(),
+      home: const ProductList(),
     );
   }
 }
