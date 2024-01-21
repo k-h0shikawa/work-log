@@ -9,5 +9,5 @@ class Work with _$Work {
       required String workName,
       required String workDetail,
       required String workMemo,
-      required int projectId}) = _Work;
+      required int productId}) = _Work;
 }

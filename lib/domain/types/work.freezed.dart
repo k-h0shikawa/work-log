@@ -21,7 +21,7 @@ mixin _$Work {
   String get workName => throw _privateConstructorUsedError;
   String get workDetail => throw _privateConstructorUsedError;
   String get workMemo => throw _privateConstructorUsedError;
-  int get projectId => throw _privateConstructorUsedError;
+  int get productId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $WorkCopyWith<Work> get copyWith => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $WorkCopyWith<$Res> {
       String workName,
       String workDetail,
       String workMemo,
-      int projectId});
+      int productId});
 }
 
 /// @nodoc
@@ -59,7 +59,7 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
     Object? workName = null,
     Object? workDetail = null,
     Object? workMemo = null,
-    Object? projectId = null,
+    Object? productId = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -82,9 +82,9 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
           ? _value.workMemo
           : workMemo // ignore: cast_nullable_to_non_nullable
               as String,
-      projectId: null == projectId
-          ? _value.projectId
-          : projectId // ignore: cast_nullable_to_non_nullable
+      productId: null == productId
+          ? _value.productId
+          : productId // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -103,7 +103,7 @@ abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
       String workName,
       String workDetail,
       String workMemo,
-      int projectId});
+      int productId});
 }
 
 /// @nodoc
@@ -121,7 +121,7 @@ class __$$WorkImplCopyWithImpl<$Res>
     Object? workName = null,
     Object? workDetail = null,
     Object? workMemo = null,
-    Object? projectId = null,
+    Object? productId = null,
   }) {
     return _then(_$WorkImpl(
       id: null == id
@@ -144,9 +144,9 @@ class __$$WorkImplCopyWithImpl<$Res>
           ? _value.workMemo
           : workMemo // ignore: cast_nullable_to_non_nullable
               as String,
-      projectId: null == projectId
-          ? _value.projectId
-          : projectId // ignore: cast_nullable_to_non_nullable
+      productId: null == productId
+          ? _value.productId
+          : productId // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -161,7 +161,7 @@ class _$WorkImpl implements _Work {
       required this.workName,
       required this.workDetail,
       required this.workMemo,
-      required this.projectId});
+      required this.productId});
 
   @override
   final int id;
@@ -174,11 +174,11 @@ class _$WorkImpl implements _Work {
   @override
   final String workMemo;
   @override
-  final int projectId;
+  final int productId;
 
   @override
   String toString() {
-    return 'Work(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, projectId: $projectId)';
+    return 'Work(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId)';
   }
 
   @override
@@ -195,13 +195,13 @@ class _$WorkImpl implements _Work {
                 other.workDetail == workDetail) &&
             (identical(other.workMemo, workMemo) ||
                 other.workMemo == workMemo) &&
-            (identical(other.projectId, projectId) ||
-                other.projectId == projectId));
+            (identical(other.productId, productId) ||
+                other.productId == productId));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, workDateTime, workName, workDetail, workMemo, projectId);
+      runtimeType, id, workDateTime, workName, workDetail, workMemo, productId);
 
   @JsonKey(ignore: true)
   @override
@@ -217,7 +217,7 @@ abstract class _Work implements Work {
       required final String workName,
       required final String workDetail,
       required final String workMemo,
-      required final int projectId}) = _$WorkImpl;
+      required final int productId}) = _$WorkImpl;
 
   @override
   int get id;
@@ -230,7 +230,7 @@ abstract class _Work implements Work {
   @override
   String get workMemo;
   @override
-  int get projectId;
+  int get productId;
   @override
   @JsonKey(ignore: true)
   _$$WorkImplCopyWith<_$WorkImpl> get copyWith =>

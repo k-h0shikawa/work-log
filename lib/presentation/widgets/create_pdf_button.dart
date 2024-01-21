@@ -162,7 +162,7 @@ class CreatePDFButton extends StatelessWidget {
 
     // ローカルのドキュメントディレクトリを取得
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/project.pdf');
+    final file = File('${dir.path}/product.pdf');
 
     // ファイルにバイトデータを書き込み
     await file.writeAsBytes(bytes);
