@@ -15,7 +15,7 @@ class WorkList extends HookWidget {
     final targetDateFormatter = DateFormat('yyyy/MM/dd');
     final targetDate = useState(DateTime.now());
     const maxWorkListLength = 1;
-    final taskList = useState(<Work>[
+    final workList = useState(<Work>[
       for (var i = 0; i < 20; i++)
         Work(
           id: i,
@@ -30,7 +30,8 @@ class WorkList extends HookWidget {
 
     final productList = useState(<Product>[
       const Product(id: 0, productName: 'ダミー案件', status: 0),
-      const Product(id: 1, productName: 'ぽしぇっと', status: 0)
+      const Product(id: 1, productName: 'ぽしぇっと', status: 0),
+      const Product(id: 2, productName: '２０文字の長さの商品名のてすとなのですよ', status: 0)
     ]);
 
     Future<void> selectDate(BuildContext context) async {
@@ -60,7 +61,7 @@ class WorkList extends HookWidget {
     }
 
     List<Widget> buildTaskList() {
-      return taskList.value.map((work) {
+      return workList.value.map((work) {
         final workDetailController =
             useTextEditingController(text: work.workDetail);
         final workMemoController =
@@ -70,37 +71,45 @@ class WorkList extends HookWidget {
         return Row(
           children: <Widget>[
             Expanded(
+              flex: 1,
               child: Container(
                 padding: const EdgeInsets.all(10),
                 child: Text(formatter.format(work.workDateTime)),
               ),
             ),
-            Container(
-              width: 200,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: DropdownButton<String>(
-                value: selectedProduct.value,
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    selectedProduct.value = newValue;
-                    taskList.value = taskList.value.map((work1) {
-                      if (work.id == work1.id) {
-                        return work1.copyWith(workName: newValue);
-                      }
-                      return work1;
-                    }).toList();
-                  }
-                },
-                items: productList.value
-                    .map<DropdownMenuItem<String>>((Product product) {
-                  return DropdownMenuItem<String>(
-                    value: product.productName,
-                    child: Text(product.productName),
-                  );
-                }).toList(),
+            Expanded(
+              flex: 3,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: DropdownButton<String>(
+                  isExpanded: false,
+                  value: selectedProduct.value,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      selectedProduct.value = newValue;
+                      workList.value = workList.value.map((tmpWork) {
+                        if (work.id == tmpWork.id) {
+                          return tmpWork.copyWith(workName: newValue);
+                        }
+                        return tmpWork;
+                      }).toList();
+                    }
+                  },
+                  items: productList.value
+                      .map<DropdownMenuItem<String>>((Product product) {
+                    return DropdownMenuItem<String>(
+                      value: product.productName,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(product.productName),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             Expanded(
+              flex: 2,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
@@ -112,6 +121,7 @@ class WorkList extends HookWidget {
               ),
             ),
             Expanded(
+              flex: 2,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
@@ -167,14 +177,14 @@ class WorkList extends HookWidget {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          if (taskList.value.last.workDateTime.hour == 9) {
+                          if (workList.value.last.workDateTime.hour == 9) {
                             return;
                           }
-                          taskList.value = [
-                            ...taskList.value,
+                          workList.value = [
+                            ...workList.value,
                             Work(
-                              id: taskList.value.length,
-                              workDateTime: taskList.value.last.workDateTime
+                              id: workList.value.length,
+                              workDateTime: workList.value.last.workDateTime
                                   .add(const Duration(minutes: 30)),
                               workName: 'ぽしぇっと',
                               workDetail: 'Detail',
@@ -195,11 +205,11 @@ class WorkList extends HookWidget {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          if (taskList.value.length > maxWorkListLength) {
+                          if (workList.value.length > maxWorkListLength) {
                             List<Work> tmpList =
-                                List<Work>.from(taskList.value);
+                                List<Work>.from(workList.value);
                             tmpList.removeLast();
-                            taskList.value = tmpList;
+                            workList.value = tmpList;
                           }
                         },
                         style: ElevatedButton.styleFrom(
