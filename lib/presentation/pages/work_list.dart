@@ -78,11 +78,14 @@ class WorkList extends HookWidget {
               ),
             ),
             Expanded(
+              // TODO: 子要素のTextの長さによってはエラーが発生するので修正する
               flex: 3,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: DropdownButton<String>(
-                  isExpanded: false,
+                  isExpanded: true,
+                  itemHeight: null,
+                  iconSize: 0,
                   value: selectedProduct.value,
                   onChanged: (String? newValue) {
                     if (newValue != null) {
@@ -98,12 +101,12 @@ class WorkList extends HookWidget {
                   items: productList.value
                       .map<DropdownMenuItem<String>>((Product product) {
                     return DropdownMenuItem<String>(
-                      value: product.productName,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(product.productName),
-                      ),
-                    );
+                        value: product.productName,
+                        child: Text(
+                          product.productName,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 10),
+                        ));
                   }).toList(),
                 ),
               ),
@@ -146,26 +149,34 @@ class WorkList extends HookWidget {
         child: Center(
           child: ListView(
             children: [
-              ButtonBar(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () => context.push('/product'),
-                    label: const Text('商品一覧画面'),
-                    icon: Icon(Icons.toys),
-                  ),
+                  Flexible(
+                      child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: ElevatedButton(
+                      onPressed: () => context.push('/product'),
+                      child: const Text('商品一覧画面'),
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(targetDateFormatter.format(targetDate.value)),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(targetDateFormatter.format(targetDate.value)),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                        onPressed: () => selectDate(context),
-                        child: const Text('日付選択')),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                          onPressed: () => selectDate(context),
+                          child: const Text('日付選択')),
+                    ),
                   ),
                 ],
               ),
@@ -175,63 +186,69 @@ class WorkList extends HookWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          if (workList.value.last.workDateTime.hour == 9) {
-                            return;
-                          }
-                          workList.value = [
-                            ...workList.value,
-                            Work(
-                              id: workList.value.length,
-                              workDateTime: workList.value.last.workDateTime
-                                  .add(const Duration(minutes: 30)),
-                              workName: 'ぽしぇっと',
-                              workDetail: 'Detail',
-                              workMemo: 'Memo',
-                              productId: 5,
-                            )
-                          ];
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                        ),
-                        child: const Text(
-                          "＋",
-                          style: TextStyle(
-                            color: Colors.blue,
+                      Flexible(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (workList.value.last.workDateTime.hour == 9) {
+                              return;
+                            }
+                            workList.value = [
+                              ...workList.value,
+                              Work(
+                                id: workList.value.length,
+                                workDateTime: workList.value.last.workDateTime
+                                    .add(const Duration(minutes: 30)),
+                                workName: 'ぽしぇっと',
+                                workDetail: 'Detail',
+                                workMemo: 'Memo',
+                                productId: 5,
+                              )
+                            ];
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                          ),
+                          child: const Text(
+                            "＋",
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (workList.value.length > maxWorkListLength) {
-                            List<Work> tmpList =
-                                List<Work>.from(workList.value);
-                            tmpList.removeLast();
-                            workList.value = tmpList;
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                        ),
-                        child: const Text(
-                          "ー",
-                          style: TextStyle(
-                            color: Colors.red,
+                      Flexible(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (workList.value.length > maxWorkListLength) {
+                              List<Work> tmpList =
+                                  List<Work>.from(workList.value);
+                              tmpList.removeLast();
+                              workList.value = tmpList;
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                          ),
+                          child: const Text(
+                            "ー",
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
                           ),
                         ),
                       ),
                       const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                        ),
-                        child: const Text(
-                          "登録",
-                          style: TextStyle(
-                            color: Colors.black,
+                      Flexible(
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                          ),
+                          child: const Text(
+                            "登録",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
