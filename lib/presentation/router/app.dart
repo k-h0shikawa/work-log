@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:work_log/presentation/pages/product_list.dart';
-import 'package:work_log/presentation/pages/work_list.dart';
 import 'package:work_log/presentation/router/router.dart';
 
 class MyApp extends StatelessWidget {
@@ -16,8 +14,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: const ProductList(),
-      // home: const WorkList(),
     );
   }
 }

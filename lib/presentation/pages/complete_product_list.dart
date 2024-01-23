@@ -28,9 +28,11 @@ class CompleteProductList extends HookWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(product.productName),
-                            ElevatedButton(
-                                onPressed: () {}, child: const Text('進行中へ戻す'))
+                            Flexible(child: Text(product.productName)),
+                            Flexible(
+                                child: ElevatedButton(
+                                    onPressed: () {},
+                                    child: const Text('進行中へ戻す')))
                           ],
                         ),
                       ],

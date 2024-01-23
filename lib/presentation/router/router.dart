@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:work_log/presentation/pages/complete_product_list.dart';
-import 'package:work_log/presentation/pages/product_list.dart';
+import 'package:work_log/presentation/pages/in_progress_product_list.dart';
 import 'package:work_log/presentation/pages/work_list.dart';
 
 final goRouter = GoRouter(
@@ -27,7 +27,7 @@ final goRouter = GoRouter(
       pageBuilder: (context, state) {
         return MaterialPage(
           key: state.pageKey,
-          child: const ProductList(),
+          child: const InProgressProductList(),
         );
       },
     ),

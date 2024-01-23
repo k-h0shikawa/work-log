@@ -26,7 +26,7 @@ class CreatePDFButton extends StatelessWidget {
     final ttf = pw.Font.ttf(font);
 
     // 表の行数と列数を定義
-    final int rows = 22;
+    const int maxRowCount = 22;
 
     // 表のヘッダーを作成
     final headers = ['日付', '作業内容', '作業日時・他', '作業時間合計'];
@@ -43,7 +43,7 @@ class CreatePDFButton extends StatelessWidget {
             .toList());
 
     // 表のボディを作成
-    final body = List.generate(rows, (int index) {
+    final body = List.generate(maxRowCount, (int index) {
       return pw.TableRow(children: [
         pw.Container(
           width: 50, // セルの幅を指定
