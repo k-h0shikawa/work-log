@@ -15,6 +15,7 @@ class WorkList extends HookWidget {
     final targetDateFormatter = DateFormat('yyyy/MM/dd');
     final targetDate = useState(DateTime.now());
     const maxWorkListLength = 1;
+    const flexRate = [1, 3, 3, 3];
     final workList = useState(<Work>[
       for (var i = 0; i < 20; i++)
         Work(
@@ -47,13 +48,18 @@ class WorkList extends HookWidget {
 
     Widget buildHeader() {
       return Row(
-        children: header.map((title) {
+        children: header.asMap().entries.map((entry) {
+          int idx = entry.key;
+          String value = entry.value;
           return Expanded(
-            child: Container(
+            flex: flexRate[idx],
+            child: Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(title,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
+              child: Text(
+                value,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
           );
         }).toList(),
@@ -71,15 +77,14 @@ class WorkList extends HookWidget {
         return Row(
           children: <Widget>[
             Expanded(
-              flex: 1,
+              flex: flexRate[0],
               child: Container(
                 padding: const EdgeInsets.all(10),
                 child: Text(formatter.format(work.workDateTime)),
               ),
             ),
             Expanded(
-              // TODO: 子要素のTextの長さによってはエラーが発生するので修正する
-              flex: 3,
+              flex: flexRate[1],
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: DropdownButton<String>(
@@ -112,7 +117,7 @@ class WorkList extends HookWidget {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: flexRate[2],
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
@@ -124,7 +129,7 @@ class WorkList extends HookWidget {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: flexRate[3],
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
@@ -187,67 +192,78 @@ class WorkList extends HookWidget {
                   child: Row(
                     children: [
                       Flexible(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (workList.value.last.workDateTime.hour == 9) {
-                              return;
-                            }
-                            workList.value = [
-                              ...workList.value,
-                              Work(
-                                id: workList.value.length,
-                                workDateTime: workList.value.last.workDateTime
-                                    .add(const Duration(minutes: 30)),
-                                workName: 'ぽしぇっと',
-                                workDetail: 'Detail',
-                                workMemo: 'Memo',
-                                productId: 5,
-                              )
-                            ];
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text(
-                            "＋",
-                            style: TextStyle(
-                              color: Colors.blue,
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (workList.value.last.workDateTime.hour == 9) {
+                                return;
+                              }
+                              workList.value = [
+                                ...workList.value,
+                                Work(
+                                  id: workList.value.length,
+                                  workDateTime: workList.value.last.workDateTime
+                                      .add(const Duration(minutes: 30)),
+                                  workName: 'ぽしぇっと',
+                                  workDetail: 'Detail',
+                                  workMemo: 'Memo',
+                                  productId: 5,
+                                )
+                              ];
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: const Text(
+                              "＋",
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
                             ),
                           ),
                         ),
                       ),
                       Flexible(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (workList.value.length > maxWorkListLength) {
-                              List<Work> tmpList =
-                                  List<Work>.from(workList.value);
-                              tmpList.removeLast();
-                              workList.value = tmpList;
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text(
-                            "ー",
-                            style: TextStyle(
-                              color: Colors.red,
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (workList.value.length > maxWorkListLength) {
+                                List<Work> tmpList =
+                                    List<Work>.from(workList.value);
+                                tmpList.removeLast();
+                                workList.value = tmpList;
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: const Text(
+                              "ー",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
                             ),
                           ),
                         ),
                       ),
                       const Spacer(),
                       Flexible(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                          ),
-                          child: const Text(
-                            "登録",
-                            style: TextStyle(
-                              color: Colors.black,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                            ),
+                            child: const Text(
+                              "登録",
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
