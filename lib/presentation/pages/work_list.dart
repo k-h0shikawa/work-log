@@ -30,9 +30,10 @@ class WorkList extends HookWidget {
     ]);
 
     final productList = useState(<Product>[
-      const Product(id: 0, productName: 'ダミー案件', status: 0),
-      const Product(id: 1, productName: 'ぽしぇっと', status: 0),
-      const Product(id: 2, productName: '２０文字の長さの商品名のてすとなのですよ', status: 0)
+      const Product(id: 0, productName: 'ダミー案件', isCompleted: false),
+      const Product(id: 1, productName: 'ぽしぇっと', isCompleted: false),
+      const Product(
+          id: 2, productName: '２０文字の長さの商品名のてすとなのですよ', isCompleted: false)
     ]);
 
     Future<void> selectDate(BuildContext context) async {

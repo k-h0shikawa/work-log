@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Product {
   int get id => throw _privateConstructorUsedError;
   String get productName => throw _privateConstructorUsedError;
-  int get status => throw _privateConstructorUsedError;
+  bool get isCompleted => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProductCopyWith<Product> get copyWith => throw _privateConstructorUsedError;
@@ -29,7 +29,7 @@ abstract class $ProductCopyWith<$Res> {
   factory $ProductCopyWith(Product value, $Res Function(Product) then) =
       _$ProductCopyWithImpl<$Res, Product>;
   @useResult
-  $Res call({int id, String productName, int status});
+  $Res call({int id, String productName, bool isCompleted});
 }
 
 /// @nodoc
@@ -47,7 +47,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
   $Res call({
     Object? id = null,
     Object? productName = null,
-    Object? status = null,
+    Object? isCompleted = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -58,10 +58,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as int,
+      isCompleted: null == isCompleted
+          ? _value.isCompleted
+          : isCompleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -73,7 +73,7 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       __$$ProductImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String productName, int status});
+  $Res call({int id, String productName, bool isCompleted});
 }
 
 /// @nodoc
@@ -89,7 +89,7 @@ class __$$ProductImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? productName = null,
-    Object? status = null,
+    Object? isCompleted = null,
   }) {
     return _then(_$ProductImpl(
       id: null == id
@@ -100,10 +100,10 @@ class __$$ProductImplCopyWithImpl<$Res>
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as int,
+      isCompleted: null == isCompleted
+          ? _value.isCompleted
+          : isCompleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -112,18 +112,19 @@ class __$$ProductImplCopyWithImpl<$Res>
 
 class _$ProductImpl implements _Product {
   const _$ProductImpl(
-      {required this.id, required this.productName, required this.status});
+      {required this.id, required this.productName, this.isCompleted = false});
 
   @override
   final int id;
   @override
   final String productName;
   @override
-  final int status;
+  @JsonKey()
+  final bool isCompleted;
 
   @override
   String toString() {
-    return 'Product(id: $id, productName: $productName, status: $status)';
+    return 'Product(id: $id, productName: $productName, isCompleted: $isCompleted)';
   }
 
   @override
@@ -134,11 +135,12 @@ class _$ProductImpl implements _Product {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.productName, productName) ||
                 other.productName == productName) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.isCompleted, isCompleted) ||
+                other.isCompleted == isCompleted));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, productName, status);
+  int get hashCode => Object.hash(runtimeType, id, productName, isCompleted);
 
   @JsonKey(ignore: true)
   @override
@@ -151,14 +153,14 @@ abstract class _Product implements Product {
   const factory _Product(
       {required final int id,
       required final String productName,
-      required final int status}) = _$ProductImpl;
+      final bool isCompleted}) = _$ProductImpl;
 
   @override
   int get id;
   @override
   String get productName;
   @override
-  int get status;
+  bool get isCompleted;
   @override
   @JsonKey(ignore: true)
   _$$ProductImplCopyWith<_$ProductImpl> get copyWith =>

@@ -8,8 +8,8 @@ class CompleteProductList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final productList = useState(<Product>[
-      const Product(id: 0, productName: 'パジャマ', status: 0),
-      const Product(id: 1, productName: '討伐', status: 0)
+      const Product(id: 0, productName: 'パジャマ', isCompleted: false),
+      const Product(id: 1, productName: '討伐', isCompleted: false)
     ]);
 
     return Scaffold(

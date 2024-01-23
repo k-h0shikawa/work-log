@@ -10,8 +10,8 @@ class InProgressProductList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final inProgressProductList = useState(<Product>[
-      const Product(id: 0, productName: 'ダミー案件', status: 0),
-      const Product(id: 1, productName: 'ぽしぇっと', status: 0)
+      const Product(id: 0, productName: 'ダミー案件', isCompleted: false),
+      const Product(id: 1, productName: 'ぽしぇっと', isCompleted: false)
     ]);
 
     final controller = useTextEditingController();
@@ -90,7 +90,7 @@ class InProgressProductList extends HookWidget {
                 Product(
                   id: inProgressProductList.value.length,
                   productName: controller.text,
-                  status: 0,
+                  isCompleted: false,
                 )
               ];
             },
