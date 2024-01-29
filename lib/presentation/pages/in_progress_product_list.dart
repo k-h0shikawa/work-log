@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:work_log/domain/types/product.dart';
+import 'package:work_log/application/usecases/in_progress_product_list_usecase.dart';
+import 'package:work_log/domain/types/in_progress_product.dart';
 import 'package:work_log/presentation/widgets/create_pdf_button.dart';
 
 class InProgressProductList extends HookWidget {
@@ -9,10 +11,15 @@ class InProgressProductList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inProgressProductList = useState(<Product>[
-      const Product(id: 0, productName: 'ダミー案件', isCompleted: false),
-      const Product(id: 1, productName: 'ぽしぇっと', isCompleted: false)
-    ]);
+    var inProgressProductList = useState<List<InProgressProduct>>([]);
+    useEffect(() {
+      () async {
+        inProgressProductList.value =
+            await GetIt.I<InProgressProductListUsecase>()
+                .fetchInProgressProductList();
+      }();
+      return null;
+    }, []);
 
     final controller = useTextEditingController();
     return Scaffold(
@@ -44,7 +51,8 @@ class InProgressProductList extends HookWidget {
     );
   }
 
-  Widget _buildProductList(ValueNotifier<List<Product>> inProgressProductList) {
+  Widget _buildProductList(
+      ValueNotifier<List<InProgressProduct>> inProgressProductList) {
     return Column(
       children: inProgressProductList.value.map((product) {
         return Padding(
@@ -70,7 +78,7 @@ class InProgressProductList extends HookWidget {
   }
 
   Widget _buildAddProductRow(TextEditingController controller,
-      ValueNotifier<List<Product>> inProgressProductList) {
+      ValueNotifier<List<InProgressProduct>> inProgressProductList) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -87,11 +95,12 @@ class InProgressProductList extends HookWidget {
             onPressed: () {
               inProgressProductList.value = [
                 ...inProgressProductList.value,
-                Product(
-                  id: inProgressProductList.value.length,
-                  productName: controller.text,
-                  isCompleted: false,
-                )
+                InProgressProduct(
+                    id: inProgressProductList.value.length,
+                    productName: controller.text,
+                    isCompleted: 0,
+                    createdOn: DateTime.now(),
+                    createdBy: 'hoshikawa')
               ];
             },
             child: const Text('登録'),

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'work.dart';
+part of 'work_entity.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,26 +15,28 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$Work {
+mixin _$WorkEntity {
   int get id => throw _privateConstructorUsedError;
   DateTime get workDateTime => throw _privateConstructorUsedError;
   String get workName => throw _privateConstructorUsedError;
   String get workDetail => throw _privateConstructorUsedError;
   String get workMemo => throw _privateConstructorUsedError;
   int get productId => throw _privateConstructorUsedError;
-  DateTime get createdOn => throw _privateConstructorUsedError;
+  String get createdOn => throw _privateConstructorUsedError;
   String get createdBy => throw _privateConstructorUsedError;
   DateTime? get updatedOn => throw _privateConstructorUsedError;
   String? get updatedBy => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $WorkCopyWith<Work> get copyWith => throw _privateConstructorUsedError;
+  $WorkEntityCopyWith<WorkEntity> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WorkCopyWith<$Res> {
-  factory $WorkCopyWith(Work value, $Res Function(Work) then) =
-      _$WorkCopyWithImpl<$Res, Work>;
+abstract class $WorkEntityCopyWith<$Res> {
+  factory $WorkEntityCopyWith(
+          WorkEntity value, $Res Function(WorkEntity) then) =
+      _$WorkEntityCopyWithImpl<$Res, WorkEntity>;
   @useResult
   $Res call(
       {int id,
@@ -43,16 +45,16 @@ abstract class $WorkCopyWith<$Res> {
       String workDetail,
       String workMemo,
       int productId,
-      DateTime createdOn,
+      String createdOn,
       String createdBy,
       DateTime? updatedOn,
       String? updatedBy});
 }
 
 /// @nodoc
-class _$WorkCopyWithImpl<$Res, $Val extends Work>
-    implements $WorkCopyWith<$Res> {
-  _$WorkCopyWithImpl(this._value, this._then);
+class _$WorkEntityCopyWithImpl<$Res, $Val extends WorkEntity>
+    implements $WorkEntityCopyWith<$Res> {
+  _$WorkEntityCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -101,7 +103,7 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
       createdOn: null == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
@@ -119,10 +121,11 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
 }
 
 /// @nodoc
-abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
-  factory _$$WorkImplCopyWith(
-          _$WorkImpl value, $Res Function(_$WorkImpl) then) =
-      __$$WorkImplCopyWithImpl<$Res>;
+abstract class _$$WorkEntityImplCopyWith<$Res>
+    implements $WorkEntityCopyWith<$Res> {
+  factory _$$WorkEntityImplCopyWith(
+          _$WorkEntityImpl value, $Res Function(_$WorkEntityImpl) then) =
+      __$$WorkEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -132,17 +135,18 @@ abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
       String workDetail,
       String workMemo,
       int productId,
-      DateTime createdOn,
+      String createdOn,
       String createdBy,
       DateTime? updatedOn,
       String? updatedBy});
 }
 
 /// @nodoc
-class __$$WorkImplCopyWithImpl<$Res>
-    extends _$WorkCopyWithImpl<$Res, _$WorkImpl>
-    implements _$$WorkImplCopyWith<$Res> {
-  __$$WorkImplCopyWithImpl(_$WorkImpl _value, $Res Function(_$WorkImpl) _then)
+class __$$WorkEntityImplCopyWithImpl<$Res>
+    extends _$WorkEntityCopyWithImpl<$Res, _$WorkEntityImpl>
+    implements _$$WorkEntityImplCopyWith<$Res> {
+  __$$WorkEntityImplCopyWithImpl(
+      _$WorkEntityImpl _value, $Res Function(_$WorkEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -159,7 +163,7 @@ class __$$WorkImplCopyWithImpl<$Res>
     Object? updatedOn = freezed,
     Object? updatedBy = freezed,
   }) {
-    return _then(_$WorkImpl(
+    return _then(_$WorkEntityImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -187,7 +191,7 @@ class __$$WorkImplCopyWithImpl<$Res>
       createdOn: null == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as String,
       createdBy: null == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
@@ -206,8 +210,8 @@ class __$$WorkImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$WorkImpl implements _Work {
-  const _$WorkImpl(
+class _$WorkEntityImpl implements _WorkEntity {
+  const _$WorkEntityImpl(
       {required this.id,
       required this.workDateTime,
       required this.workName,
@@ -232,7 +236,7 @@ class _$WorkImpl implements _Work {
   @override
   final int productId;
   @override
-  final DateTime createdOn;
+  final String createdOn;
   @override
   final String createdBy;
   @override
@@ -244,14 +248,14 @@ class _$WorkImpl implements _Work {
 
   @override
   String toString() {
-    return 'Work(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+    return 'WorkEntity(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WorkImpl &&
+            other is _$WorkEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.workDateTime, workDateTime) ||
                 other.workDateTime == workDateTime) &&
@@ -290,22 +294,22 @@ class _$WorkImpl implements _Work {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$WorkImplCopyWith<_$WorkImpl> get copyWith =>
-      __$$WorkImplCopyWithImpl<_$WorkImpl>(this, _$identity);
+  _$$WorkEntityImplCopyWith<_$WorkEntityImpl> get copyWith =>
+      __$$WorkEntityImplCopyWithImpl<_$WorkEntityImpl>(this, _$identity);
 }
 
-abstract class _Work implements Work {
-  const factory _Work(
+abstract class _WorkEntity implements WorkEntity {
+  const factory _WorkEntity(
       {required final int id,
       required final DateTime workDateTime,
       required final String workName,
       required final String workDetail,
       required final String workMemo,
       required final int productId,
-      required final DateTime createdOn,
+      required final String createdOn,
       required final String createdBy,
       final DateTime? updatedOn,
-      final String? updatedBy}) = _$WorkImpl;
+      final String? updatedBy}) = _$WorkEntityImpl;
 
   @override
   int get id;
@@ -320,7 +324,7 @@ abstract class _Work implements Work {
   @override
   int get productId;
   @override
-  DateTime get createdOn;
+  String get createdOn;
   @override
   String get createdBy;
   @override
@@ -329,6 +333,6 @@ abstract class _Work implements Work {
   String? get updatedBy;
   @override
   @JsonKey(ignore: true)
-  _$$WorkImplCopyWith<_$WorkImpl> get copyWith =>
+  _$$WorkEntityImplCopyWith<_$WorkEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

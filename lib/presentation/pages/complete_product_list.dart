@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:work_log/domain/types/product.dart';
+import 'package:work_log/domain/types/in_progress_product.dart';
 
 class CompleteProductList extends HookWidget {
   const CompleteProductList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final productList = useState(<Product>[
-      const Product(id: 0, productName: 'パジャマ', isCompleted: false),
-      const Product(id: 1, productName: '討伐', isCompleted: false)
+    final productList = useState(<InProgressProduct>[
+      InProgressProduct(
+          id: 0,
+          productName: 'パジャマ',
+          isCompleted: 1,
+          createdOn: DateTime.now(),
+          createdBy: 'hoshikawa'),
+      InProgressProduct(
+          id: 1,
+          productName: '討伐',
+          isCompleted: 1,
+          createdOn: DateTime.now(),
+          createdBy: 'hoshikawa')
     ]);
 
     return Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:work_log/domain/types/product.dart';
+import 'package:work_log/domain/types/in_progress_product.dart';
 import 'package:work_log/domain/types/work.dart';
 import 'package:intl/intl.dart';
 
@@ -19,21 +19,36 @@ class WorkList extends HookWidget {
     final workList = useState(<Work>[
       for (var i = 0; i < 20; i++)
         Work(
-          id: i,
-          workDateTime:
-              DateTime(2024, 1, 1, 9, 30).add(Duration(minutes: 30 * i)),
-          workName: 'ダミー案件',
-          workDetail: 'Detail $i',
-          workMemo: 'Memo $i',
-          productId: i,
-        ),
+            id: i,
+            workDateTime:
+                DateTime(2024, 1, 1, 9, 30).add(Duration(minutes: 30 * i)),
+            workName: 'ダミー案件',
+            workDetail: 'Detail $i',
+            workMemo: 'Memo $i',
+            productId: i,
+            createdOn: DateTime.now(),
+            createdBy: 'hoshikawa'),
     ]);
 
-    final productList = useState(<Product>[
-      const Product(id: 0, productName: 'ダミー案件', isCompleted: false),
-      const Product(id: 1, productName: 'ぽしぇっと', isCompleted: false),
-      const Product(
-          id: 2, productName: '２０文字の長さの商品名のてすとなのですよ', isCompleted: false)
+    final productList = useState(<InProgressProduct>[
+      InProgressProduct(
+          id: 0,
+          productName: 'ダミー案件',
+          isCompleted: 0,
+          createdOn: DateTime.now(),
+          createdBy: 'hoshikawa'),
+      InProgressProduct(
+          id: 1,
+          productName: 'ぽしぇっと',
+          isCompleted: 0,
+          createdOn: DateTime.now(),
+          createdBy: 'hoshikawa'),
+      InProgressProduct(
+          id: 2,
+          productName: '２０文字の長さの商品名のてすとなのですよ',
+          isCompleted: 0,
+          createdOn: DateTime.now(),
+          createdBy: 'hoshikawa')
     ]);
 
     Future<void> selectDate(BuildContext context) async {
@@ -104,8 +119,8 @@ class WorkList extends HookWidget {
                       }).toList();
                     }
                   },
-                  items: productList.value
-                      .map<DropdownMenuItem<String>>((Product product) {
+                  items: productList.value.map<DropdownMenuItem<String>>(
+                      (InProgressProduct product) {
                     return DropdownMenuItem<String>(
                         value: product.productName,
                         child: Text(
@@ -204,14 +219,16 @@ class WorkList extends HookWidget {
                               workList.value = [
                                 ...workList.value,
                                 Work(
-                                  id: workList.value.length,
-                                  workDateTime: workList.value.last.workDateTime
-                                      .add(const Duration(minutes: 30)),
-                                  workName: 'ぽしぇっと',
-                                  workDetail: 'Detail',
-                                  workMemo: 'Memo',
-                                  productId: 5,
-                                )
+                                    id: workList.value.length,
+                                    workDateTime: workList
+                                        .value.last.workDateTime
+                                        .add(const Duration(minutes: 30)),
+                                    workName: 'ぽしぇっと',
+                                    workDetail: 'Detail',
+                                    workMemo: 'Memo',
+                                    productId: 5,
+                                    createdOn: DateTime.now(),
+                                    createdBy: 'hoshikawa')
                               ];
                             },
                             style: ElevatedButton.styleFrom(
