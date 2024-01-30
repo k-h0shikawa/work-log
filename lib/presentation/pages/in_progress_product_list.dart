@@ -66,7 +66,13 @@ class InProgressProductList extends HookWidget {
               Flexible(
                 flex: 1,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    () async {
+                      inProgressProductList.value =
+                          await GetIt.I<InProgressProductListUsecase>()
+                              .finishProduct(product.id);
+                    }();
+                  },
                   child: const Text('完了'),
                 ),
               ),
@@ -102,17 +108,6 @@ class InProgressProductList extends HookWidget {
                             createdOn: DateTime.now(),
                             createdBy: 'user'));
               }();
-              /*
-              inProgressProductList.value = [
-                ...inProgressProductList.value,
-                InProgressProduct(
-                    id: inProgressProductList.value.length,
-                    productName: controller.text,
-                    isCompleted: 0,
-                    createdOn: DateTime.now(),
-                    createdBy: 'hoshikawa')
-              ];
-              */
             },
             child: const Text('登録'),
           ),

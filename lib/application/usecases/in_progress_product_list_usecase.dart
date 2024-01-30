@@ -23,6 +23,25 @@ class InProgressProductListUsecase {
         .toList();
   }
 
+  Future<List<InProgressProduct>> finishProduct(int? id) async {
+    await GetIt.I<InProgressProductListRepository>().finishProduct(id: id);
+
+    final inProgressProductEntities =
+        await GetIt.I<InProgressProductListRepository>()
+            .fetchInProgressProductList();
+
+    return inProgressProductEntities
+        .map((entity) => InProgressProduct(
+            id: entity.id,
+            productName: entity.productName,
+            isCompleted: entity.isCompleted,
+            createdOn: entity.createdOn != null
+                ? DateTime.parse(entity.createdOn!)
+                : null,
+            createdBy: entity.createdBy))
+        .toList();
+  }
+
   Future<List<InProgressProduct>> insertProduct(
       InProgressProduct product) async {
     await GetIt.I<InProgressProductListRepository>().insertProduct(

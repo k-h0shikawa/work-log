@@ -46,4 +46,15 @@ class InProgressProductListRepository {
       "createdBy": product.createdBy,
     };
   }
+
+  Future<void> finishProduct({int? id}) async {
+    final database = await openDatabase('WorkLog.db');
+    await database.update(
+      'product',
+      {'isCompleted': 1},
+      where: 'id = ?',
+      whereArgs: [id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 }
