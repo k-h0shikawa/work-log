@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +29,7 @@ class InProgressProductList extends HookWidget {
         child: Center(
           child: ListView(
             children: [
-              _buildButtonBar(context),
+              _buildButtonBar(context, inProgressProductList),
               _buildProductList(inProgressProductList),
               const SizedBox(height: 20),
               _buildAddProductRow(controller, inProgressProductList),
@@ -41,11 +40,18 @@ class InProgressProductList extends HookWidget {
     );
   }
 
-  Widget _buildButtonBar(BuildContext context) {
+  Widget _buildButtonBar(BuildContext context,
+      ValueNotifier<List<InProgressProduct>> inProgressProductList) {
     return ButtonBar(
       children: [
         ElevatedButton(
-          onPressed: () => context.push('/product/complete'),
+          onPressed: () async {
+            await context.push('/product/complete');
+            // /product/completeで戻るボタンを押したときに、最新のリストを取得する
+            inProgressProductList.value =
+                await GetIt.I<InProgressProductListUsecase>()
+                    .fetchInProgressProductList();
+          },
           child: const Text('完了済み商品一覧画面'),
         ),
       ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
+import 'package:work_log/application/usecases/complete_product_list_usecase.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
 
 class CompleteProductList extends HookWidget {
@@ -7,20 +9,12 @@ class CompleteProductList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productList = useState(<InProgressProduct>[
-      InProgressProduct(
-          id: 0,
-          productName: 'パジャマ',
-          isCompleted: 1,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa'),
-      InProgressProduct(
-          id: 1,
-          productName: '討伐',
-          isCompleted: 1,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa')
-    ]);
+    final completeProductList = useState(<InProgressProduct>[]);
+
+    useEffect(() {
+      fetchAndSetCompleteProductList(completeProductList);
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(title: const Text('完了済みの案件一覧')),
@@ -30,24 +24,8 @@ class CompleteProductList extends HookWidget {
           child: ListView(
             children: <Widget>[
               Column(
-                children: productList.value.map((product) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Flexible(child: Text(product.productName)),
-                            Flexible(
-                                child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('進行中へ戻す')))
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
+                children: completeProductList.value.map((product) {
+                  return buildProductRow(product, completeProductList);
                 }).toList(),
               ),
             ],
@@ -55,5 +33,37 @@ class CompleteProductList extends HookWidget {
         ),
       ),
     );
+  }
+
+  Future<void> fetchAndSetCompleteProductList(
+      ValueNotifier<List<InProgressProduct>> completeProductList) async {
+    completeProductList.value =
+        await GetIt.I<CompleteProductListUsecase>().fetchCompleteProductList();
+  }
+
+  Widget buildProductRow(InProgressProduct product,
+      ValueNotifier<List<InProgressProduct>> completeProductList) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(child: Text(product.productName)),
+          Flexible(
+            child: ElevatedButton(
+              onPressed: () =>
+                  convertProductToInProgress(product, completeProductList),
+              child: const Text('進行中へ戻す'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> convertProductToInProgress(InProgressProduct product,
+      ValueNotifier<List<InProgressProduct>> completeProductList) async {
+    completeProductList.value = await GetIt.I<CompleteProductListUsecase>()
+        .convertProductToInProgress(product.id);
   }
 }
