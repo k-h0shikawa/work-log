@@ -7,9 +7,9 @@ class InProgressProductListRepository {
   Future<List<ProductEntity>> fetchInProgressProductList() async {
     final database = await openDatabase('WorkLog.db');
 
-    List<Map<String, dynamic>> results = await database.query("product");
+    List<Map<String, dynamic>> results =
+        await database.query("product", where: "isCompleted = 0");
 
-    // map to account list
     final result = results.map((Map<String, dynamic> m) {
       int id = m["id"];
       String productName = m["productName"];

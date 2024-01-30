@@ -38,7 +38,6 @@ class DatabaseHelper {
 
   _initDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
-    print("init database");
     return await openDatabase(path,
         version: _databaseVersion,
         onConfigure: _onConfigure,
