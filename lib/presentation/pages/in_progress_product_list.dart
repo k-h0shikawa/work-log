@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -58,13 +59,14 @@ class InProgressProductList extends HookWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Flexible(flex: 1, child: Text(product.productName)),
-              const Spacer(flex: 3),
-              const Flexible(flex: 1, child: CreatePDFButton()),
+              Expanded(
+                flex: 5,
+                child: Text(product.productName),
+              ),
+              Flexible(child: CreatePDFButton()),
+              SizedBox(width: 8.0), // ボタン間のスペース
               Flexible(
-                flex: 1,
                 child: ElevatedButton(
                   onPressed: () {
                     () async {
@@ -75,7 +77,7 @@ class InProgressProductList extends HookWidget {
                   },
                   child: const Text('完了'),
                 ),
-              ),
+              )
             ],
           ),
         );
@@ -88,11 +90,12 @@ class InProgressProductList extends HookWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Expanded(
+        Flexible(
           flex: 6,
           child: TextField(
             controller: controller,
             decoration: const InputDecoration(label: Text('新規商品')),
+            maxLength: 20,
           ),
         ),
         Flexible(
