@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'work.dart';
+part of 'complete_product.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,34 +15,30 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$Work {
+mixin _$CompleteProduct {
   int? get id => throw _privateConstructorUsedError;
-  DateTime get workDateTime => throw _privateConstructorUsedError;
-  String get workName => throw _privateConstructorUsedError;
-  String get workDetail => throw _privateConstructorUsedError;
-  String get workMemo => throw _privateConstructorUsedError;
-  int get productId => throw _privateConstructorUsedError;
+  String get productName => throw _privateConstructorUsedError;
+  int? get isCompleted => throw _privateConstructorUsedError;
   DateTime? get createdOn => throw _privateConstructorUsedError;
   String? get createdBy => throw _privateConstructorUsedError;
   DateTime? get updatedOn => throw _privateConstructorUsedError;
   String? get updatedBy => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $WorkCopyWith<Work> get copyWith => throw _privateConstructorUsedError;
+  $CompleteProductCopyWith<CompleteProduct> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WorkCopyWith<$Res> {
-  factory $WorkCopyWith(Work value, $Res Function(Work) then) =
-      _$WorkCopyWithImpl<$Res, Work>;
+abstract class $CompleteProductCopyWith<$Res> {
+  factory $CompleteProductCopyWith(
+          CompleteProduct value, $Res Function(CompleteProduct) then) =
+      _$CompleteProductCopyWithImpl<$Res, CompleteProduct>;
   @useResult
   $Res call(
       {int? id,
-      DateTime workDateTime,
-      String workName,
-      String workDetail,
-      String workMemo,
-      int productId,
+      String productName,
+      int? isCompleted,
       DateTime? createdOn,
       String? createdBy,
       DateTime? updatedOn,
@@ -50,9 +46,9 @@ abstract class $WorkCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$WorkCopyWithImpl<$Res, $Val extends Work>
-    implements $WorkCopyWith<$Res> {
-  _$WorkCopyWithImpl(this._value, this._then);
+class _$CompleteProductCopyWithImpl<$Res, $Val extends CompleteProduct>
+    implements $CompleteProductCopyWith<$Res> {
+  _$CompleteProductCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -63,11 +59,8 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
   @override
   $Res call({
     Object? id = freezed,
-    Object? workDateTime = null,
-    Object? workName = null,
-    Object? workDetail = null,
-    Object? workMemo = null,
-    Object? productId = null,
+    Object? productName = null,
+    Object? isCompleted = freezed,
     Object? createdOn = freezed,
     Object? createdBy = freezed,
     Object? updatedOn = freezed,
@@ -78,26 +71,14 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      workDateTime: null == workDateTime
-          ? _value.workDateTime
-          : workDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      workName: null == workName
-          ? _value.workName
-          : workName // ignore: cast_nullable_to_non_nullable
+      productName: null == productName
+          ? _value.productName
+          : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      workDetail: null == workDetail
-          ? _value.workDetail
-          : workDetail // ignore: cast_nullable_to_non_nullable
-              as String,
-      workMemo: null == workMemo
-          ? _value.workMemo
-          : workMemo // ignore: cast_nullable_to_non_nullable
-              as String,
-      productId: null == productId
-          ? _value.productId
-          : productId // ignore: cast_nullable_to_non_nullable
-              as int,
+      isCompleted: freezed == isCompleted
+          ? _value.isCompleted
+          : isCompleted // ignore: cast_nullable_to_non_nullable
+              as int?,
       createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
@@ -119,19 +100,17 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
 }
 
 /// @nodoc
-abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
-  factory _$$WorkImplCopyWith(
-          _$WorkImpl value, $Res Function(_$WorkImpl) then) =
-      __$$WorkImplCopyWithImpl<$Res>;
+abstract class _$$CompleteProductImplCopyWith<$Res>
+    implements $CompleteProductCopyWith<$Res> {
+  factory _$$CompleteProductImplCopyWith(_$CompleteProductImpl value,
+          $Res Function(_$CompleteProductImpl) then) =
+      __$$CompleteProductImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {int? id,
-      DateTime workDateTime,
-      String workName,
-      String workDetail,
-      String workMemo,
-      int productId,
+      String productName,
+      int? isCompleted,
       DateTime? createdOn,
       String? createdBy,
       DateTime? updatedOn,
@@ -139,51 +118,37 @@ abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$WorkImplCopyWithImpl<$Res>
-    extends _$WorkCopyWithImpl<$Res, _$WorkImpl>
-    implements _$$WorkImplCopyWith<$Res> {
-  __$$WorkImplCopyWithImpl(_$WorkImpl _value, $Res Function(_$WorkImpl) _then)
+class __$$CompleteProductImplCopyWithImpl<$Res>
+    extends _$CompleteProductCopyWithImpl<$Res, _$CompleteProductImpl>
+    implements _$$CompleteProductImplCopyWith<$Res> {
+  __$$CompleteProductImplCopyWithImpl(
+      _$CompleteProductImpl _value, $Res Function(_$CompleteProductImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? workDateTime = null,
-    Object? workName = null,
-    Object? workDetail = null,
-    Object? workMemo = null,
-    Object? productId = null,
+    Object? productName = null,
+    Object? isCompleted = freezed,
     Object? createdOn = freezed,
     Object? createdBy = freezed,
     Object? updatedOn = freezed,
     Object? updatedBy = freezed,
   }) {
-    return _then(_$WorkImpl(
+    return _then(_$CompleteProductImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      workDateTime: null == workDateTime
-          ? _value.workDateTime
-          : workDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      workName: null == workName
-          ? _value.workName
-          : workName // ignore: cast_nullable_to_non_nullable
+      productName: null == productName
+          ? _value.productName
+          : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      workDetail: null == workDetail
-          ? _value.workDetail
-          : workDetail // ignore: cast_nullable_to_non_nullable
-              as String,
-      workMemo: null == workMemo
-          ? _value.workMemo
-          : workMemo // ignore: cast_nullable_to_non_nullable
-              as String,
-      productId: null == productId
-          ? _value.productId
-          : productId // ignore: cast_nullable_to_non_nullable
-              as int,
+      isCompleted: freezed == isCompleted
+          ? _value.isCompleted
+          : isCompleted // ignore: cast_nullable_to_non_nullable
+              as int?,
       createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
@@ -206,14 +171,11 @@ class __$$WorkImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$WorkImpl implements _Work {
-  const _$WorkImpl(
+class _$CompleteProductImpl implements _CompleteProduct {
+  const _$CompleteProductImpl(
       {this.id = null,
-      required this.workDateTime,
-      required this.workName,
-      required this.workDetail,
-      required this.workMemo,
-      required this.productId,
+      required this.productName,
+      this.isCompleted = null,
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
@@ -223,15 +185,10 @@ class _$WorkImpl implements _Work {
   @JsonKey()
   final int? id;
   @override
-  final DateTime workDateTime;
+  final String productName;
   @override
-  final String workName;
-  @override
-  final String workDetail;
-  @override
-  final String workMemo;
-  @override
-  final int productId;
+  @JsonKey()
+  final int? isCompleted;
   @override
   @JsonKey()
   final DateTime? createdOn;
@@ -247,25 +204,19 @@ class _$WorkImpl implements _Work {
 
   @override
   String toString() {
-    return 'Work(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+    return 'CompleteProduct(id: $id, productName: $productName, isCompleted: $isCompleted, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WorkImpl &&
+            other is _$CompleteProductImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.workDateTime, workDateTime) ||
-                other.workDateTime == workDateTime) &&
-            (identical(other.workName, workName) ||
-                other.workName == workName) &&
-            (identical(other.workDetail, workDetail) ||
-                other.workDetail == workDetail) &&
-            (identical(other.workMemo, workMemo) ||
-                other.workMemo == workMemo) &&
-            (identical(other.productId, productId) ||
-                other.productId == productId) &&
+            (identical(other.productName, productName) ||
+                other.productName == productName) &&
+            (identical(other.isCompleted, isCompleted) ||
+                other.isCompleted == isCompleted) &&
             (identical(other.createdOn, createdOn) ||
                 other.createdOn == createdOn) &&
             (identical(other.createdBy, createdBy) ||
@@ -277,51 +228,33 @@ class _$WorkImpl implements _Work {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      workDateTime,
-      workName,
-      workDetail,
-      workMemo,
-      productId,
-      createdOn,
-      createdBy,
-      updatedOn,
-      updatedBy);
+  int get hashCode => Object.hash(runtimeType, id, productName, isCompleted,
+      createdOn, createdBy, updatedOn, updatedBy);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$WorkImplCopyWith<_$WorkImpl> get copyWith =>
-      __$$WorkImplCopyWithImpl<_$WorkImpl>(this, _$identity);
+  _$$CompleteProductImplCopyWith<_$CompleteProductImpl> get copyWith =>
+      __$$CompleteProductImplCopyWithImpl<_$CompleteProductImpl>(
+          this, _$identity);
 }
 
-abstract class _Work implements Work {
-  const factory _Work(
+abstract class _CompleteProduct implements CompleteProduct {
+  const factory _CompleteProduct(
       {final int? id,
-      required final DateTime workDateTime,
-      required final String workName,
-      required final String workDetail,
-      required final String workMemo,
-      required final int productId,
+      required final String productName,
+      final int? isCompleted,
       final DateTime? createdOn,
       final String? createdBy,
       final DateTime? updatedOn,
-      final String? updatedBy}) = _$WorkImpl;
+      final String? updatedBy}) = _$CompleteProductImpl;
 
   @override
   int? get id;
   @override
-  DateTime get workDateTime;
+  String get productName;
   @override
-  String get workName;
-  @override
-  String get workDetail;
-  @override
-  String get workMemo;
-  @override
-  int get productId;
+  int? get isCompleted;
   @override
   DateTime? get createdOn;
   @override
@@ -332,6 +265,6 @@ abstract class _Work implements Work {
   String? get updatedBy;
   @override
   @JsonKey(ignore: true)
-  _$$WorkImplCopyWith<_$WorkImpl> get copyWith =>
+  _$$CompleteProductImplCopyWith<_$CompleteProductImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

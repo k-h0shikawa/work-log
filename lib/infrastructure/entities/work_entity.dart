@@ -1,17 +1,17 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-part 'work.freezed.dart';
+part 'work_entity.freezed.dart';
 
 @freezed
-class Work with _$Work {
-  const factory Work(
+class WorkEntity with _$WorkEntity {
+  const factory WorkEntity(
       {@Default(null) int? id,
       required DateTime workDateTime,
       required String workName,
       required String workDetail,
       required String workMemo,
       required int productId,
-      @Default(null) DateTime? createdOn,
+      @Default(null) String? createdOn,
       @Default(null) String? createdBy,
-      @Default(null) DateTime? updatedOn,
-      @Default(null) String? updatedBy}) = _Work;
+      @Default(null) String? updatedOn,
+      @Default(null) String? updatedBy}) = _WorkEntity;
 }
