@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:work_log/domain/types/in_progress_product.dart';
 import 'package:work_log/infrastructure/entities/product_entity.dart';
 
 class InProgressProductListRepository {
@@ -10,8 +9,6 @@ class InProgressProductListRepository {
 
     List<Map<String, dynamic>> results = await database.query("product");
 
-    print("results");
-    print(results);
     // map to account list
     final result = results.map((Map<String, dynamic> m) {
       int id = m["id"];
@@ -24,22 +21,29 @@ class InProgressProductListRepository {
           id: id,
           productName: productName,
           isCompleted: isCompleted,
-          createdOn: createdOn, // 動作確認のため、一時的にコメントアウト
+          createdOn: createdOn,
           createdBy: createdBy);
     }).toList();
-    print("result");
-    print(result);
-    return result;
 
-    // final List<InProgressProduct> products = await database.query('product');
-    // print(products);
-/*
-    final inProgressProductList = <InProgressProduct>[
-      const InProgressProduct(id: 0, productName: 'ダミー案件', isCompleted: 0),
-      const InProgressProduct(id: 1, productName: 'ぽしぇっと1', isCompleted: 0)
-    ];
-    print("use InProgressProductListRepository");
-    return inProgressProductList;
-    */
+    return result;
+  }
+
+  Future<void> insertProduct(ProductEntity product) async {
+    final database = await openDatabase('WorkLog.db');
+    await database.insert(
+      'product',
+      toMap(product),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Map<String, dynamic> toMap(ProductEntity product) {
+    return <String, dynamic>{
+      "id": product.id,
+      "productName": product.productName,
+      "isCompleted": product.isCompleted,
+      "createdOn": product.createdOn.toString(),
+      "createdBy": product.createdBy,
+    };
   }
 }

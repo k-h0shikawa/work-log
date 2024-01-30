@@ -4,14 +4,14 @@ part 'work_entity.freezed.dart';
 @freezed
 class WorkEntity with _$WorkEntity {
   const factory WorkEntity(
-      {required int id,
+      {@Default(null) int? id,
       required DateTime workDateTime,
       required String workName,
       required String workDetail,
       required String workMemo,
       required int productId,
-      required String createdOn,
-      required String createdBy,
-      @Default(null) DateTime? updatedOn,
+      @Default(null) String? createdOn,
+      @Default(null) String? createdBy,
+      @Default(null) String? updatedOn,
       @Default(null) String? updatedBy}) = _WorkEntity;
 }

@@ -52,7 +52,7 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $productTable (
-            $columnId INTEGER PRIMARY KEY,
+            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnName TEXT NOT NULL,
             $columnIsCompleted INTEGER NOT NULL,
             $columnCreatedOn TEXT,
@@ -64,7 +64,7 @@ class DatabaseHelper {
 
     await db.execute('''
           CREATE TABLE $workTable (
-            $columnId INTEGER PRIMARY KEY,
+            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnWorkDateTime TEXT NOT NULL,
             $columnWorkName TEXT NOT NULL,
             $columnWorkDetail TEXT NOT NULL,
@@ -77,5 +77,18 @@ class DatabaseHelper {
             foreign key ($columnProductId) references $productTable($columnId)
           )
           ''');
+
+    // ダミーデータ
+    await db.execute('''
+INSERT INTO product (productName, isCompleted, createdOn, createdBy, updatedOn, updatedBy)
+VALUES ('Product1', 0, '2024-01-30', 'User1', '2024-01-30', 'User1'),
+       ('Product2', 1, '2024-01-30', 'User1', '2024-01-30', 'User1');
+      ''');
+    // ダミーデータ
+    await db.execute('''
+INSERT INTO work (workDateTime, workName, workDetail, workMemo, productId, createdOn, createdBy, updatedOn, updatedBy)
+VALUES ('2024-01-30', 'Work1', 'Detail1', 'Memo1', 1, '2024-01-30', 'User1', '2024-01-30', 'User1'),
+       ('2024-01-30', 'Work2', 'Detail2', 'Memo2', 2, '2024-01-30', 'User1', '2024-01-30', 'User1');
+      ''');
   }
 }

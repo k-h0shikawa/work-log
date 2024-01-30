@@ -16,11 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$InProgressProduct {
-  int get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   String get productName => throw _privateConstructorUsedError;
-  int get isCompleted => throw _privateConstructorUsedError;
-  DateTime get createdOn => throw _privateConstructorUsedError;
-  String get createdBy => throw _privateConstructorUsedError;
+  int? get isCompleted => throw _privateConstructorUsedError;
+  DateTime? get createdOn => throw _privateConstructorUsedError;
+  String? get createdBy => throw _privateConstructorUsedError;
   DateTime? get updatedOn => throw _privateConstructorUsedError;
   String? get updatedBy => throw _privateConstructorUsedError;
 
@@ -36,11 +36,11 @@ abstract class $InProgressProductCopyWith<$Res> {
       _$InProgressProductCopyWithImpl<$Res, InProgressProduct>;
   @useResult
   $Res call(
-      {int id,
+      {int? id,
       String productName,
-      int isCompleted,
-      DateTime createdOn,
-      String createdBy,
+      int? isCompleted,
+      DateTime? createdOn,
+      String? createdBy,
       DateTime? updatedOn,
       String? updatedBy});
 }
@@ -58,35 +58,35 @@ class _$InProgressProductCopyWithImpl<$Res, $Val extends InProgressProduct>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? productName = null,
-    Object? isCompleted = null,
-    Object? createdOn = null,
-    Object? createdBy = null,
+    Object? isCompleted = freezed,
+    Object? createdOn = freezed,
+    Object? createdBy = freezed,
     Object? updatedOn = freezed,
     Object? updatedBy = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       productName: null == productName
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      isCompleted: null == isCompleted
+      isCompleted: freezed == isCompleted
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdOn: null == createdOn
+              as int?,
+      createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      createdBy: null == createdBy
+              as DateTime?,
+      createdBy: freezed == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       updatedOn: freezed == updatedOn
           ? _value.updatedOn
           : updatedOn // ignore: cast_nullable_to_non_nullable
@@ -108,11 +108,11 @@ abstract class _$$InProgressProductImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
+      {int? id,
       String productName,
-      int isCompleted,
-      DateTime createdOn,
-      String createdBy,
+      int? isCompleted,
+      DateTime? createdOn,
+      String? createdBy,
       DateTime? updatedOn,
       String? updatedBy});
 }
@@ -128,35 +128,35 @@ class __$$InProgressProductImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? productName = null,
-    Object? isCompleted = null,
-    Object? createdOn = null,
-    Object? createdBy = null,
+    Object? isCompleted = freezed,
+    Object? createdOn = freezed,
+    Object? createdBy = freezed,
     Object? updatedOn = freezed,
     Object? updatedBy = freezed,
   }) {
     return _then(_$InProgressProductImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       productName: null == productName
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      isCompleted: null == isCompleted
+      isCompleted: freezed == isCompleted
           ? _value.isCompleted
           : isCompleted // ignore: cast_nullable_to_non_nullable
-              as int,
-      createdOn: null == createdOn
+              as int?,
+      createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      createdBy: null == createdBy
+              as DateTime?,
+      createdBy: freezed == createdBy
           ? _value.createdBy
           : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       updatedOn: freezed == updatedOn
           ? _value.updatedOn
           : updatedOn // ignore: cast_nullable_to_non_nullable
@@ -173,25 +173,28 @@ class __$$InProgressProductImplCopyWithImpl<$Res>
 
 class _$InProgressProductImpl implements _InProgressProduct {
   const _$InProgressProductImpl(
-      {required this.id,
+      {this.id = null,
       required this.productName,
-      this.isCompleted = 0,
-      required this.createdOn,
-      required this.createdBy,
+      this.isCompleted = null,
+      this.createdOn = null,
+      this.createdBy = null,
       this.updatedOn = null,
       this.updatedBy = null});
 
   @override
-  final int id;
+  @JsonKey()
+  final int? id;
   @override
   final String productName;
   @override
   @JsonKey()
-  final int isCompleted;
+  final int? isCompleted;
   @override
-  final DateTime createdOn;
+  @JsonKey()
+  final DateTime? createdOn;
   @override
-  final String createdBy;
+  @JsonKey()
+  final String? createdBy;
   @override
   @JsonKey()
   final DateTime? updatedOn;
@@ -238,24 +241,24 @@ class _$InProgressProductImpl implements _InProgressProduct {
 
 abstract class _InProgressProduct implements InProgressProduct {
   const factory _InProgressProduct(
-      {required final int id,
+      {final int? id,
       required final String productName,
-      final int isCompleted,
-      required final DateTime createdOn,
-      required final String createdBy,
+      final int? isCompleted,
+      final DateTime? createdOn,
+      final String? createdBy,
       final DateTime? updatedOn,
       final String? updatedBy}) = _$InProgressProductImpl;
 
   @override
-  int get id;
+  int? get id;
   @override
   String get productName;
   @override
-  int get isCompleted;
+  int? get isCompleted;
   @override
-  DateTime get createdOn;
+  DateTime? get createdOn;
   @override
-  String get createdBy;
+  String? get createdBy;
   @override
   DateTime? get updatedOn;
   @override

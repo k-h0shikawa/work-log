@@ -93,6 +93,16 @@ class InProgressProductList extends HookWidget {
           flex: 1,
           child: ElevatedButton(
             onPressed: () {
+              () async {
+                inProgressProductList.value =
+                    await GetIt.I<InProgressProductListUsecase>().insertProduct(
+                        InProgressProduct(
+                            productName: controller.text,
+                            isCompleted: 0,
+                            createdOn: DateTime.now(),
+                            createdBy: 'user'));
+              }();
+              /*
               inProgressProductList.value = [
                 ...inProgressProductList.value,
                 InProgressProduct(
@@ -102,6 +112,7 @@ class InProgressProductList extends HookWidget {
                     createdOn: DateTime.now(),
                     createdBy: 'hoshikawa')
               ];
+              */
             },
             child: const Text('登録'),
           ),

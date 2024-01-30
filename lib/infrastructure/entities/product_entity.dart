@@ -4,11 +4,11 @@ part 'product_entity.freezed.dart';
 @freezed
 class ProductEntity with _$ProductEntity {
   const factory ProductEntity(
-      {required int id,
+      {@Default(null) int? id,
       required String productName,
-      required int isCompleted,
-      required String createdOn,
-      required String createdBy,
-      @Default(null) DateTime? updatedOn,
+      @Default(null) int? isCompleted,
+      @Default(null) String? createdOn,
+      @Default(null) String? createdBy,
+      @Default(null) String? updatedOn,
       @Default(null) String? updatedBy}) = _ProductEntity;
 }
