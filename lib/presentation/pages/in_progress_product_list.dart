@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import 'package:work_log/application/usecases/in_progress_product_list_usecase.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
 import 'package:work_log/presentation/widgets/create_pdf_button.dart';
@@ -14,9 +15,15 @@ class InProgressProductList extends HookWidget {
     var inProgressProductList = useState<List<InProgressProduct>>([]);
     useEffect(() {
       () async {
-        inProgressProductList.value =
-            await GetIt.I<InProgressProductListUsecase>()
-                .fetchInProgressProductList();
+        try {
+          inProgressProductList.value =
+              await GetIt.I<InProgressProductListUsecase>()
+                  .fetchInProgressProductList();
+        } catch (e) {
+          final logger = Logger();
+          logger.e(e);
+          // TODO: エラーを画面に表示する
+        }
       }();
       return null;
     }, []);
@@ -46,11 +53,17 @@ class InProgressProductList extends HookWidget {
       children: [
         ElevatedButton(
           onPressed: () async {
-            await context.push('/product/complete');
-            // /product/completeで戻るボタンを押したときに、最新のリストを取得する
-            inProgressProductList.value =
-                await GetIt.I<InProgressProductListUsecase>()
-                    .fetchInProgressProductList();
+            try {
+              await context.push('/product/complete');
+              // 上記のpushされた画面で戻るボタンを押したときに、最新のリストを取得する
+              inProgressProductList.value =
+                  await GetIt.I<InProgressProductListUsecase>()
+                      .fetchInProgressProductList();
+            } catch (e) {
+              final logger = Logger();
+              logger.e(e);
+              // TODO: エラーを画面に表示する
+            }
           },
           child: const Text('完了済み商品一覧画面'),
         ),
@@ -70,15 +83,21 @@ class InProgressProductList extends HookWidget {
                 flex: 5,
                 child: Text(product.productName),
               ),
-              Flexible(child: CreatePDFButton()),
-              SizedBox(width: 8.0), // ボタン間のスペース
+              const Flexible(child: CreatePDFButton()),
+              const SizedBox(width: 8.0), // ボタン間のスペース
               Flexible(
                 child: ElevatedButton(
                   onPressed: () {
                     () async {
-                      inProgressProductList.value =
-                          await GetIt.I<InProgressProductListUsecase>()
-                              .finishProduct(product.id);
+                      try {
+                        inProgressProductList.value =
+                            await GetIt.I<InProgressProductListUsecase>()
+                                .finishProduct(product.id);
+                      } catch (e) {
+                        final logger = Logger();
+                        logger.e(e);
+                        // TODO: エラーを画面に表示する
+                      }
                     }();
                   },
                   child: const Text('完了'),
@@ -109,13 +128,19 @@ class InProgressProductList extends HookWidget {
           child: ElevatedButton(
             onPressed: () {
               () async {
-                inProgressProductList.value =
-                    await GetIt.I<InProgressProductListUsecase>().insertProduct(
-                        InProgressProduct(
-                            productName: controller.text,
-                            isCompleted: 0,
-                            createdOn: DateTime.now(),
-                            createdBy: 'user'));
+                try {
+                  inProgressProductList.value =
+                      await GetIt.I<InProgressProductListUsecase>()
+                          .insertProduct(InProgressProduct(
+                              productName: controller.text,
+                              isCompleted: 0,
+                              createdOn: DateTime.now(),
+                              createdBy: 'user'));
+                } catch (e) {
+                  final logger = Logger();
+                  logger.e(e);
+                  // TODO: エラーを画面に表示する
+                }
               }();
             },
             child: const Text('登録'),
