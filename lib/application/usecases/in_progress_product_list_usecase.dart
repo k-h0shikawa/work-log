@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:work_log/database/entities/product_entity.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
-import 'package:work_log/infrastructure/entities/product_entity.dart';
 import 'package:work_log/infrastructure/repository/in_progress_product_list_repository.dart';
 
 class InProgressProductListUsecase {
@@ -33,7 +33,7 @@ class InProgressProductListUsecase {
 
   Future<List<InProgressProduct>> finishProduct(int? id) async {
     if (id == null) {
-      _logger.w('id is null');
+      _logger.e('id is null');
       throw ArgumentError.notNull('id');
     }
     try {

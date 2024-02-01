@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/logger.dart';
 import 'package:work_log/application/usecases/in_progress_product_list_usecase.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
 import 'package:work_log/presentation/widgets/create_pdf_button.dart';
@@ -13,6 +12,7 @@ class InProgressProductList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var inProgressProductList = useState<List<InProgressProduct>>([]);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     useEffect(() {
       () async {
         try {
@@ -20,9 +20,12 @@ class InProgressProductList extends HookWidget {
               await GetIt.I<InProgressProductListUsecase>()
                   .fetchInProgressProductList();
         } catch (e) {
-          final logger = Logger();
-          logger.e(e);
-          // TODO: エラーを画面に表示する
+          scaffoldMessenger.showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Text('データの更新に失敗しました'),
+            ),
+          );
         }
       }();
       return null;
@@ -37,9 +40,9 @@ class InProgressProductList extends HookWidget {
           child: ListView(
             children: [
               _buildButtonBar(context, inProgressProductList),
-              _buildProductList(inProgressProductList),
+              _buildProductList(inProgressProductList, context),
               const SizedBox(height: 20),
-              _buildAddProductRow(controller, inProgressProductList),
+              _buildAddProductRow(controller, inProgressProductList, context),
             ],
           ),
         ),
@@ -53,6 +56,7 @@ class InProgressProductList extends HookWidget {
       children: [
         ElevatedButton(
           onPressed: () async {
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
             try {
               await context.push('/product/complete');
               // 上記のpushされた画面で戻るボタンを押したときに、最新のリストを取得する
@@ -60,9 +64,12 @@ class InProgressProductList extends HookWidget {
                   await GetIt.I<InProgressProductListUsecase>()
                       .fetchInProgressProductList();
             } catch (e) {
-              final logger = Logger();
-              logger.e(e);
-              // TODO: エラーを画面に表示する
+              scaffoldMessenger.showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text('データの更新に失敗しました'),
+                ),
+              );
             }
           },
           child: const Text('完了済み商品一覧画面'),
@@ -72,7 +79,8 @@ class InProgressProductList extends HookWidget {
   }
 
   Widget _buildProductList(
-      ValueNotifier<List<InProgressProduct>> inProgressProductList) {
+      ValueNotifier<List<InProgressProduct>> inProgressProductList,
+      BuildContext context) {
     return Column(
       children: inProgressProductList.value.map((product) {
         return Padding(
@@ -89,14 +97,19 @@ class InProgressProductList extends HookWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     () async {
+                      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
                       try {
                         inProgressProductList.value =
                             await GetIt.I<InProgressProductListUsecase>()
                                 .finishProduct(product.id);
                       } catch (e) {
-                        final logger = Logger();
-                        logger.e(e);
-                        // TODO: エラーを画面に表示する
+                        scaffoldMessenger.showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('データの更新に失敗しました'),
+                          ),
+                        );
                       }
                     }();
                   },
@@ -110,8 +123,10 @@ class InProgressProductList extends HookWidget {
     );
   }
 
-  Widget _buildAddProductRow(TextEditingController controller,
-      ValueNotifier<List<InProgressProduct>> inProgressProductList) {
+  Widget _buildAddProductRow(
+      TextEditingController controller,
+      ValueNotifier<List<InProgressProduct>> inProgressProductList,
+      BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -128,6 +143,8 @@ class InProgressProductList extends HookWidget {
           child: ElevatedButton(
             onPressed: () {
               () async {
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+
                 try {
                   inProgressProductList.value =
                       await GetIt.I<InProgressProductListUsecase>()
@@ -137,9 +154,12 @@ class InProgressProductList extends HookWidget {
                               createdOn: DateTime.now(),
                               createdBy: 'user'));
                 } catch (e) {
-                  final logger = Logger();
-                  logger.e(e);
-                  // TODO: エラーを画面に表示する
+                  scaffoldMessenger.showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text('データの更新に失敗しました'),
+                    ),
+                  );
                 }
               }();
             },

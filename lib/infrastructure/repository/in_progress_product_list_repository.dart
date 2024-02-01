@@ -1,19 +1,15 @@
-import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:work_log/infrastructure/entities/product_entity.dart';
+import 'package:work_log/database/entities/product_entity.dart';
 
 class InProgressProductListRepository {
-  final _logger = Logger();
   // データベースを初期化
-  late final Future<Database> _database;
-  InProgressProductListRepository();
+  final Database _database;
+  InProgressProductListRepository(this._database);
 
   Future<List<ProductEntity>> fetchInProgressProductList() async {
     try {
-      final database = await _database;
-
       List<Map<String, dynamic>> results =
-          await database.query("product", where: "isCompleted = 0");
+          await _database.query("product", where: "isCompleted = 0");
 
       final result = results.map((Map<String, dynamic> m) {
         int id = m["id"];
@@ -32,21 +28,18 @@ class InProgressProductListRepository {
 
       return result;
     } catch (e) {
-      _logger.e(e);
       rethrow;
     }
   }
 
   Future<void> insertProduct(ProductEntity product) async {
     try {
-      final database = await _database;
-      await database.insert(
+      await _database.insert(
         'product',
         toMap(product),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      _logger.e(e);
       rethrow;
     }
   }
@@ -63,8 +56,7 @@ class InProgressProductListRepository {
 
   Future<void> finishProduct({int? id}) async {
     try {
-      final database = await _database;
-      await database.update(
+      await _database.update(
         'product',
         {'isCompleted': 1},
         where: 'id = ?',
@@ -72,7 +64,6 @@ class InProgressProductListRepository {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      _logger.e(e);
       rethrow;
     }
   }

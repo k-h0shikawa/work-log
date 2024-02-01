@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:work_log/application/di/initialize_singleton.dart';
+import 'package:work_log/di/initialize_singleton.dart';
 import 'package:work_log/presentation/router/router.dart';
 
 class MyApp extends StatelessWidget {

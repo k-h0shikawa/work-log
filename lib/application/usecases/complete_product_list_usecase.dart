@@ -32,7 +32,7 @@ class CompleteProductListUsecase {
 
   Future<List<InProgressProduct>> convertProductToInProgress(int? id) async {
     if (id == null) {
-      _logger.w('id is null');
+      _logger.e('id is null');
       throw ArgumentError.notNull('id');
     }
     try {
