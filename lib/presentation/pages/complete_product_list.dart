@@ -23,14 +23,12 @@ class CompleteProductList extends HookWidget {
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
-          child: ListView(
-            children: <Widget>[
-              Column(
-                children: completeProductList.value.map((product) {
-                  return buildProductRow(product, completeProductList, context);
-                }).toList(),
-              ),
-            ],
+          child: ListView.builder(
+            itemCount: completeProductList.value.length,
+            itemBuilder: (context, index) {
+              final product = completeProductList.value[index];
+              return buildProductRow(product, completeProductList, context);
+            },
           ),
         ),
       ),
@@ -48,7 +46,7 @@ class CompleteProductList extends HookWidget {
       scaffoldMessenger.showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content: Text(ErrorMessages.fetchFailure),
+          content: Text(ErrorMessages.failureFetch),
         ),
       );
     }
@@ -86,12 +84,20 @@ class CompleteProductList extends HookWidget {
     try {
       completeProductList.value = await GetIt.I<CompleteProductListUsecase>()
           .convertProductToInProgress(product.id);
+      // 成功時のフィードバックを追加
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(ErrorMessages.successConvertProductToInProgress(
+              product.productName)),
+        ),
+      );
     } catch (e) {
       // データ更新に失敗した場合は、エラーを画面に表示する
       scaffoldMessenger.showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content: Text(ErrorMessages.updateFailure),
+          content: Text(ErrorMessages.failureUpdate),
         ),
       );
     }

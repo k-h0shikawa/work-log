@@ -8,10 +8,10 @@ class InProgressProductListRepository {
 
   Future<List<ProductEntity>> fetchInProgressProductList() async {
     try {
-      List<Map<String, dynamic>> results =
-          await _database.query("product", where: "isCompleted = 0");
+      List<Map<String, dynamic>> results = await _database.query("product",
+          where: "isCompleted = 0", orderBy: "id");
 
-      final result = results.map((Map<String, dynamic> m) {
+      return results.map((Map<String, dynamic> m) {
         int id = m["id"];
         String productName = m["productName"];
         int isCompleted = m["isCompleted"];
@@ -25,8 +25,6 @@ class InProgressProductListRepository {
             createdOn: createdOn,
             createdBy: createdBy);
       }).toList();
-
-      return result;
     } catch (e) {
       rethrow;
     }

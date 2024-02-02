@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:work_log/application/usecases/in_progress_product_list_usecase.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
+import 'package:work_log/log/error_messages.dart';
 import 'package:work_log/presentation/widgets/create_pdf_button.dart';
 
 class InProgressProductList extends HookWidget {
@@ -23,7 +24,7 @@ class InProgressProductList extends HookWidget {
           scaffoldMessenger.showSnackBar(
             const SnackBar(
               backgroundColor: Colors.red,
-              content: Text('ErrorMessages.updateFailure'),
+              content: Text(ErrorMessages.failureUpdate),
             ),
           );
         }
@@ -67,7 +68,7 @@ class InProgressProductList extends HookWidget {
               scaffoldMessenger.showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text('ErrorMessages.updateFailure'),
+                  content: Text(ErrorMessages.failureFetch),
                 ),
               );
             }
@@ -103,11 +104,20 @@ class InProgressProductList extends HookWidget {
                         inProgressProductList.value =
                             await GetIt.I<InProgressProductListUsecase>()
                                 .finishProduct(product.id);
+                        // 成功時のフィードバック
+                        scaffoldMessenger.showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(
+                                ErrorMessages.successConvertProductToComplete(
+                                    product.productName)),
+                          ),
+                        );
                       } catch (e) {
                         scaffoldMessenger.showSnackBar(
                           const SnackBar(
                             backgroundColor: Colors.red,
-                            content: Text('ErrorMessages.updateFailure'),
+                            content: Text(ErrorMessages.failureUpdate),
                           ),
                         );
                       }
@@ -153,11 +163,19 @@ class InProgressProductList extends HookWidget {
                               isCompleted: 0,
                               createdOn: DateTime.now(),
                               createdBy: 'user'));
+                  // 成功時のフィードバック
+                  scaffoldMessenger.showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text(ErrorMessages.successRegisterProduct(
+                          controller.text)),
+                    ),
+                  );
                 } catch (e) {
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text('ErrorMessages.updateFailure'),
+                      content: Text(ErrorMessages.failureUpdate),
                     ),
                   );
                 }

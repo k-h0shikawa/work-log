@@ -8,8 +8,8 @@ class CompleteProductListRepository {
 
   Future<List<ProductEntity>> fetchCompleteProductList() async {
     try {
-      List<Map<String, dynamic>> products =
-          await _database.query("product", where: "isCompleted = 1");
+      List<Map<String, dynamic>> products = await _database.query("product",
+          where: "isCompleted = 1", orderBy: "id DESC");
 
       return products.map((Map<String, dynamic> m) {
         int id = m["id"];
