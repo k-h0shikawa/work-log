@@ -1,59 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
+import 'package:work_log/application/usecases/complete_product_list_usecase.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
+import 'package:work_log/log/error_messages.dart';
 
 class CompleteProductList extends HookWidget {
   const CompleteProductList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final productList = useState(<InProgressProduct>[
-      InProgressProduct(
-          id: 0,
-          productName: 'パジャマ',
-          isCompleted: 1,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa'),
-      InProgressProduct(
-          id: 1,
-          productName: '討伐',
-          isCompleted: 1,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa')
-    ]);
+    final completeProductList = useState(<InProgressProduct>[]);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    useEffect(() {
+      fetchAndSetCompleteProductList(completeProductList, scaffoldMessenger);
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(title: const Text('完了済みの案件一覧')),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
-          child: ListView(
-            children: <Widget>[
-              Column(
-                children: productList.value.map((product) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Flexible(child: Text(product.productName)),
-                            Flexible(
-                                child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('進行中へ戻す')))
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+          child: ListView.builder(
+            itemCount: completeProductList.value.length,
+            itemBuilder: (context, index) {
+              final product = completeProductList.value[index];
+              return buildProductRow(product, completeProductList, context);
+            },
           ),
         ),
       ),
     );
+  }
+
+  Future<void> fetchAndSetCompleteProductList(
+      ValueNotifier<List<InProgressProduct>> completeProductList,
+      ScaffoldMessengerState scaffoldMessenger) async {
+    try {
+      completeProductList.value = await GetIt.I<CompleteProductListUsecase>()
+          .fetchCompleteProductList();
+    } catch (e) {
+      // データの取得に失敗した場合は、エラーを画面に表示する
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(ErrorMessages.failureFetch),
+        ),
+      );
+    }
+  }
+
+  Widget buildProductRow(
+      InProgressProduct product,
+      ValueNotifier<List<InProgressProduct>> completeProductList,
+      BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Flexible(child: Text(product.productName)),
+          Flexible(
+            child: ElevatedButton(
+              onPressed: () {
+                convertProductToInProgress(
+                    product, completeProductList, context);
+              },
+              child: const Text('進行中へ戻す'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> convertProductToInProgress(
+      InProgressProduct product,
+      ValueNotifier<List<InProgressProduct>> completeProductList,
+      BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    try {
+      completeProductList.value = await GetIt.I<CompleteProductListUsecase>()
+          .convertProductToInProgress(product.id);
+      // 成功時のフィードバックを追加
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(ErrorMessages.successConvertProductToInProgress(
+              product.productName)),
+        ),
+      );
+    } catch (e) {
+      // データ更新に失敗した場合は、エラーを画面に表示する
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(ErrorMessages.failureUpdate),
+        ),
+      );
+    }
   }
 }

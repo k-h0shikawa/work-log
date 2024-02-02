@@ -1,44 +1,65 @@
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:work_log/database/entities/product_entity.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
-import 'package:work_log/infrastructure/entities/product_entity.dart';
 import 'package:work_log/infrastructure/repository/in_progress_product_list_repository.dart';
 
 class InProgressProductListUsecase {
+  final _logger = Logger();
+
   InProgressProductListUsecase();
 
   Future<List<InProgressProduct>> fetchInProgressProductList() async {
-    final inProgressProductEntities =
-        await GetIt.I<InProgressProductListRepository>()
-            .fetchInProgressProductList();
+    try {
+      final inProgressProductEntities =
+          await GetIt.I<InProgressProductListRepository>()
+              .fetchInProgressProductList();
 
-    return inProgressProductEntities
-        .map((entity) => InProgressProduct(
-            id: entity.id,
-            productName: entity.productName,
-            isCompleted: entity.isCompleted,
-            createdOn: entity.createdOn != null
-                ? DateTime.parse(entity.createdOn!)
-                : null,
-            createdBy: entity.createdBy))
-        .toList();
+      return inProgressProductEntities
+          .map((entity) => InProgressProduct(
+              id: entity.id,
+              productName: entity.productName,
+              isCompleted: entity.isCompleted,
+              createdOn: entity.createdOn != null
+                  ? DateTime.parse(entity.createdOn!)
+                  : null,
+              createdBy: entity.createdBy))
+          .toList();
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 
   Future<List<InProgressProduct>> finishProduct(int? id) async {
-    await GetIt.I<InProgressProductListRepository>().finishProduct(id: id);
-
-    return fetchInProgressProductList();
+    if (id == null) {
+      _logger.e('id is null');
+      throw ArgumentError.notNull('id');
+    }
+    try {
+      await GetIt.I<InProgressProductListRepository>().finishProduct(id: id);
+      return fetchInProgressProductList();
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 
   Future<List<InProgressProduct>> insertProduct(
       InProgressProduct product) async {
-    await GetIt.I<InProgressProductListRepository>().insertProduct(
-        ProductEntity(
-            id: product.id,
-            productName: product.productName,
-            isCompleted: product.isCompleted,
-            createdOn: product.createdOn.toString(),
-            createdBy: product.createdBy));
+    try {
+      await GetIt.I<InProgressProductListRepository>().insertProduct(
+          ProductEntity(
+              id: product.id,
+              productName: product.productName,
+              isCompleted: product.isCompleted,
+              createdOn: product.createdOn.toString(),
+              createdBy: product.createdBy));
 
-    return fetchInProgressProductList();
+      return fetchInProgressProductList();
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 }
