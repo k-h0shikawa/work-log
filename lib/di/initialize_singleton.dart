@@ -1,9 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:work_log/application/usecases/complete_product_list_usecase.dart';
-import 'package:work_log/application/usecases/in_progress_product_list_usecase.dart';
-import 'package:work_log/infrastructure/repository/complete_product_list_repository.dart';
-import 'package:work_log/infrastructure/repository/in_progress_product_list_repository.dart';
+import 'package:work_log/product/application/complete_product_list_usecase.dart';
+import 'package:work_log/product/application/in_progress_product_list_usecase.dart';
+import 'package:work_log/product/infrastructure/complete_product_list_repository.dart';
+import 'package:work_log/product/infrastructure/in_progress_product_list_repository.dart';
 
 class InitializeSingleton {
   static Future<void> registerSingletons() async {

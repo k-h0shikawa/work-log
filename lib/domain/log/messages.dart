@@ -1,4 +1,4 @@
-class ErrorMessages {
+mixin messages {
   static const String failureUpdate = 'データの更新に失敗しました';
   static const String failureFetch = 'データの取得に失敗しました';
   static String successConvertProductToInProgress(String productName) {

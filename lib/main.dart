@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:work_log/database/database_helper.dart';
 // import 'package:flutter/rendering.dart';
-import 'package:work_log/presentation/router/app.dart';
+import 'package:work_log/router/app.dart';
 
 void main() async {
   // debugPaintSizeEnabled = true;

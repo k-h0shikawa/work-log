@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:work_log/domain/types/in_progress_product.dart';
-import 'package:work_log/domain/types/work.dart';
+import 'package:work_log/domain/entities/in_progress_product.dart';
+import 'package:work_log/domain/entities/work.dart';
 import 'package:intl/intl.dart';
 
 class WorkList extends HookWidget {
