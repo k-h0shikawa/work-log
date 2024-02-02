@@ -9,21 +9,20 @@ class InitializeSingleton {
   static Future<void> registerSingletons() async {
     final database = await openDatabase('WorkLog.db');
 
-    if (!GetIt.I.isRegistered<InProgressProductListUsecase>()) {
-      GetIt.I.registerSingleton<InProgressProductListUsecase>(
-          InProgressProductListUsecase());
-    }
-    if (!GetIt.I.isRegistered<InProgressProductListRepository>()) {
-      GetIt.I.registerSingleton<InProgressProductListRepository>(
-          InProgressProductListRepository(database));
-    }
-    if (!GetIt.I.isRegistered<CompleteProductListUsecase>()) {
-      GetIt.I.registerSingleton<CompleteProductListUsecase>(
-          CompleteProductListUsecase());
-    }
-    if (!GetIt.I.isRegistered<CompleteProductListRepository>()) {
-      GetIt.I.registerSingleton<CompleteProductListRepository>(
-          CompleteProductListRepository(database));
+    registerSingletonIfNotRegistered<InProgressProductListUsecase>(
+        InProgressProductListUsecase());
+    registerSingletonIfNotRegistered<InProgressProductListRepository>(
+        InProgressProductListRepository(database));
+    registerSingletonIfNotRegistered<CompleteProductListUsecase>(
+        CompleteProductListUsecase());
+    registerSingletonIfNotRegistered<CompleteProductListRepository>(
+        CompleteProductListRepository(database));
+  }
+
+  // 登録されていない場合、シングルトンを登録する
+  static void registerSingletonIfNotRegistered<T extends Object>(T instance) {
+    if (!GetIt.I.isRegistered<T>()) {
+      GetIt.I.registerSingleton<T>(instance);
     }
   }
 }

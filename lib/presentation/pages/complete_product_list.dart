@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:work_log/application/usecases/complete_product_list_usecase.dart';
 import 'package:work_log/domain/types/in_progress_product.dart';
+import 'package:work_log/log/error_messages.dart';
 
 class CompleteProductList extends HookWidget {
   const CompleteProductList({super.key});
@@ -10,9 +11,10 @@ class CompleteProductList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final completeProductList = useState(<InProgressProduct>[]);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     useEffect(() {
-      fetchAndSetCompleteProductList(completeProductList);
+      fetchAndSetCompleteProductList(completeProductList, scaffoldMessenger);
       return null;
     }, []);
 
@@ -36,9 +38,20 @@ class CompleteProductList extends HookWidget {
   }
 
   Future<void> fetchAndSetCompleteProductList(
-      ValueNotifier<List<InProgressProduct>> completeProductList) async {
-    completeProductList.value =
-        await GetIt.I<CompleteProductListUsecase>().fetchCompleteProductList();
+      ValueNotifier<List<InProgressProduct>> completeProductList,
+      ScaffoldMessengerState scaffoldMessenger) async {
+    try {
+      completeProductList.value = await GetIt.I<CompleteProductListUsecase>()
+          .fetchCompleteProductList();
+    } catch (e) {
+      // データの取得に失敗した場合は、エラーを画面に表示する
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(ErrorMessages.fetchFailure),
+        ),
+      );
+    }
   }
 
   Widget buildProductRow(
@@ -78,7 +91,7 @@ class CompleteProductList extends HookWidget {
       scaffoldMessenger.showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content: Text('データの更新に失敗しました'),
+          content: Text(ErrorMessages.updateFailure),
         ),
       );
     }

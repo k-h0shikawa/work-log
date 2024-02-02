@@ -23,7 +23,7 @@ class InProgressProductList extends HookWidget {
           scaffoldMessenger.showSnackBar(
             const SnackBar(
               backgroundColor: Colors.red,
-              content: Text('データの更新に失敗しました'),
+              content: Text('ErrorMessages.updateFailure'),
             ),
           );
         }
@@ -67,7 +67,7 @@ class InProgressProductList extends HookWidget {
               scaffoldMessenger.showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text('データの更新に失敗しました'),
+                  content: Text('ErrorMessages.updateFailure'),
                 ),
               );
             }
@@ -107,7 +107,7 @@ class InProgressProductList extends HookWidget {
                         scaffoldMessenger.showSnackBar(
                           const SnackBar(
                             backgroundColor: Colors.red,
-                            content: Text('データの更新に失敗しました'),
+                            content: Text('ErrorMessages.updateFailure'),
                           ),
                         );
                       }
@@ -157,7 +157,7 @@ class InProgressProductList extends HookWidget {
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text('データの更新に失敗しました'),
+                      content: Text('ErrorMessages.updateFailure'),
                     ),
                   );
                 }
