@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:work_log/domain/entities/in_progress_product.dart';
 import 'package:work_log/product/application/in_progress_product_list_usecase.dart';
-import 'package:work_log/domain/log/messages.dart';
+import 'package:work_log/domain/log/Messages.dart';
 import 'package:work_log/product/presentation/widgets/create_pdf_button.dart';
 
 class InProgressProductList extends HookWidget {
@@ -24,7 +24,7 @@ class InProgressProductList extends HookWidget {
           scaffoldMessenger.showSnackBar(
             const SnackBar(
               backgroundColor: Colors.red,
-              content: Text(messages.failureUpdate),
+              content: Text(Messages.failureUpdate),
             ),
           );
         }
@@ -68,7 +68,7 @@ class InProgressProductList extends HookWidget {
               scaffoldMessenger.showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text(messages.failureFetch),
+                  content: Text(Messages.failureFetch),
                 ),
               );
             }
@@ -109,7 +109,7 @@ class InProgressProductList extends HookWidget {
                           SnackBar(
                             backgroundColor: Colors.green,
                             content: Text(
-                                messages.successConvertProductToComplete(
+                                Messages.successConvertProductToComplete(
                                     product.productName)),
                           ),
                         );
@@ -117,7 +117,7 @@ class InProgressProductList extends HookWidget {
                         scaffoldMessenger.showSnackBar(
                           const SnackBar(
                             backgroundColor: Colors.red,
-                            content: Text(messages.failureUpdate),
+                            content: Text(Messages.failureUpdate),
                           ),
                         );
                       }
@@ -168,14 +168,14 @@ class InProgressProductList extends HookWidget {
                     SnackBar(
                       backgroundColor: Colors.green,
                       content: Text(
-                          messages.successRegisterProduct(controller.text)),
+                          Messages.successRegisterProduct(controller.text)),
                     ),
                   );
                 } catch (e) {
                   scaffoldMessenger.showSnackBar(
                     const SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text(messages.failureUpdate),
+                      content: Text(Messages.failureUpdate),
                     ),
                   );
                 }
