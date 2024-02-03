@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
-import 'package:work_log/application/usecases/complete_product_list_usecase.dart';
-import 'package:work_log/domain/types/in_progress_product.dart';
-import 'package:work_log/log/error_messages.dart';
+import 'package:work_log/app/domain/entities/in_progress_product.dart';
+import 'package:work_log/app/domain/log/messages.dart';
+import 'package:work_log/app/product/application/complete_product_list_usecase.dart';
 
 class CompleteProductList extends HookWidget {
   const CompleteProductList({super.key});
@@ -46,7 +46,7 @@ class CompleteProductList extends HookWidget {
       scaffoldMessenger.showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content: Text(ErrorMessages.failureFetch),
+          content: Text(Messages.failureFetch),
         ),
       );
     }
@@ -88,8 +88,8 @@ class CompleteProductList extends HookWidget {
       scaffoldMessenger.showSnackBar(
         SnackBar(
           backgroundColor: Colors.green,
-          content: Text(ErrorMessages.successConvertProductToInProgress(
-              product.productName)),
+          content: Text(
+              Messages.successConvertProductToInProgress(product.productName)),
         ),
       );
     } catch (e) {
@@ -97,7 +97,7 @@ class CompleteProductList extends HookWidget {
       scaffoldMessenger.showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content: Text(ErrorMessages.failureUpdate),
+          content: Text(Messages.failureUpdate),
         ),
       );
     }

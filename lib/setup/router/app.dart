@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:work_log/di/initialize_singleton.dart';
-import 'package:work_log/presentation/router/router.dart';
+import 'package:work_log/setup/di/initialize_singleton.dart';
+import 'package:work_log/setup/router/router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

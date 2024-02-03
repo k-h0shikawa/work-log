@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:work_log/database/entities/product_entity.dart';
+import 'package:work_log/setup/database/entities/product_entity.dart';
 
 class InProgressProductListRepository {
   // データベースを初期化

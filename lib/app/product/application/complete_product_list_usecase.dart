@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:work_log/domain/types/in_progress_product.dart';
-import 'package:work_log/infrastructure/repository/complete_product_list_repository.dart';
+import 'package:work_log/app/domain/entities/in_progress_product.dart';
+import 'package:work_log/app/product/infrastructure/complete_product_list_repository.dart';
 import 'package:logger/logger.dart';
 
 class CompleteProductListUsecase {
