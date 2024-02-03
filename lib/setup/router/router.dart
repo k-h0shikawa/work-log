@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:work_log/product/presentation/pages/complete_product_list.dart';
-import 'package:work_log/product/presentation/pages/in_progress_product_list.dart';
-import 'package:work_log/work/presentation/pages/work_list.dart';
+import 'package:work_log/app/product/presentation/pages/complete_product_list.dart';
+import 'package:work_log/app/product/presentation/pages/in_progress_product_list.dart';
+import 'package:work_log/app/work/presentation/pages/work_list.dart';
 
 final goRouter = GoRouter(
   // アプリが起動した時
