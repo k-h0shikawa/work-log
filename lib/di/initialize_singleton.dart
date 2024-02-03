@@ -4,19 +4,29 @@ import 'package:work_log/product/application/complete_product_list_usecase.dart'
 import 'package:work_log/product/application/in_progress_product_list_usecase.dart';
 import 'package:work_log/product/infrastructure/complete_product_list_repository.dart';
 import 'package:work_log/product/infrastructure/in_progress_product_list_repository.dart';
+import 'package:work_log/work/application/work_list_usecase.dart';
+import 'package:work_log/work/infrastructure/work_list_repository.dart';
 
 class InitializeSingleton {
   static Future<void> registerSingletons() async {
     final database = await openDatabase('WorkLog.db');
 
+    // InProgressProductListUseCaseとInProgressProductListRepositoryを登録
     registerSingletonIfNotRegistered<InProgressProductListUsecase>(
         InProgressProductListUsecase());
     registerSingletonIfNotRegistered<InProgressProductListRepository>(
         InProgressProductListRepository(database));
+
+    // CompleteProductListUseCaseとCompleteProductListRepositoryを登録
     registerSingletonIfNotRegistered<CompleteProductListUsecase>(
         CompleteProductListUsecase());
     registerSingletonIfNotRegistered<CompleteProductListRepository>(
         CompleteProductListRepository(database));
+
+    // WorkListUseCaseとWorkListRepositoryを登録
+    registerSingletonIfNotRegistered<WorkListUseCase>(WorkListUseCase());
+    registerSingletonIfNotRegistered<WorkListRepository>(
+        WorkListRepository(database));
   }
 
   // 登録されていない場合、シングルトンを登録する
