@@ -18,10 +18,10 @@ class InitializeSingleton {
         InProgressProductListRepository(database));
 
     // CompleteProductListUseCaseとCompleteProductListRepositoryを登録
-    registerSingletonIfNotRegistered<CompleteProductListUsecase>(
-        CompleteProductListUsecase());
     registerSingletonIfNotRegistered<CompleteProductListRepository>(
         CompleteProductListRepository(database));
+    registerSingletonIfNotRegistered<CompleteProductListUsecase>(
+        CompleteProductListUsecase(CompleteProductListRepository(database)));
 
     // WorkListUseCaseとWorkListRepositoryを登録
     registerSingletonIfNotRegistered<WorkListUseCase>(WorkListUseCase());

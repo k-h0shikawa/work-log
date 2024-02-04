@@ -1,12 +1,11 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:work_log/setup/database/entities/product_entity.dart';
+import 'package:work_log/app/domain/entities/complete_product.dart';
 
 class CompleteProductListRepository {
-  // データベースを初期化
   final Database _database;
   CompleteProductListRepository(this._database);
 
-  Future<List<ProductEntity>> fetchCompleteProductList() async {
+  Future<List<CompleteProduct>> fetchCompleteProductList() async {
     try {
       List<Map<String, dynamic>> products = await _database.query("product",
           where: "isCompleted = 1", orderBy: "id DESC");
@@ -18,11 +17,11 @@ class CompleteProductListRepository {
         String createdOn = m["createdOn"];
         String createdBy = m["createdBy"];
 
-        return ProductEntity(
+        return CompleteProduct(
             id: id,
             productName: productName,
             isCompleted: isCompleted,
-            createdOn: createdOn,
+            createdOn: DateTime.parse(createdOn),
             createdBy: createdBy);
       }).toList();
     } catch (e) {
