@@ -12,10 +12,11 @@ class InitializeSingleton {
     final database = await openDatabase('WorkLog.db');
 
     // InProgressProductListUseCaseとInProgressProductListRepositoryを登録
-    registerSingletonIfNotRegistered<InProgressProductListUsecase>(
-        InProgressProductListUsecase());
     registerSingletonIfNotRegistered<InProgressProductListRepository>(
         InProgressProductListRepository(database));
+    registerSingletonIfNotRegistered<InProgressProductListUsecase>(
+        InProgressProductListUsecase(
+            InProgressProductListRepository(database)));
 
     // CompleteProductListUseCaseとCompleteProductListRepositoryを登録
     registerSingletonIfNotRegistered<CompleteProductListRepository>(
@@ -24,9 +25,10 @@ class InitializeSingleton {
         CompleteProductListUsecase(CompleteProductListRepository(database)));
 
     // WorkListUseCaseとWorkListRepositoryを登録
-    registerSingletonIfNotRegistered<WorkListUseCase>(WorkListUseCase());
     registerSingletonIfNotRegistered<WorkListRepository>(
         WorkListRepository(database));
+    registerSingletonIfNotRegistered<WorkListUseCase>(
+        WorkListUseCase(WorkListRepository(database)));
   }
 
   // 登録されていない場合、シングルトンを登録する

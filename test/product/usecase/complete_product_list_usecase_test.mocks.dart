@@ -6,9 +6,9 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:work_log/app/domain/entities/complete_product.dart' as _i4;
 import 'package:work_log/app/product/infrastructure/complete_product_list_repository.dart'
     as _i2;
+import 'package:work_log/setup/database/entities/product_entity.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -33,15 +33,15 @@ class MockCompleteProductListRepository extends _i1.Mock
   }
 
   @override
-  _i3.Future<List<_i4.CompleteProduct>> fetchCompleteProductList() =>
+  _i3.Future<List<_i4.ProductEntity>> fetchCompleteProductList() =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchCompleteProductList,
           [],
         ),
-        returnValue: _i3.Future<List<_i4.CompleteProduct>>.value(
-            <_i4.CompleteProduct>[]),
-      ) as _i3.Future<List<_i4.CompleteProduct>>);
+        returnValue:
+            _i3.Future<List<_i4.ProductEntity>>.value(<_i4.ProductEntity>[]),
+      ) as _i3.Future<List<_i4.ProductEntity>>);
 
   @override
   _i3.Future<void> convertProductToInProgress({int? id}) => (super.noSuchMethod(

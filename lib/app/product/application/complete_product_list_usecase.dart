@@ -10,7 +10,19 @@ class CompleteProductListUsecase {
 
   Future<List<CompleteProduct>> fetchCompleteProductList() async {
     try {
-      return await _repository.fetchCompleteProductList();
+      final inProgressProductEntities =
+          await _repository.fetchCompleteProductList();
+
+      return inProgressProductEntities
+          .map((entity) => CompleteProduct(
+              id: entity.id,
+              productName: entity.productName,
+              isCompleted: entity.isCompleted,
+              createdOn: entity.createdOn != null
+                  ? DateTime.parse(entity.createdOn!)
+                  : null,
+              createdBy: entity.createdBy))
+          .toList();
     } catch (e) {
       _logger.e(e);
       rethrow;

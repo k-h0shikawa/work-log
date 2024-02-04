@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:work_log/app/domain/entities/complete_product.dart';
 import 'package:work_log/app/product/application/complete_product_list_usecase.dart';
 import 'package:work_log/app/product/infrastructure/complete_product_list_repository.dart';
+import 'package:work_log/setup/database/entities/product_entity.dart';
 
 import 'complete_product_list_usecase_test.mocks.dart';
 
@@ -20,15 +21,21 @@ void main() {
   group('fetchCompleteProductList', () {
     test('完了済みの商品の一覧', () async {
       // Arrange
+      final mockReturnList = [
+        const ProductEntity(id: 1, productName: 'Product 1', isCompleted: 0),
+        const ProductEntity(id: 2, productName: 'Product 2', isCompleted: 1),
+      ];
+
+      when(mockRepository.fetchCompleteProductList())
+          .thenAnswer((_) async => mockReturnList);
+
+      // Act
+      final result = await usecase.fetchCompleteProductList();
+
       final expectedList = [
         const CompleteProduct(id: 1, productName: 'Product 1', isCompleted: 0),
         const CompleteProduct(id: 2, productName: 'Product 2', isCompleted: 1),
       ];
-      when(mockRepository.fetchCompleteProductList())
-          .thenAnswer((_) async => expectedList);
-
-      // Act
-      final result = await usecase.fetchCompleteProductList();
 
       // Assert
       expect(result, expectedList);
@@ -49,18 +56,22 @@ void main() {
     test('製品を進行中に変換し、更新されたリストを返す', () async {
       // Arrange
       const id = 1;
-      final expectedList = [
-        const CompleteProduct(id: 1, productName: 'Product 1', isCompleted: 0),
-        const CompleteProduct(id: 2, productName: 'Product 2', isCompleted: 1),
+      final mockReturnList = [
+        const ProductEntity(id: 1, productName: 'Product 1', isCompleted: 0),
+        const ProductEntity(id: 2, productName: 'Product 2', isCompleted: 1),
       ];
       when(mockRepository.convertProductToInProgress(id: id))
-          .thenAnswer((_) async => null);
+          .thenAnswer((_) async {});
       when(mockRepository.fetchCompleteProductList())
-          .thenAnswer((_) async => expectedList);
+          .thenAnswer((_) async => mockReturnList);
 
       // Act
       final result = await usecase.convertProductToInProgress(id);
 
+      final expectedList = [
+        const CompleteProduct(id: 1, productName: 'Product 1', isCompleted: 0),
+        const CompleteProduct(id: 2, productName: 'Product 2', isCompleted: 1),
+      ];
       // Assert
       expect(result, expectedList);
       verify(mockRepository.convertProductToInProgress(id: id)).called(1);
