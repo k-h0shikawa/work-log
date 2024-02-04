@@ -7,32 +7,32 @@ import 'package:work_log/app/product/infrastructure/in_progress_product_list_rep
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/infrastructure/work_list_repository.dart';
 
-class InitializeSingleton {
-  static Future<void> registerSingletons() async {
-    final database = await openDatabase('WorkLog.db');
-
-    // InProgressProductListUseCaseとInProgressProductListRepositoryを登録
-    registerSingletonIfNotRegistered<InProgressProductListUsecase>(
-        InProgressProductListUsecase());
+class ServiceLocator {
+  static Future<void> setupServiceLocator(Database database) async {
+    // InProgressProductList関連
     registerSingletonIfNotRegistered<InProgressProductListRepository>(
         InProgressProductListRepository(database));
+    registerSingletonIfNotRegistered<InProgressProductListUsecase>(
+        InProgressProductListUsecase(
+            InProgressProductListRepository(database)));
 
-    // CompleteProductListUseCaseとCompleteProductListRepositoryを登録
-    registerSingletonIfNotRegistered<CompleteProductListUsecase>(
-        CompleteProductListUsecase());
+    // CompleteProductList関連
     registerSingletonIfNotRegistered<CompleteProductListRepository>(
         CompleteProductListRepository(database));
+    registerSingletonIfNotRegistered<CompleteProductListUsecase>(
+        CompleteProductListUsecase(CompleteProductListRepository(database)));
 
-    // WorkListUseCaseとWorkListRepositoryを登録
-    registerSingletonIfNotRegistered<WorkListUseCase>(WorkListUseCase());
+    // WorkList関連
     registerSingletonIfNotRegistered<WorkListRepository>(
         WorkListRepository(database));
+    registerSingletonIfNotRegistered<WorkListUseCase>(
+        WorkListUseCase(WorkListRepository(database)));
   }
 
   // 登録されていない場合、シングルトンを登録する
   static void registerSingletonIfNotRegistered<T extends Object>(T instance) {
     if (!GetIt.I.isRegistered<T>()) {
-      GetIt.I.registerSingleton<T>(instance);
+      GetIt.I.registerLazySingleton<T>(() => instance);
     }
   }
 }

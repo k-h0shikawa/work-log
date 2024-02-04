@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/setup/database/entities/product_entity.dart';
@@ -6,14 +5,14 @@ import 'package:work_log/app/product/infrastructure/in_progress_product_list_rep
 
 class InProgressProductListUsecase {
   final _logger = Logger();
+  final InProgressProductListRepository _repository;
 
-  InProgressProductListUsecase();
+  InProgressProductListUsecase(this._repository);
 
   Future<List<InProgressProduct>> fetchInProgressProductList() async {
     try {
       final inProgressProductEntities =
-          await GetIt.I<InProgressProductListRepository>()
-              .fetchInProgressProductList();
+          await _repository.fetchInProgressProductList();
 
       return inProgressProductEntities
           .map((entity) => InProgressProduct(
@@ -37,7 +36,7 @@ class InProgressProductListUsecase {
       throw ArgumentError.notNull('id');
     }
     try {
-      await GetIt.I<InProgressProductListRepository>().finishProduct(id: id);
+      await _repository.finishProduct(id: id);
       return fetchInProgressProductList();
     } catch (e) {
       _logger.e(e);
@@ -48,13 +47,12 @@ class InProgressProductListUsecase {
   Future<List<InProgressProduct>> insertProduct(
       InProgressProduct product) async {
     try {
-      await GetIt.I<InProgressProductListRepository>().insertProduct(
-          ProductEntity(
-              id: product.id,
-              productName: product.productName,
-              isCompleted: product.isCompleted,
-              createdOn: product.createdOn.toString(),
-              createdBy: product.createdBy));
+      await _repository.insertProduct(ProductEntity(
+          id: product.id,
+          productName: product.productName,
+          isCompleted: product.isCompleted,
+          createdOn: product.createdOn.toString(),
+          createdBy: product.createdBy));
 
       return fetchInProgressProductList();
     } catch (e) {

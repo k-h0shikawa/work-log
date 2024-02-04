@@ -1,21 +1,20 @@
-import 'package:get_it/get_it.dart';
-import 'package:work_log/app/domain/entities/in_progress_product.dart';
-import 'package:work_log/app/product/infrastructure/complete_product_list_repository.dart';
+import 'package:work_log/app/domain/entities/complete_product.dart';
 import 'package:logger/logger.dart';
+import 'package:work_log/app/product/infrastructure/complete_product_list_repository.dart';
 
 class CompleteProductListUsecase {
   final _logger = Logger();
+  final CompleteProductListRepository _repository;
 
-  CompleteProductListUsecase();
+  CompleteProductListUsecase(this._repository);
 
-  Future<List<InProgressProduct>> fetchCompleteProductList() async {
+  Future<List<CompleteProduct>> fetchCompleteProductList() async {
     try {
       final inProgressProductEntities =
-          await GetIt.I<CompleteProductListRepository>()
-              .fetchCompleteProductList();
+          await _repository.fetchCompleteProductList();
 
       return inProgressProductEntities
-          .map((entity) => InProgressProduct(
+          .map((entity) => CompleteProduct(
               id: entity.id,
               productName: entity.productName,
               isCompleted: entity.isCompleted,
@@ -30,14 +29,13 @@ class CompleteProductListUsecase {
     }
   }
 
-  Future<List<InProgressProduct>> convertProductToInProgress(int? id) async {
+  Future<List<CompleteProduct>> convertProductToInProgress(int? id) async {
     if (id == null) {
       _logger.e('id is null');
       throw ArgumentError.notNull('id');
     }
     try {
-      await GetIt.I<CompleteProductListRepository>()
-          .convertProductToInProgress(id: id);
+      await _repository.convertProductToInProgress(id: id);
 
       return fetchCompleteProductList();
     } catch (e) {

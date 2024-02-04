@@ -2,7 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:work_log/setup/database/entities/product_entity.dart';
 
 class CompleteProductListRepository {
-  // データベースを初期化
   final Database _database;
   CompleteProductListRepository(this._database);
 

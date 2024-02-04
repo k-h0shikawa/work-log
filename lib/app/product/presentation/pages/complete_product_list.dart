@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
-import 'package:work_log/app/domain/entities/in_progress_product.dart';
+import 'package:work_log/app/domain/entities/complete_product.dart';
 import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/product/application/complete_product_list_usecase.dart';
 
@@ -10,7 +10,7 @@ class CompleteProductList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final completeProductList = useState(<InProgressProduct>[]);
+    final completeProductList = useState(<CompleteProduct>[]);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     useEffect(() {
@@ -36,7 +36,7 @@ class CompleteProductList extends HookWidget {
   }
 
   Future<void> fetchAndSetCompleteProductList(
-      ValueNotifier<List<InProgressProduct>> completeProductList,
+      ValueNotifier<List<CompleteProduct>> completeProductList,
       ScaffoldMessengerState scaffoldMessenger) async {
     try {
       completeProductList.value = await GetIt.I<CompleteProductListUsecase>()
@@ -53,8 +53,8 @@ class CompleteProductList extends HookWidget {
   }
 
   Widget buildProductRow(
-      InProgressProduct product,
-      ValueNotifier<List<InProgressProduct>> completeProductList,
+      CompleteProduct product,
+      ValueNotifier<List<CompleteProduct>> completeProductList,
       BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -77,8 +77,8 @@ class CompleteProductList extends HookWidget {
   }
 
   Future<void> convertProductToInProgress(
-      InProgressProduct product,
-      ValueNotifier<List<InProgressProduct>> completeProductList,
+      CompleteProduct product,
+      ValueNotifier<List<CompleteProduct>> completeProductList,
       BuildContext context) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
