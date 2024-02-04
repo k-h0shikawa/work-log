@@ -41,7 +41,6 @@ class TestDatabaseHelper {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
     String path = join(await getDatabasesPath(), _databaseName);
-    print(path);
     await deleteDatabase(path); // Delete the existing database if it exists
     return await openDatabase(path,
         version: _databaseVersion,
