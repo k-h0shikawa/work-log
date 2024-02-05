@@ -11,11 +11,12 @@ void main() {
     late InProgressProductListRepository repository;
 
     setUp(() async {
+      await TestDatabaseHelper.instance.resetDatabase();
       database = await TestDatabaseHelper.instance.database;
       repository = InProgressProductListRepository(database);
     });
 
-    tearDownAll(() async {
+    tearDown(() async {
       await database.close();
     });
 

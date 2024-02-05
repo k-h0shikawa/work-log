@@ -37,6 +37,14 @@ class TestDatabaseHelper {
     return _database!;
   }
 
+  Future<void> resetDatabase() async {
+    if (_database != null && _database!.isOpen) {
+      await _database!.close();
+      _database = null;
+    }
+    _database = await _initDatabase();
+  }
+
   _initDatabase() async {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;

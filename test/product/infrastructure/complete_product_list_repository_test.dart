@@ -10,6 +10,7 @@ void main() {
     late CompleteProductListRepository repository;
 
     setUp(() async {
+      await TestDatabaseHelper.instance.resetDatabase();
       database = await TestDatabaseHelper.instance.database;
       repository = CompleteProductListRepository(database);
     });
