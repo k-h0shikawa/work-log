@@ -1,15 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:work_log/app/product/infrastructure/complete_product_list_repository.dart';
 
 import '../../database/test_database_helper.dart';
 
 void main() {
   group('CompleteProductListRepository', () {
+    late Database database;
     late CompleteProductListRepository repository;
 
     setUp(() async {
-      final database = await TestDatabaseHelper.instance.database;
+      database = await TestDatabaseHelper.instance.database;
       repository = CompleteProductListRepository(database);
+    });
+
+    tearDownAll(() async {
+      await database.close();
     });
 
     test('fetchCompleteProductListで取得する件数確認', () async {

@@ -7,11 +7,16 @@ import '../../database/test_database_helper.dart';
 
 void main() {
   group('InProgressProductListRepository', () {
+    late Database database;
     late InProgressProductListRepository repository;
 
     setUp(() async {
-      final database = await TestDatabaseHelper.instance.database;
+      database = await TestDatabaseHelper.instance.database;
       repository = InProgressProductListRepository(database);
+    });
+
+    tearDownAll(() async {
+      await database.close();
     });
 
     test('fetchInProgressProductListで取得する件数確認', () async {
