@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+WorkEntity _$WorkEntityFromJson(Map<String, dynamic> json) {
+  return _WorkEntity.fromJson(json);
+}
+
 /// @nodoc
 mixin _$WorkEntity {
   int? get id => throw _privateConstructorUsedError;
@@ -27,6 +31,7 @@ mixin _$WorkEntity {
   String? get updatedOn => throw _privateConstructorUsedError;
   String? get updatedBy => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WorkEntityCopyWith<WorkEntity> get copyWith =>
       throw _privateConstructorUsedError;
@@ -209,7 +214,7 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$WorkEntityImpl implements _WorkEntity {
   const _$WorkEntityImpl(
       {this.id = null,
@@ -222,6 +227,9 @@ class _$WorkEntityImpl implements _WorkEntity {
       this.createdBy = null,
       this.updatedOn = null,
       this.updatedBy = null});
+
+  factory _$WorkEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WorkEntityImplFromJson(json);
 
   @override
   @JsonKey()
@@ -280,6 +288,7 @@ class _$WorkEntityImpl implements _WorkEntity {
                 other.updatedBy == updatedBy));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -299,6 +308,13 @@ class _$WorkEntityImpl implements _WorkEntity {
   @pragma('vm:prefer-inline')
   _$$WorkEntityImplCopyWith<_$WorkEntityImpl> get copyWith =>
       __$$WorkEntityImplCopyWithImpl<_$WorkEntityImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WorkEntityImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _WorkEntity implements WorkEntity {
@@ -313,6 +329,9 @@ abstract class _WorkEntity implements WorkEntity {
       final String? createdBy,
       final String? updatedOn,
       final String? updatedBy}) = _$WorkEntityImpl;
+
+  factory _WorkEntity.fromJson(Map<String, dynamic> json) =
+      _$WorkEntityImpl.fromJson;
 
   @override
   int? get id;

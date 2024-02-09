@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/product/application/in_progress_product_list_usecase.dart';
 import 'package:work_log/app/product/infrastructure/in_progress_product_list_repository.dart';
 import 'package:work_log/setup/database/entities/product_entity.dart';
