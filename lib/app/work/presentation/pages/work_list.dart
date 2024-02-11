@@ -24,10 +24,10 @@ class WorkList extends HookWidget {
         Work(
             workDateTime:
                 DateTime(2024, 1, 1, 9, 30).add(Duration(minutes: 30 * i)),
-            workName: '商品123',
+            workName: 'Product1',
             workDetail: '',
             workMemo: '',
-            productId: 1,
+            productId: 18,
             createdOn: DateTime.now(),
             createdBy: 'hoshikawa'),
     ]);
@@ -94,31 +94,42 @@ class WorkList extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: DropdownButton<String>(
-                    isExpanded: true,
-                    itemHeight: null,
-                    iconSize: 0,
-                    value: selectedProduct.value,
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        selectedProduct.value = newValue;
-                        workList.value = workList.value.map((tmpWork) {
-                          if (work.id == tmpWork.id) {
-                            return tmpWork.copyWith(workName: newValue);
-                          }
-                          return tmpWork;
-                        }).toList();
-                      }
-                    },
-                    items: productList.value.map<DropdownMenuItem<String>>(
-                        (InProgressProduct product) {
+                  isExpanded: true,
+                  itemHeight: null,
+                  iconSize: 0,
+                  value: selectedProduct.value,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      selectedProduct.value = newValue;
+                      workList.value = workList.value.map((tmpWork) {
+                        if (work.id == tmpWork.id) {
+                          // Find the product that matches the selected value
+                          var selectedProduct = productList.value.firstWhere(
+                            (product) => product.productName == newValue,
+                          );
+                          // Update the work's productId with the selected product's id
+                          return tmpWork.copyWith(
+                            workName: newValue,
+                            productId: selectedProduct.id ?? 0,
+                          );
+                        }
+                        return tmpWork;
+                      }).toList();
+                    }
+                  },
+                  items: productList.value.map<DropdownMenuItem<String>>(
+                    (InProgressProduct product) {
                       return DropdownMenuItem<String>(
-                          value: product.productName,
-                          child: Text(
-                            product.productName,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 10),
-                          ));
-                    }).toList()),
+                        value: product.productName,
+                        child: Text(
+                          product.productName,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                ),
               ),
             ),
             Expanded(
@@ -212,7 +223,7 @@ class WorkList extends HookWidget {
                                     workDateTime: workList
                                         .value.last.workDateTime
                                         .add(const Duration(minutes: 30)),
-                                    workName: '',
+                                    workName: 'Product1',
                                     workDetail: '',
                                     workMemo: '',
                                     productId: 5,
