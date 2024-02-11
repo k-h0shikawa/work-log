@@ -1,57 +1,85 @@
+import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
+import 'package:work_log/setup/database/entities/product_entity.dart';
 import 'package:work_log/setup/database/entities/work_entity.dart';
 
 class WorkListRepository {
+  final Logger _logger = Logger();
   final Database _database;
 
   WorkListRepository(this._database);
 
-  Future<List<Work>> insertWork(List<WorkEntity> workList) async {
-    int insertCount = 0;
+  Future<List<Work>> fetchWorks(List<int> workIds) async {
     try {
-      for (var work in workList) {
-        insertCount = await _database.insert(
-          'work',
-          work.toJson(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }
+      final result = await _database.query(
+        'work',
+        where: 'id IN (${workIds.map((id) => '?').join(', ')})',
+        whereArgs: workIds,
+      );
 
-      if (insertCount != workList.length) {
-        throw Exception("Failed to insert work");
-        // TODO:logを追加する
-      }
-
-      return workList.map((e) => toWork(e)).toList();
+      // DBから受け取ったデータをEntityを経由してドメインモデルに変換
+      return result.map((Map<String, dynamic> m) {
+        return WorkEntity.fromMap(m).toWork();
+      }).toList();
     } catch (e) {
       rethrow;
     }
   }
 
-  Map<String, dynamic> _convertEntityToMap(WorkEntity work) {
-    return <String, dynamic>{
-      "id": work.id,
-      "workDateTime": work.workDateTime.toString(),
-      "workName": work.workName,
-      "workDetail": work.workDetail,
-      "workMemo": work.workMemo,
-      "createdBy": work.createdBy,
-      "createdOn": work.createdOn.toString(),
-      "productId": work.productId,
-    };
+  Future<List<int>> insertWork(List<Work> workList) async {
+    try {
+      var insertTaskIds = <int>[];
+
+      await _database.transaction((txn) async {
+        await Future.forEach(workList, (work) async {
+          final id = await txn.insert(
+            'work',
+            work.toWorkEntity().toJson(),
+            conflictAlgorithm: ConflictAlgorithm.fail,
+          );
+          if (id == 0) {
+            _logger.e("work : $work のINSERTに失敗しました");
+            throw Exception("work : $work のINSERTに失敗しました");
+          }
+          insertTaskIds.add(id);
+        });
+
+        if (insertTaskIds.length != workList.length) {
+          _logger.e(
+              "insertCount : ${insertTaskIds.length}, workList.length : ${workList.length} のため、INSERT時の件数が一致しません");
+          throw Exception("INSERT時の件数が一致しません");
+        }
+      });
+
+      return insertTaskIds;
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Work toWork(WorkEntity e) {
-    return Work(
-      id: e.id,
-      workDateTime: e.workDateTime,
-      workName: e.workName,
-      workDetail: e.workDetail,
-      workMemo: e.workMemo,
-      createdBy: e.createdBy,
-      createdOn: DateTime.parse(e.createdOn!),
-      productId: e.productId,
-    );
+  Future<List<InProgressProduct>> fetchInProgressProductList() async {
+    try {
+      List<Map<String, dynamic>> products = await _database.query("product",
+          where: "isCompleted = 0", orderBy: "id DESC");
+
+      // DBから受け取ったデータをEntityに変換
+      final productEntityList = products.map((Map<String, dynamic> m) {
+        return ProductEntity(
+            id: m["id"],
+            productName: m["productName"],
+            isCompleted: m["isCompleted"],
+            createdOn: m["createdOn"],
+            createdBy: m["createdBy"]);
+      }).toList();
+
+      // Entityをドメインモデルに変換
+      return productEntityList
+          .map((entity) => entity.toInProgressProduct())
+          .toList();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

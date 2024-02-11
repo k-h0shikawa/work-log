@@ -215,7 +215,7 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$WorkEntityImpl implements _WorkEntity {
+class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
   const _$WorkEntityImpl(
       {this.id = null,
       required this.workDateTime,
@@ -226,7 +226,8 @@ class _$WorkEntityImpl implements _WorkEntity {
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
-      this.updatedBy = null});
+      this.updatedBy = null})
+      : super._();
 
   factory _$WorkEntityImpl.fromJson(Map<String, dynamic> json) =>
       _$$WorkEntityImplFromJson(json);
@@ -258,8 +259,25 @@ class _$WorkEntityImpl implements _WorkEntity {
   final String? updatedBy;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'WorkEntity(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'WorkEntity'))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('workDateTime', workDateTime))
+      ..add(DiagnosticsProperty('workName', workName))
+      ..add(DiagnosticsProperty('workDetail', workDetail))
+      ..add(DiagnosticsProperty('workMemo', workMemo))
+      ..add(DiagnosticsProperty('productId', productId))
+      ..add(DiagnosticsProperty('createdOn', createdOn))
+      ..add(DiagnosticsProperty('createdBy', createdBy))
+      ..add(DiagnosticsProperty('updatedOn', updatedOn))
+      ..add(DiagnosticsProperty('updatedBy', updatedBy));
   }
 
   @override
@@ -317,7 +335,7 @@ class _$WorkEntityImpl implements _WorkEntity {
   }
 }
 
-abstract class _WorkEntity implements WorkEntity {
+abstract class _WorkEntity extends WorkEntity {
   const factory _WorkEntity(
       {final int? id,
       required final DateTime workDateTime,
@@ -329,6 +347,7 @@ abstract class _WorkEntity implements WorkEntity {
       final String? createdBy,
       final String? updatedOn,
       final String? updatedBy}) = _$WorkEntityImpl;
+  const _WorkEntity._() : super._();
 
   factory _WorkEntity.fromJson(Map<String, dynamic> json) =
       _$WorkEntityImpl.fromJson;

@@ -67,14 +67,14 @@ class _FakeBatch_3 extends _i1.SmartFake implements _i2.Batch {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDatabase extends _i1.Mock implements _i2.Database {
-  MockDatabase() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   String get path => (super.noSuchMethod(
         Invocation.getter(#path),
         returnValue: _i4.dummyValue<String>(
+          this,
+          Invocation.getter(#path),
+        ),
+        returnValueForMissingStub: _i4.dummyValue<String>(
           this,
           Invocation.getter(#path),
         ),
@@ -84,12 +84,17 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
   bool get isOpen => (super.noSuchMethod(
         Invocation.getter(#isOpen),
         returnValue: false,
+        returnValueForMissingStub: false,
       ) as bool);
 
   @override
   _i2.Database get database => (super.noSuchMethod(
         Invocation.getter(#database),
         returnValue: _FakeDatabase_0(
+          this,
+          Invocation.getter(#database),
+        ),
+        returnValueForMissingStub: _FakeDatabase_0(
           this,
           Invocation.getter(#database),
         ),
@@ -135,6 +140,25 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
                 {#exclusive: exclusive},
               ),
             ),
+        returnValueForMissingStub: _i4.ifNotNull(
+              _i4.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #transaction,
+                  [action],
+                  {#exclusive: exclusive},
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_1<T>(
+              this,
+              Invocation.method(
+                #transaction,
+                [action],
+                {#exclusive: exclusive},
+              ),
+            ),
       ) as _i3.Future<T>);
 
   @override
@@ -146,6 +170,23 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           [action],
         ),
         returnValue: _i4.ifNotNull(
+              _i4.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #readTransaction,
+                  [action],
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_1<T>(
+              this,
+              Invocation.method(
+                #readTransaction,
+                [action],
+              ),
+            ),
+        returnValueForMissingStub: _i4.ifNotNull(
               _i4.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
@@ -178,6 +219,29 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           ],
         ),
         returnValue: _i4.ifNotNull(
+              _i4.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #devInvokeMethod,
+                  [
+                    method,
+                    arguments,
+                  ],
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_1<T>(
+              this,
+              Invocation.method(
+                #devInvokeMethod,
+                [
+                  method,
+                  arguments,
+                ],
+              ),
+            ),
+        returnValueForMissingStub: _i4.ifNotNull(
               _i4.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
@@ -242,6 +306,31 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
                 ],
               ),
             ),
+        returnValueForMissingStub: _i4.ifNotNull(
+              _i4.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #devInvokeSqlMethod,
+                  [
+                    method,
+                    sql,
+                    arguments,
+                  ],
+                ),
+              ),
+              (T v) => _i3.Future<T>.value(v),
+            ) ??
+            _FakeFuture_1<T>(
+              this,
+              Invocation.method(
+                #devInvokeSqlMethod,
+                [
+                  method,
+                  sql,
+                  arguments,
+                ],
+              ),
+            ),
       ) as _i3.Future<T>);
 
   @override
@@ -275,6 +364,7 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           ],
         ),
         returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
 
   @override
@@ -297,6 +387,7 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           },
         ),
         returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
 
   @override
@@ -330,6 +421,8 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
         ),
         returnValue: _i3.Future<List<Map<String, Object?>>>.value(
             <Map<String, Object?>>[]),
+        returnValueForMissingStub: _i3.Future<List<Map<String, Object?>>>.value(
+            <Map<String, Object?>>[]),
       ) as _i3.Future<List<Map<String, Object?>>>);
 
   @override
@@ -346,6 +439,8 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           ],
         ),
         returnValue: _i3.Future<List<Map<String, Object?>>>.value(
+            <Map<String, Object?>>[]),
+        returnValueForMissingStub: _i3.Future<List<Map<String, Object?>>>.value(
             <Map<String, Object?>>[]),
       ) as _i3.Future<List<Map<String, Object?>>>);
 
@@ -365,6 +460,18 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           {#bufferSize: bufferSize},
         ),
         returnValue: _i3.Future<_i2.QueryCursor>.value(_FakeQueryCursor_2(
+          this,
+          Invocation.method(
+            #rawQueryCursor,
+            [
+              sql,
+              arguments,
+            ],
+            {#bufferSize: bufferSize},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i3.Future<_i2.QueryCursor>.value(_FakeQueryCursor_2(
           this,
           Invocation.method(
             #rawQueryCursor,
@@ -427,6 +534,26 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
             },
           ),
         )),
+        returnValueForMissingStub:
+            _i3.Future<_i2.QueryCursor>.value(_FakeQueryCursor_2(
+          this,
+          Invocation.method(
+            #queryCursor,
+            [table],
+            {
+              #distinct: distinct,
+              #columns: columns,
+              #where: where,
+              #whereArgs: whereArgs,
+              #groupBy: groupBy,
+              #having: having,
+              #orderBy: orderBy,
+              #limit: limit,
+              #offset: offset,
+              #bufferSize: bufferSize,
+            },
+          ),
+        )),
       ) as _i3.Future<_i2.QueryCursor>);
 
   @override
@@ -443,6 +570,7 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           ],
         ),
         returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
 
   @override
@@ -467,6 +595,7 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           },
         ),
         returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
 
   @override
@@ -483,6 +612,7 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           ],
         ),
         returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
 
   @override
@@ -501,6 +631,7 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           },
         ),
         returnValue: _i3.Future<int>.value(0),
+        returnValueForMissingStub: _i3.Future<int>.value(0),
       ) as _i3.Future<int>);
 
   @override
@@ -510,6 +641,13 @@ class MockDatabase extends _i1.Mock implements _i2.Database {
           [],
         ),
         returnValue: _FakeBatch_3(
+          this,
+          Invocation.method(
+            #batch,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _FakeBatch_3(
           this,
           Invocation.method(
             #batch,

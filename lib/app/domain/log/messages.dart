@@ -12,4 +12,6 @@ class Messages {
   static String successRegisterProduct(String productName) {
     return '$productName の登録に成功しました';
   }
+
+  static const String successRegisterWork = '業務の登録に成功しました';
 }

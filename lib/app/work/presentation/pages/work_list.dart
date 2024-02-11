@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:intl/intl.dart';
+import 'package:work_log/app/domain/log/messages.dart';
+import 'package:work_log/app/work/application/work_list_usecase.dart';
 
 class WorkList extends HookWidget {
   const WorkList({super.key});
@@ -19,36 +22,14 @@ class WorkList extends HookWidget {
     final workList = useState(<Work>[
       for (var i = 0; i < 20; i++)
         Work(
-            id: i,
             workDateTime:
                 DateTime(2024, 1, 1, 9, 30).add(Duration(minutes: 30 * i)),
-            workName: 'ダミー案件',
-            workDetail: 'Detail $i',
-            workMemo: 'Memo $i',
-            productId: i,
+            workName: '商品123',
+            workDetail: '',
+            workMemo: '',
+            productId: 1,
             createdOn: DateTime.now(),
             createdBy: 'hoshikawa'),
-    ]);
-
-    final productList = useState(<InProgressProduct>[
-      InProgressProduct(
-          id: 0,
-          productName: 'ダミー案件',
-          isCompleted: 0,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa'),
-      InProgressProduct(
-          id: 1,
-          productName: 'ぽしぇっと',
-          isCompleted: 0,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa'),
-      InProgressProduct(
-          id: 2,
-          productName: '２０文字の長さの商品名のてすとなのですよ',
-          isCompleted: 0,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa')
     ]);
 
     Future<void> selectDate(BuildContext context) async {
@@ -83,6 +64,15 @@ class WorkList extends HookWidget {
     }
 
     List<Widget> buildTaskList() {
+      final productList = useState(<InProgressProduct>[]);
+      useEffect(() {
+        () async {
+          productList.value =
+              await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
+        }();
+        return null;
+      }, []);
+
       return workList.value.map((work) {
         final workDetailController =
             useTextEditingController(text: work.workDetail);
@@ -104,32 +94,31 @@ class WorkList extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: DropdownButton<String>(
-                  isExpanded: true,
-                  itemHeight: null,
-                  iconSize: 0,
-                  value: selectedProduct.value,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      selectedProduct.value = newValue;
-                      workList.value = workList.value.map((tmpWork) {
-                        if (work.id == tmpWork.id) {
-                          return tmpWork.copyWith(workName: newValue);
-                        }
-                        return tmpWork;
-                      }).toList();
-                    }
-                  },
-                  items: productList.value.map<DropdownMenuItem<String>>(
-                      (InProgressProduct product) {
-                    return DropdownMenuItem<String>(
-                        value: product.productName,
-                        child: Text(
-                          product.productName,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 10),
-                        ));
-                  }).toList(),
-                ),
+                    isExpanded: true,
+                    itemHeight: null,
+                    iconSize: 0,
+                    value: selectedProduct.value,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        selectedProduct.value = newValue;
+                        workList.value = workList.value.map((tmpWork) {
+                          if (work.id == tmpWork.id) {
+                            return tmpWork.copyWith(workName: newValue);
+                          }
+                          return tmpWork;
+                        }).toList();
+                      }
+                    },
+                    items: productList.value.map<DropdownMenuItem<String>>(
+                        (InProgressProduct product) {
+                      return DropdownMenuItem<String>(
+                          value: product.productName,
+                          child: Text(
+                            product.productName,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 10),
+                          ));
+                    }).toList()),
               ),
             ),
             Expanded(
@@ -223,12 +212,12 @@ class WorkList extends HookWidget {
                                     workDateTime: workList
                                         .value.last.workDateTime
                                         .add(const Duration(minutes: 30)),
-                                    workName: 'ぽしぇっと',
-                                    workDetail: 'Detail',
-                                    workMemo: 'Memo',
+                                    workName: '',
+                                    workDetail: '',
+                                    workMemo: '',
                                     productId: 5,
                                     createdOn: DateTime.now(),
-                                    createdBy: 'hoshikawa')
+                                    createdBy: 'user')
                               ];
                             },
                             style: ElevatedButton.styleFrom(
@@ -273,7 +262,18 @@ class WorkList extends HookWidget {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final scaffoldMessenger =
+                                  ScaffoldMessenger.of(context);
+                              workList.value = await GetIt.I<WorkListUsecase>()
+                                  .insertWork(workList.value);
+                              scaffoldMessenger.showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text(Messages.successRegisterWork),
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.black,
                             ),

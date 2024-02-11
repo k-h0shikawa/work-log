@@ -206,7 +206,7 @@ class __$$WorkImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$WorkImpl implements _Work {
+class _$WorkImpl extends _Work {
   const _$WorkImpl(
       {this.id = null,
       required this.workDateTime,
@@ -217,7 +217,8 @@ class _$WorkImpl implements _Work {
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
-      this.updatedBy = null});
+      this.updatedBy = null})
+      : super._();
 
   @override
   @JsonKey()
@@ -297,7 +298,7 @@ class _$WorkImpl implements _Work {
       __$$WorkImplCopyWithImpl<_$WorkImpl>(this, _$identity);
 }
 
-abstract class _Work implements Work {
+abstract class _Work extends Work {
   const factory _Work(
       {final int? id,
       required final DateTime workDateTime,
@@ -309,6 +310,7 @@ abstract class _Work implements Work {
       final String? createdBy,
       final DateTime? updatedOn,
       final String? updatedBy}) = _$WorkImpl;
+  const _Work._() : super._();
 
   @override
   int? get id;
