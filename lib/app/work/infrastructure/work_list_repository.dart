@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
@@ -11,7 +12,7 @@ class WorkListRepository {
 
   WorkListRepository(this._database);
 
-  Future<List<Work>> fetchWorks(List<int> workIds) async {
+  Future<List<Work>> fetchWorksById(List<int> workIds) async {
     try {
       final result = await _database.query(
         'work',
@@ -31,6 +32,9 @@ class WorkListRepository {
   Future<List<int>> insertWork(List<Work> workList) async {
     try {
       var insertTaskIds = <int>[];
+      workList.map(
+        (e) => print(e),
+      );
 
       await _database.transaction((txn) async {
         await Future.forEach(workList, (work) async {
@@ -81,5 +85,23 @@ class WorkListRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<List<Work>> getWorksWithinDateRange(
+      DateTime startDateTime, DateTime endDateTime) async {
+    final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+
+    final result = await _database.query("work",
+        where: "workDateTime BETWEEN ? AND ?",
+        whereArgs: [
+          formatter.format(startDateTime),
+          formatter.format(endDateTime)
+        ]);
+    print("startDateTime : $startDateTime, endDateTime : $endDateTime");
+
+    // DBから受け取ったデータをEntityを経由してドメインモデルに変換
+    return result.map((Map<String, dynamic> m) {
+      return WorkEntity.fromMap(m).toWork();
+    }).toList();
   }
 }

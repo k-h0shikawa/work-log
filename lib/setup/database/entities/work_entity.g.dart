@@ -9,8 +9,7 @@ part of 'work_entity.dart';
 _$WorkEntityImpl _$$WorkEntityImplFromJson(Map<String, dynamic> json) =>
     _$WorkEntityImpl(
       id: json['id'] as int? ?? null,
-      workDateTime: DateTime.parse(json['workDateTime'] as String),
-      workName: json['workName'] as String,
+      workDateTime: json['workDateTime'] as String,
       workDetail: json['workDetail'] as String,
       workMemo: json['workMemo'] as String,
       productId: json['productId'] as int,
@@ -23,8 +22,7 @@ _$WorkEntityImpl _$$WorkEntityImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$WorkEntityImplToJson(_$WorkEntityImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'workDateTime': instance.workDateTime.toIso8601String(),
-      'workName': instance.workName,
+      'workDateTime': instance.workDateTime,
       'workDetail': instance.workDetail,
       'workMemo': instance.workMemo,
       'productId': instance.productId,

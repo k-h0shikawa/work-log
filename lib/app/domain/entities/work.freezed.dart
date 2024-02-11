@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Work {
   int? get id => throw _privateConstructorUsedError;
   DateTime get workDateTime => throw _privateConstructorUsedError;
-  String get workName => throw _privateConstructorUsedError;
   String get workDetail => throw _privateConstructorUsedError;
   String get workMemo => throw _privateConstructorUsedError;
   int get productId => throw _privateConstructorUsedError;
@@ -39,7 +38,6 @@ abstract class $WorkCopyWith<$Res> {
   $Res call(
       {int? id,
       DateTime workDateTime,
-      String workName,
       String workDetail,
       String workMemo,
       int productId,
@@ -64,7 +62,6 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
   $Res call({
     Object? id = freezed,
     Object? workDateTime = null,
-    Object? workName = null,
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
@@ -82,10 +79,6 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
           ? _value.workDateTime
           : workDateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      workName: null == workName
-          ? _value.workName
-          : workName // ignore: cast_nullable_to_non_nullable
-              as String,
       workDetail: null == workDetail
           ? _value.workDetail
           : workDetail // ignore: cast_nullable_to_non_nullable
@@ -128,7 +121,6 @@ abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
   $Res call(
       {int? id,
       DateTime workDateTime,
-      String workName,
       String workDetail,
       String workMemo,
       int productId,
@@ -150,7 +142,6 @@ class __$$WorkImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? workDateTime = null,
-    Object? workName = null,
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
@@ -168,10 +159,6 @@ class __$$WorkImplCopyWithImpl<$Res>
           ? _value.workDateTime
           : workDateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      workName: null == workName
-          ? _value.workName
-          : workName // ignore: cast_nullable_to_non_nullable
-              as String,
       workDetail: null == workDetail
           ? _value.workDetail
           : workDetail // ignore: cast_nullable_to_non_nullable
@@ -210,7 +197,6 @@ class _$WorkImpl extends _Work {
   const _$WorkImpl(
       {this.id = null,
       required this.workDateTime,
-      required this.workName,
       required this.workDetail,
       required this.workMemo,
       required this.productId,
@@ -225,8 +211,6 @@ class _$WorkImpl extends _Work {
   final int? id;
   @override
   final DateTime workDateTime;
-  @override
-  final String workName;
   @override
   final String workDetail;
   @override
@@ -248,7 +232,7 @@ class _$WorkImpl extends _Work {
 
   @override
   String toString() {
-    return 'Work(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+    return 'Work(id: $id, workDateTime: $workDateTime, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
   }
 
   @override
@@ -259,8 +243,6 @@ class _$WorkImpl extends _Work {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.workDateTime, workDateTime) ||
                 other.workDateTime == workDateTime) &&
-            (identical(other.workName, workName) ||
-                other.workName == workName) &&
             (identical(other.workDetail, workDetail) ||
                 other.workDetail == workDetail) &&
             (identical(other.workMemo, workMemo) ||
@@ -278,18 +260,8 @@ class _$WorkImpl extends _Work {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      workDateTime,
-      workName,
-      workDetail,
-      workMemo,
-      productId,
-      createdOn,
-      createdBy,
-      updatedOn,
-      updatedBy);
+  int get hashCode => Object.hash(runtimeType, id, workDateTime, workDetail,
+      workMemo, productId, createdOn, createdBy, updatedOn, updatedBy);
 
   @JsonKey(ignore: true)
   @override
@@ -302,7 +274,6 @@ abstract class _Work extends Work {
   const factory _Work(
       {final int? id,
       required final DateTime workDateTime,
-      required final String workName,
       required final String workDetail,
       required final String workMemo,
       required final int productId,
@@ -316,8 +287,6 @@ abstract class _Work extends Work {
   int? get id;
   @override
   DateTime get workDateTime;
-  @override
-  String get workName;
   @override
   String get workDetail;
   @override

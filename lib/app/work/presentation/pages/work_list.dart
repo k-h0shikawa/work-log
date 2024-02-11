@@ -19,18 +19,7 @@ class WorkList extends HookWidget {
     final targetDate = useState(DateTime.now());
     const maxWorkListLength = 1;
     const flexRate = [1, 3, 3, 3];
-    final workList = useState(<Work>[
-      for (var i = 0; i < 20; i++)
-        Work(
-            workDateTime:
-                DateTime(2024, 1, 1, 9, 30).add(Duration(minutes: 30 * i)),
-            workName: 'Product1',
-            workDetail: '',
-            workMemo: '',
-            productId: 18,
-            createdOn: DateTime.now(),
-            createdBy: 'hoshikawa'),
-    ]);
+    final workList = useState(<Work>[]);
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -69,6 +58,8 @@ class WorkList extends HookWidget {
         () async {
           productList.value =
               await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
+          workList.value =
+              await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
         }();
         return null;
       }, []);
@@ -78,7 +69,7 @@ class WorkList extends HookWidget {
             useTextEditingController(text: work.workDetail);
         final workMemoController =
             useTextEditingController(text: work.workMemo);
-        var selectedProduct = useState<String>(work.workName);
+        var selectedProduct = useState<String>("Product1");
 
         return Row(
           children: <Widget>[
@@ -109,7 +100,6 @@ class WorkList extends HookWidget {
                           );
                           // Update the work's productId with the selected product's id
                           return tmpWork.copyWith(
-                            workName: newValue,
                             productId: selectedProduct.id ?? 0,
                           );
                         }
@@ -177,7 +167,10 @@ class WorkList extends HookWidget {
                       child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: ElevatedButton(
-                      onPressed: () => context.push('/product'),
+                      onPressed: () async {
+                        context.push('/product');
+                        // TODO: 画面遷移後に最新の進行中商品リストを取得する。
+                      },
                       child: const Text('商品一覧画面'),
                     ),
                   ))
@@ -223,7 +216,6 @@ class WorkList extends HookWidget {
                                     workDateTime: workList
                                         .value.last.workDateTime
                                         .add(const Duration(minutes: 30)),
-                                    workName: 'Product1',
                                     workDetail: '',
                                     workMemo: '',
                                     productId: 5,

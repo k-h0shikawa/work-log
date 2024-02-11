@@ -33,7 +33,6 @@ void main() {
         // id: 3が追加される
         Work(
           workDateTime: DateTime.now(),
-          workName: 'Work 1',
           workDetail: 'Work 1 detail',
           workMemo: 'Work 1 memo',
           createdBy: 'User 1',
@@ -43,7 +42,6 @@ void main() {
         // id: 4が追加される
         Work(
           workDateTime: DateTime.now(),
-          workName: 'Work 2',
           workDetail: 'Work 2 detail',
           workMemo: 'Work 2 memo',
           createdBy: 'User 2',
@@ -64,36 +62,59 @@ void main() {
       final expectedWorks = <Work>[
         Work(
           id: 1,
-          workDateTime: DateTime.parse('2024-01-30 00:00:00.000'),
-          workName: 'Work1',
+          workDateTime: DateTime.parse('2024-02-09 09:30:00'),
           workDetail: 'Detail1',
           workMemo: 'Memo1',
           productId: 1,
           createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
-          createdBy: 'User1',
+          createdBy: 'user',
           updatedOn: DateTime.parse('2024-01-30 00:00:00.000'),
-          updatedBy: 'User1',
+          updatedBy: 'user',
         ),
         Work(
           id: 2,
-          workDateTime: DateTime.parse('2024-01-30 00:00:00.000'),
-          workName: 'Work2',
+          workDateTime: DateTime.parse('2024-02-10 09:30:00'),
           workDetail: 'Detail2',
           workMemo: 'Memo2',
           productId: 2,
           createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
-          createdBy: 'User1',
+          createdBy: 'user',
           updatedOn: DateTime.parse('2024-01-30 00:00:00.000'),
-          updatedBy: 'User1',
+          updatedBy: 'user',
         ),
       ];
 
       // Act
-      final result = await repository.fetchWorks(<int>[1, 2]);
+      final result = await repository.fetchWorksById(<int>[1, 2]);
 
       // Assert
       expect(result.length, 2);
       expect(result, expectedWorks);
+    });
+
+    test('業務内容を取得できること', () async {
+      final startDateTime = DateTime(2024, 02, 9, 9, 0, 0);
+      final endDateTime = DateTime(2024, 02, 10, 9, 0, 0);
+
+      final expected = <Work>[
+        Work(
+          id: 1,
+          workDateTime: DateTime.parse('2024-02-09 09:30:00.000'),
+          workDetail: 'Detail1',
+          workMemo: 'Memo1',
+          productId: 1,
+          createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
+          createdBy: 'user',
+          updatedOn: DateTime.parse('2024-01-30 00:00:00.000'),
+          updatedBy: 'user',
+        ),
+      ];
+
+      final works =
+          await repository.getWorksWithinDateRange(startDateTime, endDateTime);
+
+      expect(works.length, 1);
+      expect(works, expected);
     });
   });
 
@@ -123,7 +144,7 @@ void main() {
           productName: 'Product1',
           isCompleted: 0,
           createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
-          createdBy: 'User1',
+          createdBy: 'user',
           updatedOn: null,
           updatedBy: null,
         ),

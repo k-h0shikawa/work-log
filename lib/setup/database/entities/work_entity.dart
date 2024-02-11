@@ -10,8 +10,7 @@ abstract class WorkEntity implements _$WorkEntity {
 
   const factory WorkEntity(
       {@Default(null) int? id,
-      required DateTime workDateTime,
-      required String workName,
+      required String workDateTime,
       required String workDetail,
       required String workMemo,
       required int productId,
@@ -29,8 +28,7 @@ abstract class WorkEntity implements _$WorkEntity {
   Work toWork() {
     return Work(
       id: id,
-      workDateTime: workDateTime,
-      workName: workName,
+      workDateTime: DateTime.parse(workDateTime),
       workDetail: workDetail,
       workMemo: workMemo,
       productId: productId,

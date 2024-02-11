@@ -6,12 +6,61 @@ import 'package:work_log/app/work/infrastructure/work_list_repository.dart';
 class WorkListUsecase {
   final _logger = Logger();
   final WorkListRepository _repository;
+  static const startWorkTime = 9;
+
+  final defaultWorkList = <Work>[
+    for (var i = 0; i < 20; i++)
+      Work(
+          workDateTime: DateTime(DateTime.now().year, DateTime.now().month,
+                  DateTime.now().day, 9, 30)
+              .add(Duration(minutes: 30 * i)),
+          workDetail: '',
+          workMemo: '',
+          productId: 1, // TODO: 要修正
+          createdOn: DateTime.now(),
+          createdBy: 'user'),
+  ];
+
   WorkListUsecase(this._repository);
 
+  Future<List<Work>> initWorkList(DateTime workDateTime) async {
+    var targetStartTime = DateTime(1966, 1, 1);
+    var targetEndTime = DateTime(1966, 1, 1);
+
+    final hour = workDateTime.hour;
+
+    if (hour < startWorkTime) {
+      // 9時より前の場合は前日の9時から当日の9時までの業務を表示
+      targetStartTime = DateTime(
+          workDateTime.year, workDateTime.month, workDateTime.day - 1, 9, 0, 0);
+      targetEndTime = DateTime(
+          workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0);
+    } else {
+      // 9時以降の場合は当日の9時から翌日の9時までの業務を表示
+      targetStartTime = DateTime(
+          workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0);
+      targetEndTime = DateTime(
+          workDateTime.year, workDateTime.month, workDateTime.day + 1, 9, 0, 0);
+    }
+
+    try {
+      final targetWorkList = await _repository.getWorksWithinDateRange(
+          targetStartTime, targetEndTime);
+      // print("targetWorkList : $targetWorkList");
+      // 対象日の業務がない場合はデフォルトの業務を返す
+      if (targetWorkList.isEmpty) return defaultWorkList;
+      return targetWorkList;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
   Future<List<Work>> insertWork(List<Work> workList) async {
+    print(workList[0]);
     try {
       final insertedIds = await _repository.insertWork(workList);
-      final insertedWorks = _repository.fetchWorks(insertedIds);
+      final insertedWorks = _repository.fetchWorksById(insertedIds);
       return insertedWorks;
     } catch (e) {
       _logger.e(e);

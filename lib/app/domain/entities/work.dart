@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:work_log/setup/database/entities/work_entity.dart';
 part 'work.freezed.dart';
 
@@ -8,7 +9,6 @@ abstract class Work implements _$Work {
   const factory Work({
     @Default(null) int? id,
     required DateTime workDateTime,
-    required String workName,
     required String workDetail,
     required String workMemo,
     required int productId,
@@ -19,10 +19,10 @@ abstract class Work implements _$Work {
   }) = _Work;
 
   WorkEntity toWorkEntity() {
+    final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return WorkEntity(
       id: id,
-      workDateTime: workDateTime,
-      workName: workName,
+      workDateTime: formatter.format(workDateTime),
       workDetail: workDetail,
       workMemo: workMemo,
       createdBy: createdBy,
