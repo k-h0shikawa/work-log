@@ -9,6 +9,7 @@ import 'package:work_log/setup/database/entities/work_entity.dart';
 class WorkListRepository {
   final Logger _logger = Logger();
   final Database _database;
+  final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   WorkListRepository(this._database);
 
@@ -81,14 +82,13 @@ class WorkListRepository {
           .map((entity) => entity.toInProgressProduct())
           .toList();
     } catch (e) {
+      _logger.e(e);
       rethrow;
     }
   }
 
   Future<List<Work>> getWorksWithinDateRange(
       DateTime startDateTime, DateTime endDateTime) async {
-    final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-
     final result = await _database.query("work",
         where: "workDateTime BETWEEN ? AND ?",
         whereArgs: [
