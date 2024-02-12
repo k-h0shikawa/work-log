@@ -83,8 +83,8 @@ class WorkListUsecase {
     }
 
     try {
-      final insertedIds = await _repository.saveWork(insertList, updateList);
-      final savedWorks = _repository.fetchWorksById(insertedIds);
+      final savedIds = await _repository.saveWork(insertList, updateList);
+      final savedWorks = _repository.fetchWorksById(savedIds);
       return savedWorks;
     } catch (e) {
       _logger.e(e);

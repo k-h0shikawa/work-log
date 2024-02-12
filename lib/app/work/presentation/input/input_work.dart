@@ -5,7 +5,7 @@ class InputWork {
   DateTime workDateTime;
   TextEditingController workDetailController;
   TextEditingController workMemoController;
-  ValueNotifier<int> selectedProductId;
+  int selectedProductId;
 
   InputWork({
     this.workId,

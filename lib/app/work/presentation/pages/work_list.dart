@@ -63,25 +63,22 @@ class WorkList extends HookWidget {
               await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
           workList.value =
               await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
+
+          // workListの内容をinputWorkListへ詰め替える
+          for (final work in workList.value) {
+            inputWorkList.value.add(InputWork(
+                workId: work.id,
+                workDateTime: work.workDateTime,
+                workDetailController: work.workDetailController,
+                workMemoController: work.workMemoController,
+                selectedProductId: work.productId));
+          }
         }();
         return null;
       }, []);
 
-      return workList.value.map((work) {
-        final workDetailController =
-            useTextEditingController(text: work.workDetail);
-        final workMemoController =
-            useTextEditingController(text: work.workMemo);
-
-        var inputWork = InputWork(
-            workId: work.id,
-            workDateTime: work.workDateTime,
-            workDetailController: workDetailController,
-            workMemoController: workMemoController,
-            selectedProductId: useState<int>(work.productId));
-
-        inputWorkList.value = [...inputWorkList.value, inputWork];
-
+      return inputWorkList.value.map((inputWork) {
+        var selectedProductId = useState<int>(inputWork.selectedProductId);
         return Row(
           children: <Widget>[
             Expanded(
@@ -99,10 +96,11 @@ class WorkList extends HookWidget {
                   isExpanded: true,
                   itemHeight: null,
                   iconSize: 0,
-                  value: inputWork.selectedProductId.value.toString(),
+                  value: inputWork.selectedProductId.toString(),
                   onChanged: (String? newValue) {
                     if (newValue != null) {
-                      inputWork.selectedProductId.value = int.parse(newValue);
+                      inputWork.selectedProductId = int.parse(newValue);
+                      selectedProductId.value = int.parse(newValue);
                     }
                   },
                   items: productList.value.map<DropdownMenuItem<String>>(
@@ -275,15 +273,13 @@ class WorkList extends HookWidget {
                                             inputWork.workDetailController.text,
                                         workMemo:
                                             inputWork.workMemoController.text,
-                                        productId:
-                                            inputWork.selectedProductId.value,
+                                        productId: inputWork.selectedProductId,
                                       ))
                                   .toList();
 
                               workList.value = await GetIt.I<WorkListUsecase>()
                                   .saveWork(registerWorks);
-                              // 入力を初期化
-                              inputWorkList.value = <InputWork>[];
+
                               scaffoldMessenger.showSnackBar(
                                 const SnackBar(
                                   backgroundColor: Colors.green,
