@@ -16,7 +16,8 @@ class WorkListUsecase {
               .add(Duration(minutes: 30 * i)),
           workDetail: '',
           workMemo: '',
-          productId: 1, // TODO: 要修正
+          productId: 1, // 使用時に進行中商品を代入
+          productName: 'Product1', // 使用時に進行中商品を代入
           createdOn: DateTime.now(),
           createdBy: 'user'),
   ];
@@ -95,6 +96,41 @@ class WorkListUsecase {
   Future<List<InProgressProduct>> fetchInProgressProductList() async {
     try {
       return await _repository.fetchInProgressProductList();
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  Future<List<Work>> fetchWorkListByDate(DateTime workDateTime) async {
+    final targetStartTime = DateTime(
+        workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0);
+    final targetEndTime = DateTime(
+        workDateTime.year, workDateTime.month, workDateTime.day + 1, 9, 0, 0);
+
+    try {
+      final targetWorkList = await _repository.getWorksWithinDateRange(
+          targetStartTime, targetEndTime);
+      // 対象日の業務がない場合はデフォルトの業務を返す
+      if (targetWorkList.isEmpty) {
+        final InProgressProduct inProgressProduct =
+            (await _repository.fetchInProgressProductList()).first;
+        return defaultWorkList.map((work) {
+          return Work(
+            workDateTime: DateTime(workDateTime.year, workDateTime.month,
+                    workDateTime.day, 9, 30)
+                .add(Duration(minutes: 30 * defaultWorkList.indexOf(work))),
+            workDetail: work.workDetail,
+            workMemo: work.workMemo,
+            productId: inProgressProduct.id!,
+            productName: inProgressProduct.productName,
+            createdOn: work.createdOn,
+            createdBy: work.createdBy,
+          );
+        }).toList();
+      } else {
+        return targetWorkList;
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;

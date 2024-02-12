@@ -57,7 +57,14 @@ class WorkListRepository {
       await Future.forEach(workList, (work) async {
         final id = await txn.insert(
           'work',
-          work.toWorkEntity().toJson(),
+          {
+            'workDateTime': formatter.format(work.workDateTime),
+            'workDetail': work.workDetail,
+            'workMemo': work.workMemo,
+            'productId': work.productId,
+            'createdBy': work.createdBy,
+            'createdOn': formatter.format(work.createdOn!),
+          },
           conflictAlgorithm: ConflictAlgorithm.fail,
         );
         if (id == 0) {
@@ -84,7 +91,14 @@ class WorkListRepository {
       await Future.forEach(workList, (work) async {
         final id = await txn.update(
           'work',
-          work.toWorkEntity().toUpdateJson(),
+          {
+            'workDateTime': formatter.format(work.workDateTime),
+            'workDetail': work.workDetail,
+            'workMemo': work.workMemo,
+            'productId': work.productId,
+            'updatedBy': work.updatedBy,
+            'updatedOn': formatter.format(work.updatedOn!),
+          },
           where: 'id = ?',
           whereArgs: [work.id],
           conflictAlgorithm: ConflictAlgorithm.fail,
@@ -128,12 +142,12 @@ class WorkListRepository {
 
   Future<List<Work>> getWorksWithinDateRange(
       DateTime startDateTime, DateTime endDateTime) async {
-    final result = await _database.query("work",
-        where: "workDateTime BETWEEN ? AND ?",
-        whereArgs: [
-          formatter.format(startDateTime),
-          formatter.format(endDateTime)
-        ]);
+    final result = await _database.rawQuery('''
+      SELECT work.*, product.productName, product.isCompleted, product.createdOn, product.createdBy
+      FROM work
+      INNER JOIN product ON work.productId = product.id
+      WHERE work.workDateTime BETWEEN ? AND ?
+    ''', [formatter.format(startDateTime), formatter.format(endDateTime)]);
 
     // DBから受け取ったデータをEntityを経由してドメインモデルに変換
     return result.map((Map<String, dynamic> m) {

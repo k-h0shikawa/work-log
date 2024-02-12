@@ -21,6 +21,7 @@ mixin _$Work {
   String get workDetail => throw _privateConstructorUsedError;
   String get workMemo => throw _privateConstructorUsedError;
   int get productId => throw _privateConstructorUsedError;
+  String? get productName => throw _privateConstructorUsedError;
   DateTime? get createdOn => throw _privateConstructorUsedError;
   String? get createdBy => throw _privateConstructorUsedError;
   DateTime? get updatedOn => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $WorkCopyWith<$Res> {
       String workDetail,
       String workMemo,
       int productId,
+      String? productName,
       DateTime? createdOn,
       String? createdBy,
       DateTime? updatedOn,
@@ -65,6 +67,7 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
+    Object? productName = freezed,
     Object? createdOn = freezed,
     Object? createdBy = freezed,
     Object? updatedOn = freezed,
@@ -91,6 +94,10 @@ class _$WorkCopyWithImpl<$Res, $Val extends Work>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as int,
+      productName: freezed == productName
+          ? _value.productName
+          : productName // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
@@ -124,6 +131,7 @@ abstract class _$$WorkImplCopyWith<$Res> implements $WorkCopyWith<$Res> {
       String workDetail,
       String workMemo,
       int productId,
+      String? productName,
       DateTime? createdOn,
       String? createdBy,
       DateTime? updatedOn,
@@ -145,6 +153,7 @@ class __$$WorkImplCopyWithImpl<$Res>
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
+    Object? productName = freezed,
     Object? createdOn = freezed,
     Object? createdBy = freezed,
     Object? updatedOn = freezed,
@@ -171,6 +180,10 @@ class __$$WorkImplCopyWithImpl<$Res>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as int,
+      productName: freezed == productName
+          ? _value.productName
+          : productName // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
@@ -200,6 +213,7 @@ class _$WorkImpl extends _Work {
       required this.workDetail,
       required this.workMemo,
       required this.productId,
+      this.productName,
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
@@ -218,6 +232,8 @@ class _$WorkImpl extends _Work {
   @override
   final int productId;
   @override
+  final String? productName;
+  @override
   @JsonKey()
   final DateTime? createdOn;
   @override
@@ -232,7 +248,7 @@ class _$WorkImpl extends _Work {
 
   @override
   String toString() {
-    return 'Work(id: $id, workDateTime: $workDateTime, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+    return 'Work(id: $id, workDateTime: $workDateTime, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, productName: $productName, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
   }
 
   @override
@@ -249,6 +265,8 @@ class _$WorkImpl extends _Work {
                 other.workMemo == workMemo) &&
             (identical(other.productId, productId) ||
                 other.productId == productId) &&
+            (identical(other.productName, productName) ||
+                other.productName == productName) &&
             (identical(other.createdOn, createdOn) ||
                 other.createdOn == createdOn) &&
             (identical(other.createdBy, createdBy) ||
@@ -260,8 +278,18 @@ class _$WorkImpl extends _Work {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, workDateTime, workDetail,
-      workMemo, productId, createdOn, createdBy, updatedOn, updatedBy);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      workDateTime,
+      workDetail,
+      workMemo,
+      productId,
+      productName,
+      createdOn,
+      createdBy,
+      updatedOn,
+      updatedBy);
 
   @JsonKey(ignore: true)
   @override
@@ -277,6 +305,7 @@ abstract class _Work extends Work {
       required final String workDetail,
       required final String workMemo,
       required final int productId,
+      final String? productName,
       final DateTime? createdOn,
       final String? createdBy,
       final DateTime? updatedOn,
@@ -293,6 +322,8 @@ abstract class _Work extends Work {
   String get workMemo;
   @override
   int get productId;
+  @override
+  String? get productName;
   @override
   DateTime? get createdOn;
   @override

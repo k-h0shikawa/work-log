@@ -32,6 +32,22 @@ class WorkList extends HookWidget {
           lastDate: DateTime.now().add(const Duration(days: 360)));
       if (picked != null && picked != targetDate.value) {
         targetDate.value = picked;
+
+        // targetDateが更新されたら、inputWorkListも更新する
+        workList.value =
+            await GetIt.I<WorkListUsecase>().fetchWorkListByDate(picked);
+
+        // workListの内容をinputWorkListへ詰め替える
+        inputWorkList.value.clear();
+        for (final work in workList.value) {
+          inputWorkList.value.add(InputWork(
+              workId: work.id,
+              workDateTime: work.workDateTime,
+              workDetailController: work.workDetailController,
+              workMemoController: work.workMemoController,
+              selectedProductId: work.productId,
+              productName: work.productName!));
+        }
       }
     }
 
@@ -71,14 +87,45 @@ class WorkList extends HookWidget {
                 workDateTime: work.workDateTime,
                 workDetailController: work.workDetailController,
                 workMemoController: work.workMemoController,
-                selectedProductId: work.productId));
+                selectedProductId: work.productId,
+                productName: work.productName!));
           }
         }();
         return null;
       }, []);
 
+      // 追加
       return inputWorkList.value.map((inputWork) {
-        var selectedProductId = useState<int>(inputWork.selectedProductId);
+        var selectedProductIdForDisplay =
+            useState<int>(inputWork.selectedProductId);
+        final dropDownButtonMenu =
+            productList.value.map<DropdownMenuItem<String>>(
+          (InProgressProduct product) {
+            return DropdownMenuItem<String>(
+              value: product.id.toString(),
+              child: Text(
+                product.productName,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10),
+              ),
+            );
+          },
+        ).toList();
+
+        // 未登録の商品をドロップダウンリストに追加
+        if (productList.value
+            .where((element) => element.id == inputWork.selectedProductId)
+            .isEmpty) {
+          dropDownButtonMenu.add(DropdownMenuItem<String>(
+            value: inputWork.selectedProductId.toString(),
+            child: Text(
+              inputWork.productName,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ));
+        }
+
         return Row(
           children: <Widget>[
             Expanded(
@@ -100,21 +147,10 @@ class WorkList extends HookWidget {
                   onChanged: (String? newValue) {
                     if (newValue != null) {
                       inputWork.selectedProductId = int.parse(newValue);
-                      selectedProductId.value = int.parse(newValue);
+                      selectedProductIdForDisplay.value = int.parse(newValue);
                     }
                   },
-                  items: productList.value.map<DropdownMenuItem<String>>(
-                    (InProgressProduct product) {
-                      return DropdownMenuItem<String>(
-                        value: product.id.toString(),
-                        child: Text(
-                          product.productName,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      );
-                    },
-                  ).toList(),
+                  items: dropDownButtonMenu,
                 ),
               ),
             ),

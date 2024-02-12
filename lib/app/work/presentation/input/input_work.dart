@@ -6,6 +6,7 @@ class InputWork {
   TextEditingController workDetailController;
   TextEditingController workMemoController;
   int selectedProductId;
+  String productName;
 
   InputWork({
     this.workId,
@@ -13,5 +14,6 @@ class InputWork {
     required this.workDetailController,
     required this.workMemoController,
     required this.selectedProductId,
+    required this.productName,
   });
 }
