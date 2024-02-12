@@ -171,7 +171,7 @@ class __$$ProductEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProductEntityImpl implements _ProductEntity {
+class _$ProductEntityImpl extends _ProductEntity {
   const _$ProductEntityImpl(
       {this.id = null,
       required this.productName,
@@ -179,7 +179,8 @@ class _$ProductEntityImpl implements _ProductEntity {
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
-      this.updatedBy = null});
+      this.updatedBy = null})
+      : super._();
 
   @override
   @JsonKey()
@@ -238,7 +239,7 @@ class _$ProductEntityImpl implements _ProductEntity {
       __$$ProductEntityImplCopyWithImpl<_$ProductEntityImpl>(this, _$identity);
 }
 
-abstract class _ProductEntity implements ProductEntity {
+abstract class _ProductEntity extends ProductEntity {
   const factory _ProductEntity(
       {final int? id,
       required final String productName,
@@ -247,6 +248,7 @@ abstract class _ProductEntity implements ProductEntity {
       final String? createdBy,
       final String? updatedOn,
       final String? updatedBy}) = _$ProductEntityImpl;
+  const _ProductEntity._() : super._();
 
   @override
   int? get id;

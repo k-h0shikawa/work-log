@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:intl/intl.dart';
+import 'package:work_log/app/domain/log/messages.dart';
+import 'package:work_log/app/work/application/work_list_usecase.dart';
+import 'package:work_log/app/work/presentation/input/input_work.dart';
 
 class WorkList extends HookWidget {
   const WorkList({super.key});
@@ -16,40 +20,9 @@ class WorkList extends HookWidget {
     final targetDate = useState(DateTime.now());
     const maxWorkListLength = 1;
     const flexRate = [1, 3, 3, 3];
-    final workList = useState(<Work>[
-      for (var i = 0; i < 20; i++)
-        Work(
-            id: i,
-            workDateTime:
-                DateTime(2024, 1, 1, 9, 30).add(Duration(minutes: 30 * i)),
-            workName: 'ダミー案件',
-            workDetail: 'Detail $i',
-            workMemo: 'Memo $i',
-            productId: i,
-            createdOn: DateTime.now(),
-            createdBy: 'hoshikawa'),
-    ]);
-
-    final productList = useState(<InProgressProduct>[
-      InProgressProduct(
-          id: 0,
-          productName: 'ダミー案件',
-          isCompleted: 0,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa'),
-      InProgressProduct(
-          id: 1,
-          productName: 'ぽしぇっと',
-          isCompleted: 0,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa'),
-      InProgressProduct(
-          id: 2,
-          productName: '２０文字の長さの商品名のてすとなのですよ',
-          isCompleted: 0,
-          createdOn: DateTime.now(),
-          createdBy: 'hoshikawa')
-    ]);
+    final workList = useState(<Work>[]);
+    // 入力された作業情報を保持するリスト
+    var inputWorkList = <InputWork>[];
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -83,12 +56,31 @@ class WorkList extends HookWidget {
     }
 
     List<Widget> buildTaskList() {
+      final productList = useState(<InProgressProduct>[]);
+      useEffect(() {
+        () async {
+          productList.value =
+              await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
+          workList.value =
+              await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
+        }();
+        return null;
+      }, []);
+
       return workList.value.map((work) {
         final workDetailController =
             useTextEditingController(text: work.workDetail);
         final workMemoController =
             useTextEditingController(text: work.workMemo);
-        var selectedProduct = useState<String>(work.workName);
+
+        var inputWork = InputWork(
+            workId: work.id,
+            workDateTime: work.workDateTime,
+            workDetailController: workDetailController,
+            workMemoController: workMemoController,
+            selectedProductId: useState<int>(work.productId));
+
+        inputWorkList.add(inputWork);
 
         return Row(
           children: <Widget>[
@@ -96,7 +88,7 @@ class WorkList extends HookWidget {
               flex: flexRate[0],
               child: Container(
                 padding: const EdgeInsets.all(10),
-                child: Text(formatter.format(work.workDateTime)),
+                child: Text(formatter.format(inputWork.workDateTime)),
               ),
             ),
             Expanded(
@@ -107,28 +99,24 @@ class WorkList extends HookWidget {
                   isExpanded: true,
                   itemHeight: null,
                   iconSize: 0,
-                  value: selectedProduct.value,
+                  value: inputWork.selectedProductId.value.toString(),
                   onChanged: (String? newValue) {
                     if (newValue != null) {
-                      selectedProduct.value = newValue;
-                      workList.value = workList.value.map((tmpWork) {
-                        if (work.id == tmpWork.id) {
-                          return tmpWork.copyWith(workName: newValue);
-                        }
-                        return tmpWork;
-                      }).toList();
+                      inputWork.selectedProductId.value = int.parse(newValue);
                     }
                   },
                   items: productList.value.map<DropdownMenuItem<String>>(
-                      (InProgressProduct product) {
-                    return DropdownMenuItem<String>(
-                        value: product.productName,
+                    (InProgressProduct product) {
+                      return DropdownMenuItem<String>(
+                        value: product.id.toString(),
                         child: Text(
                           product.productName,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 10),
-                        ));
-                  }).toList(),
+                        ),
+                      );
+                    },
+                  ).toList(),
                 ),
               ),
             ),
@@ -137,7 +125,7 @@ class WorkList extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
-                  controller: workDetailController,
+                  controller: inputWork.workDetailController,
                   style: const TextStyle(fontSize: 10),
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 5)),
@@ -149,7 +137,7 @@ class WorkList extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
-                  controller: workMemoController,
+                  controller: inputWork.workMemoController,
                   style: const TextStyle(fontSize: 10),
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 5)),
@@ -177,7 +165,10 @@ class WorkList extends HookWidget {
                       child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: ElevatedButton(
-                      onPressed: () => context.push('/product'),
+                      onPressed: () async {
+                        context.push('/product');
+                        // TODO: 画面遷移後に最新の進行中商品リストを取得する。
+                      },
                       child: const Text('商品一覧画面'),
                     ),
                   ))
@@ -223,12 +214,11 @@ class WorkList extends HookWidget {
                                     workDateTime: workList
                                         .value.last.workDateTime
                                         .add(const Duration(minutes: 30)),
-                                    workName: 'ぽしぇっと',
-                                    workDetail: 'Detail',
-                                    workMemo: 'Memo',
-                                    productId: 5,
+                                    workDetail: '',
+                                    workMemo: '',
+                                    productId: 1,
                                     createdOn: DateTime.now(),
-                                    createdBy: 'hoshikawa')
+                                    createdBy: 'user')
                               ];
                             },
                             style: ElevatedButton.styleFrom(
@@ -273,7 +263,34 @@ class WorkList extends HookWidget {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final scaffoldMessenger =
+                                  ScaffoldMessenger.of(context);
+                              // 登録対象の作業リストを作成
+                              var registerWorks = inputWorkList
+                                  .map((inputWork) => Work(
+                                        id: inputWork.workId,
+                                        workDateTime: inputWork.workDateTime,
+                                        workDetail:
+                                            inputWork.workDetailController.text,
+                                        workMemo:
+                                            inputWork.workMemoController.text,
+                                        productId:
+                                            inputWork.selectedProductId.value,
+                                        createdOn: DateTime.now(),
+                                        createdBy: 'user',
+                                      ))
+                                  .toList();
+
+                              workList.value = await GetIt.I<WorkListUsecase>()
+                                  .saveWork(registerWorks);
+                              scaffoldMessenger.showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text(Messages.successRegisterWork),
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.black,
                             ),

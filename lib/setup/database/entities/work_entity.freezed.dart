@@ -14,11 +14,14 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+WorkEntity _$WorkEntityFromJson(Map<String, dynamic> json) {
+  return _WorkEntity.fromJson(json);
+}
+
 /// @nodoc
 mixin _$WorkEntity {
   int? get id => throw _privateConstructorUsedError;
-  DateTime get workDateTime => throw _privateConstructorUsedError;
-  String get workName => throw _privateConstructorUsedError;
+  String get workDateTime => throw _privateConstructorUsedError;
   String get workDetail => throw _privateConstructorUsedError;
   String get workMemo => throw _privateConstructorUsedError;
   int get productId => throw _privateConstructorUsedError;
@@ -27,6 +30,7 @@ mixin _$WorkEntity {
   String? get updatedOn => throw _privateConstructorUsedError;
   String? get updatedBy => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WorkEntityCopyWith<WorkEntity> get copyWith =>
       throw _privateConstructorUsedError;
@@ -40,8 +44,7 @@ abstract class $WorkEntityCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      DateTime workDateTime,
-      String workName,
+      String workDateTime,
       String workDetail,
       String workMemo,
       int productId,
@@ -66,7 +69,6 @@ class _$WorkEntityCopyWithImpl<$Res, $Val extends WorkEntity>
   $Res call({
     Object? id = freezed,
     Object? workDateTime = null,
-    Object? workName = null,
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
@@ -83,10 +85,6 @@ class _$WorkEntityCopyWithImpl<$Res, $Val extends WorkEntity>
       workDateTime: null == workDateTime
           ? _value.workDateTime
           : workDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      workName: null == workName
-          ? _value.workName
-          : workName // ignore: cast_nullable_to_non_nullable
               as String,
       workDetail: null == workDetail
           ? _value.workDetail
@@ -130,8 +128,7 @@ abstract class _$$WorkEntityImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      DateTime workDateTime,
-      String workName,
+      String workDateTime,
       String workDetail,
       String workMemo,
       int productId,
@@ -154,7 +151,6 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? workDateTime = null,
-    Object? workName = null,
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
@@ -171,10 +167,6 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
       workDateTime: null == workDateTime
           ? _value.workDateTime
           : workDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      workName: null == workName
-          ? _value.workName
-          : workName // ignore: cast_nullable_to_non_nullable
               as String,
       workDetail: null == workDetail
           ? _value.workDetail
@@ -209,27 +201,28 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
-class _$WorkEntityImpl implements _WorkEntity {
+@JsonSerializable()
+class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
   const _$WorkEntityImpl(
       {this.id = null,
       required this.workDateTime,
-      required this.workName,
       required this.workDetail,
       required this.workMemo,
       required this.productId,
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
-      this.updatedBy = null});
+      this.updatedBy = null})
+      : super._();
+
+  factory _$WorkEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WorkEntityImplFromJson(json);
 
   @override
   @JsonKey()
   final int? id;
   @override
-  final DateTime workDateTime;
-  @override
-  final String workName;
+  final String workDateTime;
   @override
   final String workDetail;
   @override
@@ -250,8 +243,24 @@ class _$WorkEntityImpl implements _WorkEntity {
   final String? updatedBy;
 
   @override
-  String toString() {
-    return 'WorkEntity(id: $id, workDateTime: $workDateTime, workName: $workName, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'WorkEntity(id: $id, workDateTime: $workDateTime, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'WorkEntity'))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('workDateTime', workDateTime))
+      ..add(DiagnosticsProperty('workDetail', workDetail))
+      ..add(DiagnosticsProperty('workMemo', workMemo))
+      ..add(DiagnosticsProperty('productId', productId))
+      ..add(DiagnosticsProperty('createdOn', createdOn))
+      ..add(DiagnosticsProperty('createdBy', createdBy))
+      ..add(DiagnosticsProperty('updatedOn', updatedOn))
+      ..add(DiagnosticsProperty('updatedBy', updatedBy));
   }
 
   @override
@@ -262,8 +271,6 @@ class _$WorkEntityImpl implements _WorkEntity {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.workDateTime, workDateTime) ||
                 other.workDateTime == workDateTime) &&
-            (identical(other.workName, workName) ||
-                other.workName == workName) &&
             (identical(other.workDetail, workDetail) ||
                 other.workDetail == workDetail) &&
             (identical(other.workMemo, workMemo) ||
@@ -280,32 +287,29 @@ class _$WorkEntityImpl implements _WorkEntity {
                 other.updatedBy == updatedBy));
   }
 
+  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      workDateTime,
-      workName,
-      workDetail,
-      workMemo,
-      productId,
-      createdOn,
-      createdBy,
-      updatedOn,
-      updatedBy);
+  int get hashCode => Object.hash(runtimeType, id, workDateTime, workDetail,
+      workMemo, productId, createdOn, createdBy, updatedOn, updatedBy);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$WorkEntityImplCopyWith<_$WorkEntityImpl> get copyWith =>
       __$$WorkEntityImplCopyWithImpl<_$WorkEntityImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WorkEntityImplToJson(
+      this,
+    );
+  }
 }
 
-abstract class _WorkEntity implements WorkEntity {
+abstract class _WorkEntity extends WorkEntity {
   const factory _WorkEntity(
       {final int? id,
-      required final DateTime workDateTime,
-      required final String workName,
+      required final String workDateTime,
       required final String workDetail,
       required final String workMemo,
       required final int productId,
@@ -313,13 +317,15 @@ abstract class _WorkEntity implements WorkEntity {
       final String? createdBy,
       final String? updatedOn,
       final String? updatedBy}) = _$WorkEntityImpl;
+  const _WorkEntity._() : super._();
+
+  factory _WorkEntity.fromJson(Map<String, dynamic> json) =
+      _$WorkEntityImpl.fromJson;
 
   @override
   int? get id;
   @override
-  DateTime get workDateTime;
-  @override
-  String get workName;
+  String get workDateTime;
   @override
   String get workDetail;
   @override

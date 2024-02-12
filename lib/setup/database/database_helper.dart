@@ -19,7 +19,6 @@ class DatabaseHelper {
   static const columnUpdatedBy = 'updatedBy';
 
   static const columnWorkDateTime = 'workDateTime';
-  static const columnWorkName = 'workName';
   static const columnWorkDetail = 'workDetail';
   static const columnWorkMemo = 'workMemo';
   static const columnProductId = 'productId';
@@ -65,7 +64,6 @@ class DatabaseHelper {
           CREATE TABLE $workTable (
             $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnWorkDateTime TEXT NOT NULL,
-            $columnWorkName TEXT NOT NULL,
             $columnWorkDetail TEXT NOT NULL,
             $columnWorkMemo TEXT NOT NULL,
             $columnProductId INTEGER NOT NULL,
@@ -80,14 +78,14 @@ class DatabaseHelper {
     // ダミーデータ
     await db.execute('''
 INSERT INTO product (productName, isCompleted, createdOn, createdBy, updatedOn, updatedBy)
-VALUES ('Product1', 0, '2024-01-30', 'User1', '2024-01-30', 'User1'),
-       ('Product2', 1, '2024-01-30', 'User1', '2024-01-30', 'User1');
+VALUES ('Product1', 0, '2024-01-30', 'user', '2024-01-30', 'user'),
+       ('Product2', 1, '2024-01-30', 'user', '2024-01-30', 'user');
       ''');
     // ダミーデータ
     await db.execute('''
-INSERT INTO work (workDateTime, workName, workDetail, workMemo, productId, createdOn, createdBy, updatedOn, updatedBy)
-VALUES ('2024-01-30', 'Work1', 'Detail1', 'Memo1', 1, '2024-01-30', 'User1', '2024-01-30', 'User1'),
-       ('2024-01-30', 'Work2', 'Detail2', 'Memo2', 2, '2024-01-30', 'User1', '2024-01-30', 'User1');
+INSERT INTO work (workDateTime, productId, workDetail, workMemo,  createdOn, createdBy, updatedOn, updatedBy)
+VALUES ('2024-02-10 09:30:00', 1, 'Detail1', 'Memo1', '2024-01-30', 'user', '2024-01-30', 'user'),
+       ('2024-02-10 10:00:00', 2, 'Detail2', 'Memo2', '2024-01-30', 'user', '2024-01-30', 'user');
       ''');
   }
 }

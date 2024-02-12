@@ -25,8 +25,8 @@ class ServiceLocator {
     // WorkList関連
     registerSingletonIfNotRegistered<WorkListRepository>(
         WorkListRepository(database));
-    registerSingletonIfNotRegistered<WorkListUseCase>(
-        WorkListUseCase(WorkListRepository(database)));
+    registerSingletonIfNotRegistered<WorkListUsecase>(
+        WorkListUsecase(WorkListRepository(database)));
   }
 
   // 登録されていない場合、シングルトンを登録する
