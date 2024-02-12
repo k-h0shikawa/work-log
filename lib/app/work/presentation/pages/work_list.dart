@@ -22,7 +22,7 @@ class WorkList extends HookWidget {
     const flexRate = [1, 3, 3, 3];
     final workList = useState(<Work>[]);
     // 入力された作業情報を保持するリスト
-    var inputWorkList = <InputWork>[];
+    final inputWorkList = useState(<InputWork>[]);
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -80,7 +80,7 @@ class WorkList extends HookWidget {
             workMemoController: workMemoController,
             selectedProductId: useState<int>(work.productId));
 
-        inputWorkList.add(inputWork);
+        inputWorkList.value = [...inputWorkList.value, inputWork];
 
         return Row(
           children: <Widget>[
@@ -267,7 +267,7 @@ class WorkList extends HookWidget {
                               final scaffoldMessenger =
                                   ScaffoldMessenger.of(context);
                               // 登録対象の作業リストを作成
-                              var registerWorks = inputWorkList
+                              var registerWorks = inputWorkList.value
                                   .map((inputWork) => Work(
                                         id: inputWork.workId,
                                         workDateTime: inputWork.workDateTime,
@@ -277,13 +277,13 @@ class WorkList extends HookWidget {
                                             inputWork.workMemoController.text,
                                         productId:
                                             inputWork.selectedProductId.value,
-                                        createdOn: DateTime.now(),
-                                        createdBy: 'user',
                                       ))
                                   .toList();
 
                               workList.value = await GetIt.I<WorkListUsecase>()
                                   .saveWork(registerWorks);
+                              // 入力を初期化
+                              inputWorkList.value = <InputWork>[];
                               scaffoldMessenger.showSnackBar(
                                 const SnackBar(
                                   backgroundColor: Colors.green,

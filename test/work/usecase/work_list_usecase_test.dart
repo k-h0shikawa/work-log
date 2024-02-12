@@ -47,29 +47,6 @@ void main() {
 
     test('Workが登録できることを確認する', () async {
       // Arrange
-
-      final insertWorkList = [
-        Work(
-          workDateTime: DateTime(2023, 2, 12),
-          workDetail: 'Work 1 detail',
-          workMemo: 'Work 1 memo',
-          createdBy: 'User 1',
-          createdOn: DateTime(2023, 2, 12),
-          productId: 1,
-        )
-      ];
-
-      final updateWorkList = [
-        Work(
-          id: 1,
-          workDateTime: DateTime(2023, 2, 12),
-          workDetail: 'Work 2 detail',
-          workMemo: 'Work 2 memo',
-          createdBy: 'User 2',
-          createdOn: DateTime(2023, 2, 12),
-          productId: 1,
-        ),
-      ];
       final inputWorkList = <Work>[
         Work(
           workDateTime: DateTime(2023, 2, 12),
@@ -112,8 +89,8 @@ void main() {
       ];
 
       var ids = <int>[1, 3];
-      when(mockRepository.saveWork(insertWorkList, updateWorkList))
-          .thenAnswer((_) async => ids);
+
+      when(mockRepository.saveWork(any, any)).thenAnswer((_) async => ids);
 
       when(mockRepository.fetchWorksById(ids))
           .thenAnswer((_) async => expectedWorkList);

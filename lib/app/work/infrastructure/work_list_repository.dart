@@ -84,7 +84,7 @@ class WorkListRepository {
       await Future.forEach(workList, (work) async {
         final id = await txn.update(
           'work',
-          work.toWorkEntity().toJson(),
+          work.toWorkEntity().toUpdateJson(),
           where: 'id = ?',
           whereArgs: [work.id],
           conflictAlgorithm: ConflictAlgorithm.fail,

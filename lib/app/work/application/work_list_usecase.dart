@@ -59,11 +59,26 @@ class WorkListUsecase {
     var insertList = <Work>[];
     var updateList = <Work>[];
 
-    for (final work in workList) {
-      if (work.id == null) {
-        insertList.add(work);
+    // idの有無に応じて、insertかupdateかを判定
+    for (var e in workList) {
+      if (e.id == null) {
+        insertList.add(Work(
+            id: e.id,
+            workDateTime: e.workDateTime,
+            workDetail: e.workDetail,
+            workMemo: e.workMemo,
+            productId: e.productId,
+            createdBy: 'user',
+            createdOn: DateTime.now()));
       } else {
-        updateList.add(work);
+        updateList.add(Work(
+            id: e.id,
+            workDateTime: e.workDateTime,
+            workDetail: e.workDetail,
+            workMemo: e.workMemo,
+            productId: e.productId,
+            updatedBy: 'user',
+            updatedOn: DateTime.now()));
       }
     }
 

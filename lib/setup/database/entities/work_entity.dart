@@ -38,4 +38,16 @@ abstract class WorkEntity implements _$WorkEntity {
       updatedBy: updatedBy,
     );
   }
+
+  Map<String, dynamic> toUpdateJson() {
+    return {
+      'id': id,
+      'workDateTime': workDateTime,
+      'workDetail': workDetail,
+      'workMemo': workMemo,
+      'productId': productId,
+      'updatedBy': updatedBy,
+      'updatedOn': updatedOn,
+    };
+  }
 }
