@@ -283,7 +283,7 @@ class WorkList extends HookWidget {
                                   .toList();
 
                               workList.value = await GetIt.I<WorkListUsecase>()
-                                  .insertWork(registerWorks);
+                                  .saveWork(registerWorks);
                               scaffoldMessenger.showSnackBar(
                                 const SnackBar(
                                   backgroundColor: Colors.green,

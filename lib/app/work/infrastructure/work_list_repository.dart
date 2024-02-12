@@ -31,32 +31,71 @@ class WorkListRepository {
     }
   }
 
-  Future<List<int>> insertWork(List<Work> workList) async {
+  Future<List<int>> saveWork(
+      List<Work> insertWorkList, List<Work> updateWorkList) async {
+    try {
+      var insertIds = <int>[];
+      var updateIds = <int>[];
+      await _database.transaction((txn) async {
+        if (insertWorkList.isNotEmpty) {
+          insertIds = await _insertWork(insertWorkList, txn);
+        }
+        if (updateWorkList.isNotEmpty) {
+          updateIds = await _updateWork(updateWorkList, txn);
+        }
+      });
+      return insertIds + updateIds;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<int>> _insertWork(List<Work> workList, Transaction txn) async {
     try {
       var insertTaskIds = <int>[];
 
-      await _database.transaction((txn) async {
-        await Future.forEach(workList, (work) async {
-          final id = await txn.insert(
-            'work',
-            work.toWorkEntity().toJson(),
-            conflictAlgorithm: ConflictAlgorithm.fail,
-          );
-          if (id == 0) {
-            _logger.e("work : $work のINSERTに失敗しました");
-            throw Exception("work : $work のINSERTに失敗しました");
-          }
-          insertTaskIds.add(id);
-        });
+      await Future.forEach(workList, (work) async {
+        final id = await txn.insert(
+          'work',
+          work.toWorkEntity().toJson(),
+          conflictAlgorithm: ConflictAlgorithm.fail,
+        );
+        if (id == 0) {
+          _logger.e("work : $work のINSERTに失敗しました");
+          throw Exception("work : $work のINSERTに失敗しました");
+        }
+        insertTaskIds.add(id);
+      });
 
-        if (insertTaskIds.length != workList.length) {
-          _logger.e(
-              "エラー: 期待される挿入数は ${workList.length} ですが、実際の挿入数は ${insertTaskIds.length} です。これは、一部の作業項目がデータベースの制約により挿入に失敗した可能性があります。");
-          throw Exception("INSERT時の件数が一致しません");
+      if (insertTaskIds.length != workList.length) {
+        _logger.e(
+            "エラー: 期待される挿入数は ${workList.length} ですが、実際の挿入数は ${insertTaskIds.length} です。これは、一部の作業項目がデータベースの制約により挿入に失敗した可能性があります。");
+        throw Exception("INSERT時の件数が一致しません");
+      }
+
+      return insertTaskIds;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<int>> _updateWork(List<Work> workList, Transaction txn) async {
+    try {
+      await Future.forEach(workList, (work) async {
+        final id = await txn.update(
+          'work',
+          work.toWorkEntity().toJson(),
+          where: 'id = ?',
+          whereArgs: [work.id],
+          conflictAlgorithm: ConflictAlgorithm.fail,
+        );
+        if (id == 0) {
+          _logger.e("work : $work のUPDATEに失敗しました");
+          throw Exception("work : $work のUPDATEに失敗しました");
         }
       });
 
-      return insertTaskIds;
+      return workList.map((work) => work.id!).toList();
     } catch (e) {
       rethrow;
     }

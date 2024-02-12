@@ -3,13 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
+import 'package:intl/intl.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:work_log/app/domain/entities/in_progress_product.dart' as _i5;
-import 'package:work_log/app/domain/entities/work.dart' as _i4;
+import 'package:work_log/app/domain/entities/in_progress_product.dart' as _i6;
+import 'package:work_log/app/domain/entities/work.dart' as _i5;
 import 'package:work_log/app/work/infrastructure/work_list_repository.dart'
-    as _i2;
+    as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -24,50 +25,79 @@ import 'package:work_log/app/work/infrastructure/work_list_repository.dart'
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeDateFormat_0 extends _i1.SmartFake implements _i2.DateFormat {
+  _FakeDateFormat_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [WorkListRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockWorkListRepository extends _i1.Mock
-    implements _i2.WorkListRepository {
+    implements _i3.WorkListRepository {
   @override
-  _i3.Future<List<_i4.Work>> fetchWorksById(List<int>? workIds) =>
+  _i2.DateFormat get formatter => (super.noSuchMethod(
+        Invocation.getter(#formatter),
+        returnValue: _FakeDateFormat_0(
+          this,
+          Invocation.getter(#formatter),
+        ),
+        returnValueForMissingStub: _FakeDateFormat_0(
+          this,
+          Invocation.getter(#formatter),
+        ),
+      ) as _i2.DateFormat);
+
+  @override
+  _i4.Future<List<_i5.Work>> fetchWorksById(List<int>? workIds) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchWorksById,
           [workIds],
         ),
-        returnValue: _i3.Future<List<_i4.Work>>.value(<_i4.Work>[]),
+        returnValue: _i4.Future<List<_i5.Work>>.value(<_i5.Work>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i4.Work>>.value(<_i4.Work>[]),
-      ) as _i3.Future<List<_i4.Work>>);
+            _i4.Future<List<_i5.Work>>.value(<_i5.Work>[]),
+      ) as _i4.Future<List<_i5.Work>>);
 
   @override
-  _i3.Future<List<int>> insertWork(List<_i4.Work>? workList) =>
+  _i4.Future<List<int>> saveWork(
+    List<_i5.Work>? insertWorkList,
+    List<_i5.Work>? updateWorkList,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #insertWork,
-          [workList],
+          #saveWork,
+          [
+            insertWorkList,
+            updateWorkList,
+          ],
         ),
-        returnValue: _i3.Future<List<int>>.value(<int>[]),
-        returnValueForMissingStub: _i3.Future<List<int>>.value(<int>[]),
-      ) as _i3.Future<List<int>>);
+        returnValue: _i4.Future<List<int>>.value(<int>[]),
+        returnValueForMissingStub: _i4.Future<List<int>>.value(<int>[]),
+      ) as _i4.Future<List<int>>);
 
   @override
-  _i3.Future<List<_i5.InProgressProduct>> fetchInProgressProductList() =>
+  _i4.Future<List<_i6.InProgressProduct>> fetchInProgressProductList() =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchInProgressProductList,
           [],
         ),
-        returnValue: _i3.Future<List<_i5.InProgressProduct>>.value(
-            <_i5.InProgressProduct>[]),
+        returnValue: _i4.Future<List<_i6.InProgressProduct>>.value(
+            <_i6.InProgressProduct>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i5.InProgressProduct>>.value(
-                <_i5.InProgressProduct>[]),
-      ) as _i3.Future<List<_i5.InProgressProduct>>);
+            _i4.Future<List<_i6.InProgressProduct>>.value(
+                <_i6.InProgressProduct>[]),
+      ) as _i4.Future<List<_i6.InProgressProduct>>);
 
   @override
-  _i3.Future<List<_i4.Work>> getWorksWithinDateRange(
+  _i4.Future<List<_i5.Work>> getWorksWithinDateRange(
     DateTime? startDateTime,
     DateTime? endDateTime,
   ) =>
@@ -79,8 +109,8 @@ class MockWorkListRepository extends _i1.Mock
             endDateTime,
           ],
         ),
-        returnValue: _i3.Future<List<_i4.Work>>.value(<_i4.Work>[]),
+        returnValue: _i4.Future<List<_i5.Work>>.value(<_i5.Work>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i4.Work>>.value(<_i4.Work>[]),
-      ) as _i3.Future<List<_i4.Work>>);
+            _i4.Future<List<_i5.Work>>.value(<_i5.Work>[]),
+      ) as _i4.Future<List<_i5.Work>>);
 }

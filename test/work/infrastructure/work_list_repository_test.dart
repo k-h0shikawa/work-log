@@ -27,36 +27,6 @@ void main() {
       await database.close();
     });
 
-    test('insertWorkで正しい件数のWorkを追加する', () async {
-      // Arrange
-      final workList = [
-        // id: 3が追加される
-        Work(
-          workDateTime: DateTime.now(),
-          workDetail: 'Work 1 detail',
-          workMemo: 'Work 1 memo',
-          createdBy: 'User 1',
-          createdOn: DateTime.now(),
-          productId: 1,
-        ),
-        // id: 4が追加される
-        Work(
-          workDateTime: DateTime.now(),
-          workDetail: 'Work 2 detail',
-          workMemo: 'Work 2 memo',
-          createdBy: 'User 2',
-          createdOn: DateTime.now(),
-          productId: 2,
-        ),
-      ];
-
-      // Act
-      final result = await repository.insertWork(workList);
-
-      // Assert
-      expect(result, [3, 4]);
-    });
-
     test('fetchWorksで正しい件数のWorkを取得する', () async {
       // Arrange
       final expectedWorks = <Work>[
@@ -115,6 +85,43 @@ void main() {
 
       expect(works.length, 1);
       expect(works, expected);
+    });
+
+    test("業務内容の保存ができること", () async {
+      // Arrange
+      final insertWork = <Work>[
+        Work(
+          workDateTime: DateTime.parse('2024-02-09 09:30:00.000'),
+          workDetail: 'Detail1',
+          workMemo: 'Memo1',
+          productId: 1,
+          createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
+          createdBy: 'user',
+          updatedOn: DateTime.parse('2024-02-10 00:00:00.000'),
+          updatedBy: 'user',
+        )
+      ];
+
+      final updateWork = <Work>[
+        Work(
+          id: 2,
+          workDateTime: DateTime.parse('2024-02-10 09:30:00.000'),
+          workDetail: 'Detail2',
+          workMemo: 'Memo2',
+          productId: 2,
+          createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
+          createdBy: 'user',
+          updatedOn: DateTime.parse('2024-02-10 00:00:00.000'),
+          updatedBy: 'user',
+        )
+      ];
+
+      // Act
+      final result = await repository.saveWork(insertWork, updateWork);
+
+      // Assert
+      expect(result.length, 2);
+      expect(result, [3, 2]);
     });
   });
 

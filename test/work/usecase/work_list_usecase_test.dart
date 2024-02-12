@@ -47,36 +47,82 @@ void main() {
 
     test('Workが登録できることを確認する', () async {
       // Arrange
-      final workList = [
+
+      final insertWorkList = [
         Work(
-          workDateTime: DateTime.now(),
+          workDateTime: DateTime(2023, 2, 12),
           workDetail: 'Work 1 detail',
           workMemo: 'Work 1 memo',
           createdBy: 'User 1',
-          createdOn: DateTime.now(),
+          createdOn: DateTime(2023, 2, 12),
           productId: 1,
-        ),
+        )
+      ];
+
+      final updateWorkList = [
         Work(
-          workDateTime: DateTime.now(),
+          id: 1,
+          workDateTime: DateTime(2023, 2, 12),
           workDetail: 'Work 2 detail',
           workMemo: 'Work 2 memo',
           createdBy: 'User 2',
-          createdOn: DateTime.now(),
-          productId: 2,
+          createdOn: DateTime(2023, 2, 12),
+          productId: 1,
+        ),
+      ];
+      final inputWorkList = <Work>[
+        Work(
+          workDateTime: DateTime(2023, 2, 12),
+          workDetail: 'Work 1 detail',
+          workMemo: 'Work 1 memo',
+          createdBy: 'User 1',
+          createdOn: DateTime(2023, 2, 12),
+          productId: 1,
+        ),
+        Work(
+          id: 1,
+          workDateTime: DateTime(2023, 2, 12),
+          workDetail: 'Work 2 detail',
+          workMemo: 'Work 2 memo',
+          createdBy: 'User 2',
+          createdOn: DateTime(2023, 2, 12),
+          productId: 1,
         ),
       ];
 
-      when(mockRepository.insertWork(workList)).thenAnswer((_) async => [1, 2]);
+      final expectedWorkList = <Work>[
+        Work(
+          id: 3,
+          workDateTime: DateTime(2023, 2, 12),
+          workDetail: 'Work 1 detail',
+          workMemo: 'Work 1 memo',
+          createdBy: 'User 1',
+          createdOn: DateTime(2023, 2, 12),
+          productId: 1,
+        ),
+        Work(
+          id: 1,
+          workDateTime: DateTime(2023, 2, 12),
+          workDetail: 'Work 2 detail',
+          workMemo: 'Work 2 memo',
+          createdBy: 'User 2',
+          createdOn: DateTime(2023, 2, 12),
+          productId: 1,
+        ),
+      ];
 
-      var ids = <int>[1, 2];
+      var ids = <int>[1, 3];
+      when(mockRepository.saveWork(insertWorkList, updateWorkList))
+          .thenAnswer((_) async => ids);
+
       when(mockRepository.fetchWorksById(ids))
-          .thenAnswer((_) async => workList);
+          .thenAnswer((_) async => expectedWorkList);
 
       // Act
-      final result = await usecase.insertWork(workList);
+      final result = await usecase.saveWork(inputWorkList);
 
       // Assert
-      expect(result, workList);
+      expect(result, expectedWorkList);
     });
   });
 

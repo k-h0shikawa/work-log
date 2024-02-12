@@ -55,11 +55,22 @@ class WorkListUsecase {
     }
   }
 
-  Future<List<Work>> insertWork(List<Work> workList) async {
+  Future<List<Work>> saveWork(List<Work> workList) async {
+    var insertList = <Work>[];
+    var updateList = <Work>[];
+
+    for (final work in workList) {
+      if (work.id == null) {
+        insertList.add(work);
+      } else {
+        updateList.add(work);
+      }
+    }
+
     try {
-      final insertedIds = await _repository.insertWork(workList);
-      final insertedWorks = _repository.fetchWorksById(insertedIds);
-      return insertedWorks;
+      final insertedIds = await _repository.saveWork(insertList, updateList);
+      final savedWorks = _repository.fetchWorksById(insertedIds);
+      return savedWorks;
     } catch (e) {
       _logger.e(e);
       rethrow;
