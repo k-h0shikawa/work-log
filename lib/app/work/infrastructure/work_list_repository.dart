@@ -51,7 +51,7 @@ class WorkListRepository {
 
         if (insertTaskIds.length != workList.length) {
           _logger.e(
-              "エラー: 期待される挿入数は {workList.length} ですが、実際の挿入数は {insertTaskIds.length} です。これは、一部の作業項目がデータベースの制約により挿入に失敗した可能性があります。");
+              "エラー: 期待される挿入数は ${workList.length} ですが、実際の挿入数は ${insertTaskIds.length} です。これは、一部の作業項目がデータベースの制約により挿入に失敗した可能性があります。");
           throw Exception("INSERT時の件数が一致しません");
         }
       });
