@@ -46,7 +46,6 @@ class WorkListUsecase {
     try {
       final targetWorkList = await _repository.getWorksWithinDateRange(
           targetStartTime, targetEndTime);
-      // print("targetWorkList : $targetWorkList");
       // 対象日の業務がない場合はデフォルトの業務を返す
       if (targetWorkList.isEmpty) return defaultWorkList;
       return targetWorkList;
@@ -57,7 +56,6 @@ class WorkListUsecase {
   }
 
   Future<List<Work>> insertWork(List<Work> workList) async {
-    print(workList[0]);
     try {
       final insertedIds = await _repository.insertWork(workList);
       final insertedWorks = _repository.fetchWorksById(insertedIds);

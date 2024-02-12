@@ -7,6 +7,7 @@ import 'package:work_log/app/domain/entities/work.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
+import 'package:work_log/app/work/presentation/input/input_work.dart';
 
 class WorkList extends HookWidget {
   const WorkList({super.key});
@@ -20,6 +21,8 @@ class WorkList extends HookWidget {
     const maxWorkListLength = 1;
     const flexRate = [1, 3, 3, 3];
     final workList = useState(<Work>[]);
+    // 入力された作業情報を保持するリスト
+    var inputWorkList = <InputWork>[];
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -69,7 +72,15 @@ class WorkList extends HookWidget {
             useTextEditingController(text: work.workDetail);
         final workMemoController =
             useTextEditingController(text: work.workMemo);
-        var selectedProduct = useState<String>("Product1");
+
+        var inputWork = InputWork(
+            workId: work.id,
+            workDateTime: work.workDateTime,
+            workDetailController: workDetailController,
+            workMemoController: workMemoController,
+            selectedProductId: useState<int>(work.productId));
+
+        inputWorkList.add(inputWork);
 
         return Row(
           children: <Widget>[
@@ -77,7 +88,7 @@ class WorkList extends HookWidget {
               flex: flexRate[0],
               child: Container(
                 padding: const EdgeInsets.all(10),
-                child: Text(formatter.format(work.workDateTime)),
+                child: Text(formatter.format(inputWork.workDateTime)),
               ),
             ),
             Expanded(
@@ -88,29 +99,16 @@ class WorkList extends HookWidget {
                   isExpanded: true,
                   itemHeight: null,
                   iconSize: 0,
-                  value: selectedProduct.value,
+                  value: inputWork.selectedProductId.value.toString(),
                   onChanged: (String? newValue) {
                     if (newValue != null) {
-                      selectedProduct.value = newValue;
-                      workList.value = workList.value.map((tmpWork) {
-                        if (work.id == tmpWork.id) {
-                          // Find the product that matches the selected value
-                          var selectedProduct = productList.value.firstWhere(
-                            (product) => product.productName == newValue,
-                          );
-                          // Update the work's productId with the selected product's id
-                          return tmpWork.copyWith(
-                            productId: selectedProduct.id ?? 0,
-                          );
-                        }
-                        return tmpWork;
-                      }).toList();
+                      inputWork.selectedProductId.value = int.parse(newValue);
                     }
                   },
                   items: productList.value.map<DropdownMenuItem<String>>(
                     (InProgressProduct product) {
                       return DropdownMenuItem<String>(
-                        value: product.productName,
+                        value: product.id.toString(),
                         child: Text(
                           product.productName,
                           overflow: TextOverflow.ellipsis,
@@ -127,7 +125,7 @@ class WorkList extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
-                  controller: workDetailController,
+                  controller: inputWork.workDetailController,
                   style: const TextStyle(fontSize: 10),
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 5)),
@@ -139,7 +137,7 @@ class WorkList extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: TextFormField(
-                  controller: workMemoController,
+                  controller: inputWork.workMemoController,
                   style: const TextStyle(fontSize: 10),
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 5)),
@@ -218,7 +216,7 @@ class WorkList extends HookWidget {
                                         .add(const Duration(minutes: 30)),
                                     workDetail: '',
                                     workMemo: '',
-                                    productId: 5,
+                                    productId: 1,
                                     createdOn: DateTime.now(),
                                     createdBy: 'user')
                               ];
@@ -268,8 +266,24 @@ class WorkList extends HookWidget {
                             onPressed: () async {
                               final scaffoldMessenger =
                                   ScaffoldMessenger.of(context);
+                              // 登録対象の作業リストを作成
+                              var registerWorks = inputWorkList
+                                  .map((inputWork) => Work(
+                                        id: inputWork.workId,
+                                        workDateTime: inputWork.workDateTime,
+                                        workDetail:
+                                            inputWork.workDetailController.text,
+                                        workMemo:
+                                            inputWork.workMemoController.text,
+                                        productId:
+                                            inputWork.selectedProductId.value,
+                                        createdOn: DateTime.now(),
+                                        createdBy: 'user',
+                                      ))
+                                  .toList();
+
                               workList.value = await GetIt.I<WorkListUsecase>()
-                                  .insertWork(workList.value);
+                                  .insertWork(registerWorks);
                               scaffoldMessenger.showSnackBar(
                                 const SnackBar(
                                   backgroundColor: Colors.green,

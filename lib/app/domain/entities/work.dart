@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/setup/database/entities/work_entity.dart';
@@ -18,6 +19,11 @@ abstract class Work implements _$Work {
     @Default(null) String? updatedBy,
   }) = _Work;
 
+  TextEditingController get workDetailController =>
+      TextEditingController(text: workDetail);
+  TextEditingController get workMemoController =>
+      TextEditingController(text: workMemo);
+
   WorkEntity toWorkEntity() {
     final formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return WorkEntity(
@@ -26,7 +32,9 @@ abstract class Work implements _$Work {
       workDetail: workDetail,
       workMemo: workMemo,
       createdBy: createdBy,
-      createdOn: createdOn.toString(),
+      createdOn: createdOn == null ? null : formatter.format(createdOn!),
+      updatedBy: updatedBy,
+      updatedOn: updatedOn == null ? null : formatter.format(updatedOn!),
       productId: productId,
     );
   }

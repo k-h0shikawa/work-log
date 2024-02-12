@@ -25,6 +25,7 @@ class WorkListRepository {
         return WorkEntity.fromMap(m).toWork();
       }).toList();
     } catch (e) {
+      _logger.e(e);
       rethrow;
     }
   }
@@ -32,9 +33,6 @@ class WorkListRepository {
   Future<List<int>> insertWork(List<Work> workList) async {
     try {
       var insertTaskIds = <int>[];
-      workList.map(
-        (e) => print(e),
-      );
 
       await _database.transaction((txn) async {
         await Future.forEach(workList, (work) async {
@@ -97,7 +95,6 @@ class WorkListRepository {
           formatter.format(startDateTime),
           formatter.format(endDateTime)
         ]);
-    print("startDateTime : $startDateTime, endDateTime : $endDateTime");
 
     // DBから受け取ったデータをEntityを経由してドメインモデルに変換
     return result.map((Map<String, dynamic> m) {
