@@ -11,10 +11,10 @@ class RegisterButton extends HookWidget {
   final ValueNotifier<List<Work>> workList;
 
   const RegisterButton({
-    super.key,
+    Key? key,
     required this.inputWorkList,
     required this.workList,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

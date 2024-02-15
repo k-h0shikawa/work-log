@@ -14,65 +14,125 @@ class WorkList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    const header = <String>['時間', '商品名', '作業内容', '作業メモ'];
+    const header = <String>['ID', '時間', '商品名', '作業内容', '作業メモ'];
     final targetDateFormatter = DateFormat('yyyy/MM/dd');
     final targetDate = useState(DateTime.now());
-    const maxWorkListLength = 1;
-    const flexRate = [1, 3, 3, 3];
+    const maxInputWorkListLength = 1;
+    const flexRate = [1, 1, 3, 3, 3];
     final workList = useState(<Work>[]);
     // 入力された作業情報を保持するリスト
     final inputWorkList = useState(<WorkInputRow>[]);
     final productList = useState(<InProgressProduct>[]);
-    useEffect(() {
-      () async {
-        productList.value =
-            await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
-        workList.value =
-            await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
-      }();
-      return null;
-    }, []);
+    final removeInputWorkList = <WorkInputRow>[];
 
-    inputWorkList.value = workList.value.map((work) {
-      // 進行中の商品名のドロップダウンリストを作成
-      final dropDownButtonMenu =
-          productList.value.map<DropdownMenuItem<String>>(
-        (InProgressProduct product) {
-          return DropdownMenuItem<String>(
-            value: product.id.toString(),
+    List<WorkInputRow> convertWorkListToInputWorkList(List<Work> workList) {
+      return workList.map((work) {
+        // 進行中の商品名のドロップダウンリストを作成
+        final dropDownButtonMenu =
+            productList.value.map<DropdownMenuItem<String>>(
+          (InProgressProduct product) {
+            return DropdownMenuItem<String>(
+              value: product.id.toString(),
+              child: Text(
+                product.productName,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10),
+              ),
+            );
+          },
+        ).toList();
+
+        // 未登録の商品をドロップダウンリストに追加
+        if (productList.value
+            .where((element) => element.id == work.productId)
+            .isEmpty) {
+          dropDownButtonMenu.add(DropdownMenuItem<String>(
+            value: work.productId.toString(),
             child: Text(
-              product.productName,
+              work.productName!,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 10),
             ),
-          );
-        },
-      ).toList();
+          ));
+        }
 
-      // 未登録の商品をドロップダウンリストに追加
-      if (productList.value
-          .where((element) => element.id == work.productId)
-          .isEmpty) {
-        dropDownButtonMenu.add(DropdownMenuItem<String>(
-          value: work.productId.toString(),
-          child: Text(
-            work.productName!,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 10),
-          ),
-        ));
-      }
-      print(work);
-
-      return WorkInputRow(
+        return WorkInputRow(
           workId: work.id,
           workDateTime: work.workDateTime,
           workDetailController: work.workDetailController,
           workMemoController: work.workMemoController,
           dropDownButtonMenu: dropDownButtonMenu,
           selectedProductId: work.productId,
-          productName: work.productName);
-    }).toList();
+          productName: work.productName!,
+        );
+      }).toList();
+    }
+
+    useEffect(() {
+      () async {
+        productList.value =
+            await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
+        workList.value =
+            await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
+        inputWorkList.value = convertWorkListToInputWorkList(workList.value);
+      }();
+      return null;
+    }, []);
+
+    List<WorkInputRow> convertInputWorkListToInputWorkList(
+        List<Work> workList) {
+      return inputWorkList.value.map((work) {
+        // 進行中の商品名のドロップダウンリストを作成
+        final dropDownButtonMenu =
+            productList.value.map<DropdownMenuItem<String>>(
+          (InProgressProduct product) {
+            return DropdownMenuItem<String>(
+              value: product.id.toString(),
+              child: Text(
+                product.productName,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10),
+              ),
+            );
+          },
+        ).toList();
+
+        // 未登録の商品をドロップダウンリストに追加
+        if (productList.value
+            .where((element) => element.id == work.selectedProductId)
+            .isEmpty) {
+          dropDownButtonMenu.add(DropdownMenuItem<String>(
+            value: work.selectedProductId.toString(),
+            child: Text(
+              work.productName,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ));
+        }
+
+        return WorkInputRow(
+          workId: work.workId,
+          workDateTime: work.workDateTime,
+          workDetailController: work.workDetailController,
+          workMemoController: work.workMemoController,
+          dropDownButtonMenu: dropDownButtonMenu,
+          selectedProductId: work.selectedProductId,
+          productName: work.productName,
+        );
+      }).toList();
+    }
+
+    useEffect(() {
+      () async {
+        productList.value =
+            await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
+        workList.value =
+            await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
+        inputWorkList.value = convertWorkListToInputWorkList(workList.value);
+      }();
+      return null;
+    }, []);
 
     Future<void> selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -89,6 +149,9 @@ class WorkList extends HookWidget {
 
         // workListの内容をinputWorkListへ詰め替える
         inputWorkList.value.clear();
+        inputWorkList.value = convertWorkListToInputWorkList(workList.value);
+
+        removeInputWorkList.clear();
       }
     }
 
@@ -128,7 +191,11 @@ class WorkList extends HookWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         context.push('/product');
-                        // TODO: 画面遷移後に最新の進行中商品リストを取得する。
+                        // productページから戻ってきたときに最新の進行中商品リストを取得する。
+                        productList.value = await GetIt.I<WorkListUsecase>()
+                            .fetchInProgressProductList();
+                        inputWorkList.value =
+                            convertInputWorkListToInputWorkList(workList.value);
                       },
                       child: const Text('商品一覧画面'),
                     ),
@@ -165,20 +232,49 @@ class WorkList extends HookWidget {
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(
                             onPressed: () {
+                              print("press ＋ button");
+                              print("inputWorkList: $inputWorkList");
+                              print(
+                                  "removeInputWorkList: $removeInputWorkList");
                               if (workList.value.last.workDateTime.hour == 9) {
                                 return;
                               }
-                              workList.value = [
-                                ...workList.value,
-                                Work(
-                                    workDateTime: workList
-                                        .value.last.workDateTime
-                                        .add(const Duration(minutes: 30)),
-                                    workDetail: '',
-                                    workMemo: '',
-                                    productId: 1,
-                                    createdOn: DateTime.now(),
-                                    createdBy: 'user')
+
+                              if (removeInputWorkList.isNotEmpty) {
+                                inputWorkList.value = [
+                                  ...inputWorkList.value,
+                                  removeInputWorkList.removeAt(0)
+                                ];
+                                print("inputWorkList: $inputWorkList");
+                                print(
+                                    "removeInputWorkList: $removeInputWorkList");
+                                return;
+                              }
+
+                              inputWorkList.value = [
+                                ...inputWorkList.value,
+                                WorkInputRow(
+                                  workDateTime: inputWorkList
+                                      .value.last.workDateTime
+                                      .add(const Duration(minutes: 30)),
+                                  workDetailController: TextEditingController(),
+                                  workMemoController: TextEditingController(),
+                                  dropDownButtonMenu: productList.value
+                                      .map<DropdownMenuItem<String>>(
+                                          (InProgressProduct product) {
+                                    return DropdownMenuItem<String>(
+                                      value: product.id.toString(),
+                                      child: Text(
+                                        product.productName,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  selectedProductId: productList.value.first.id,
+                                  productName:
+                                      productList.value.first.productName,
+                                )
                               ];
                             },
                             style: ElevatedButton.styleFrom(
@@ -199,12 +295,19 @@ class WorkList extends HookWidget {
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(
                             onPressed: () {
-                              if (workList.value.length > maxWorkListLength) {
-                                List<Work> tmpList =
-                                    List<Work>.from(workList.value);
-                                tmpList.removeLast();
-                                workList.value = tmpList;
+                              print("press ー button");
+                              print(
+                                  "removeInputWorkList: $removeInputWorkList");
+                              if (inputWorkList.value.length >
+                                  maxInputWorkListLength) {
+                                List<WorkInputRow> tmpList =
+                                    List<WorkInputRow>.from(
+                                        inputWorkList.value);
+                                removeInputWorkList.add(tmpList.removeLast());
+                                inputWorkList.value = tmpList;
                               }
+                              print(
+                                  "removeInputWorkList: $removeInputWorkList");
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.black,

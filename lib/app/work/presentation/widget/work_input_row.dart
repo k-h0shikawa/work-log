@@ -5,16 +5,16 @@ import 'package:intl/intl.dart';
 class WorkInputRow extends HookWidget {
   final int? workId;
   final DateTime workDateTime;
-  final flexRate = [1, 3, 3, 3];
+  final List<int> flexRate = [1, 3, 3, 3];
   final List<DropdownMenuItem<String>> dropDownButtonMenu;
   final TextEditingController workDetailController;
   final TextEditingController workMemoController;
   int? selectedProductId;
-  final formatter = DateFormat('HH:mm');
-  final String? productName;
+  final DateFormat formatter = DateFormat('HH:mm');
+  final String productName;
 
   WorkInputRow({
-    super.key,
+    Key? key,
     this.workId,
     required this.workDateTime,
     required this.workDetailController,
@@ -22,17 +22,29 @@ class WorkInputRow extends HookWidget {
     required this.dropDownButtonMenu,
     required this.selectedProductId,
     required this.productName,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // TODO: dropDownButtonMenuが空の場合の処理を追加
-    final selectedProductIdForDisplay = useState<int>(selectedProductId == null
-        ? dropDownButtonMenu[0].value as int
-        : selectedProductId!);
+    final selectedProductIdForDisplay = useState<int?>(selectedProductId);
+
+    final before30Days =
+        workDateTime.isAfter(DateTime.now().subtract(const Duration(days: 30)));
+    // dropdownButtonMenuが空または、workDateTimeが1か月以上前の場合は、ドロップダウンリストを無効にする
+    final isDropDownButtonEnabled =
+        dropDownButtonMenu.isNotEmpty && before30Days;
 
     return Row(
       children: <Widget>[
+        // TODO : IDは最後に消す
+        Expanded(
+          flex: 1,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: Text(workId == null ? 'null' : workId.toString()),
+          ),
+        ),
         Expanded(
           flex: flexRate[0],
           child: Container(
@@ -48,13 +60,17 @@ class WorkInputRow extends HookWidget {
               isExpanded: true,
               itemHeight: null,
               iconSize: 0,
-              value: selectedProductId.toString(),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  selectedProductId = int.parse(newValue);
-                  selectedProductIdForDisplay.value = int.parse(newValue);
-                }
-              },
+              value: dropDownButtonMenu.isEmpty
+                  ? null
+                  : selectedProductId.toString(),
+              onChanged: isDropDownButtonEnabled
+                  ? (String? value) {
+                      if (value != null) {
+                        selectedProductId = int.parse(value);
+                        selectedProductIdForDisplay.value = int.parse(value);
+                      }
+                    }
+                  : null,
               items: dropDownButtonMenu,
             ),
           ),
@@ -66,6 +82,7 @@ class WorkInputRow extends HookWidget {
             child: TextFormField(
               controller: workDetailController,
               style: const TextStyle(fontSize: 10),
+              enabled: before30Days,
               decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 5)),
             ),
@@ -78,6 +95,7 @@ class WorkInputRow extends HookWidget {
             child: TextFormField(
               controller: workMemoController,
               style: const TextStyle(fontSize: 10),
+              enabled: before30Days,
               decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(vertical: 5)),
               keyboardType: TextInputType.multiline,
