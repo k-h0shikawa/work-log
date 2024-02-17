@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:work_log/setup/database/database_helper.dart';
 import 'package:work_log/setup/di/service_locator.dart';
 // import 'package:flutter/rendering.dart';
@@ -13,5 +14,8 @@ void main() async {
 
   // サービスロケーターを登録
   ServiceLocator.setupServiceLocator(database);
-  runApp(const MyApp());
+
+  const app = MyApp();
+  const scope = ProviderScope(child: app);
+  runApp(scope);
 }

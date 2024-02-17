@@ -6,6 +6,7 @@ import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
+import 'package:work_log/app/work/presentation/widget/date_select_button.dart';
 import 'package:work_log/app/work/presentation/widget/register_work_button.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
 
@@ -177,6 +178,8 @@ class WorkList extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('作業入力画面')),
+      floatingActionButton: RegisterButton(
+          inputWorkList: inputWorkList.value, workList: workList),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
@@ -202,24 +205,7 @@ class WorkList extends HookWidget {
                   ))
                 ],
               ),
-              Row(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(targetDateFormatter.format(targetDate.value)),
-                    ),
-                  ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () => selectDate(context),
-                          child: const Text('日付選択')),
-                    ),
-                  ),
-                ],
-              ),
+              const DateSelectButton(),
               buildHeader(),
               ...inputWorkList.value,
               Padding(
@@ -322,14 +308,6 @@ class WorkList extends HookWidget {
                         ),
                       ),
                       const Spacer(),
-                      Flexible(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: RegisterButton(
-                              inputWorkList: inputWorkList.value,
-                              workList: workList),
-                        ),
-                      ),
                     ],
                   ))
             ],
