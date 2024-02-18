@@ -185,7 +185,10 @@ class WorkList extends HookWidget {
                   ))
                 ],
               ),
-              const DateSelectButton(),
+              DateSelectButton(
+                inputWorkList: inputWorkList,
+                productList: productList,
+              ),
               buildHeader(),
               ...(inputWorkList.value),
               Padding(
