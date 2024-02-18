@@ -132,17 +132,6 @@ class WorkList extends HookConsumerWidget {
       }).toList();
     }
 
-    useEffect(() {
-      () async {
-        productList.value =
-            await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
-        workList.value =
-            await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
-        inputWorkList.value = convertWorkListToInputWorkList(workList.value);
-      }();
-      return null;
-    }, []);
-
     Widget buildHeader() {
       return Row(
         children: header.asMap().entries.map((entry) {

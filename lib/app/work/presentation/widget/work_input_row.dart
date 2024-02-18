@@ -26,6 +26,7 @@ class WorkInputRow extends StatefulWidget {
     required this.index,
   }) : super(key: key);
 
+  // AutomaticKeepAliveClientMixinするために必要
   @override
   WorkInputRowState createState() => WorkInputRowState();
 }

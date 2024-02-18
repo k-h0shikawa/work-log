@@ -59,6 +59,7 @@ class DateSelectButton extends ConsumerWidget {
           ));
         }
 
+        // 商品IDのstateを更新
         final notifier =
             ref.read(selectedProductIdNotifierProvider(index).notifier);
         notifier.updateState(work.productId);

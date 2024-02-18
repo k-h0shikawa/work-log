@@ -12,6 +12,6 @@ class InProgressProductListNotifier extends _$InProgressProductListNotifier {
   }
 
   void updateState(List<InProgressProduct> inProgressProductList) {
-    state = inProgressProductList as AsyncValue<List<InProgressProduct>>;
+    state = AsyncValue.data(inProgressProductList);
   }
 }
