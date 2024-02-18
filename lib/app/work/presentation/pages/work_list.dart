@@ -27,7 +27,9 @@ class WorkList extends HookWidget {
     final removeInputWorkList = <WorkInputRow>[];
 
     List<WorkInputRow> convertWorkListToInputWorkList(List<Work> workList) {
-      return workList.map((work) {
+      return workList.asMap().entries.map((entry) {
+        final index = entry.key;
+        final work = entry.value;
         // 進行中の商品名のドロップダウンリストを作成
         final dropDownButtonMenu =
             productList.value.map<DropdownMenuItem<String>>(
@@ -65,6 +67,7 @@ class WorkList extends HookWidget {
           dropDownButtonMenu: dropDownButtonMenu,
           selectedProductId: work.productId,
           productName: work.productName!,
+          index: index,
         );
       }).toList();
     }
@@ -82,7 +85,9 @@ class WorkList extends HookWidget {
 
     List<WorkInputRow> convertInputWorkListToInputWorkList(
         List<Work> workList) {
-      return inputWorkList.value.map((work) {
+      return inputWorkList.value.asMap().entries.map((entry) {
+        final index = entry.key;
+        final work = entry.value;
         // 進行中の商品名のドロップダウンリストを作成
         final dropDownButtonMenu =
             productList.value.map<DropdownMenuItem<String>>(
@@ -120,6 +125,7 @@ class WorkList extends HookWidget {
           dropDownButtonMenu: dropDownButtonMenu,
           selectedProductId: work.selectedProductId,
           productName: work.productName,
+          index: index,
         );
       }).toList();
     }
@@ -134,27 +140,6 @@ class WorkList extends HookWidget {
       }();
       return null;
     }, []);
-
-    Future<void> selectDate(BuildContext context) async {
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: targetDate.value,
-          firstDate: DateTime(2016),
-          lastDate: DateTime.now().add(const Duration(days: 360)));
-      if (picked != null && picked != targetDate.value) {
-        targetDate.value = picked;
-
-        // targetDateが更新されたら、inputWorkListも更新する
-        workList.value =
-            await GetIt.I<WorkListUsecase>().fetchWorkListByDate(picked);
-
-        // workListの内容をinputWorkListへ詰め替える
-        inputWorkList.value.clear();
-        inputWorkList.value = convertWorkListToInputWorkList(workList.value);
-
-        removeInputWorkList.clear();
-      }
-    }
 
     Widget buildHeader() {
       return Row(
@@ -194,9 +179,6 @@ class WorkList extends HookWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         context.push('/product');
-                        // productページから戻ってきたときに最新の進行中商品リストを取得する。
-                        productList.value = await GetIt.I<WorkListUsecase>()
-                            .fetchInProgressProductList();
                         inputWorkList.value =
                             convertInputWorkListToInputWorkList(workList.value);
                       },
@@ -260,6 +242,7 @@ class WorkList extends HookWidget {
                                   selectedProductId: productList.value.first.id,
                                   productName:
                                       productList.value.first.productName,
+                                  index: inputWorkList.value.length,
                                 )
                               ];
                             },
