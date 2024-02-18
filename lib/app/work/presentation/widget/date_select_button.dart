@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
+import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
 import 'package:work_log/app/work/application/state/work_date.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
@@ -58,6 +59,10 @@ class DateSelectButton extends ConsumerWidget {
           ));
         }
 
+        final notifier =
+            ref.read(selectedProductIdNotifierProvider(index).notifier);
+        notifier.updateState(work.productId);
+
         return WorkInputRow(
           workId: work.id,
           workDateTime: work.workDateTime,
@@ -88,8 +93,6 @@ class DateSelectButton extends ConsumerWidget {
         // workListの内容をinputWorkListへ詰め替える
         inputWorkList.value.clear();
         inputWorkList.value = convertWorkListToInputWorkList(workList);
-
-        // removeInputWorkList.clear();
       }
     }
 

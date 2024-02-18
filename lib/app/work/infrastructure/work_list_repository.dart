@@ -142,15 +142,13 @@ class WorkListRepository {
 
   Future<List<Work>> getWorksWithinDateRange(
       DateTime startDateTime, DateTime endDateTime) async {
+    // TODO: *をなくす
     final result = await _database.rawQuery('''
       SELECT work.*, product.productName, product.isCompleted, product.createdOn, product.createdBy
       FROM work
       INNER JOIN product ON work.productId = product.id
       WHERE work.workDateTime BETWEEN ? AND ?
     ''', [formatter.format(startDateTime), formatter.format(endDateTime)]);
-    print(
-        "formatter.format(startDateTime) : ${formatter.format(startDateTime)}");
-    print("formatter.format(endDateTime) : ${formatter.format(endDateTime)}");
 
     // DBから受け取ったデータをEntityを経由してドメインモデルに変換
     return result.map((Map<String, dynamic> m) {

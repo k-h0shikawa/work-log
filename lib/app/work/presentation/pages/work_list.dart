@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
+import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/date_select_button.dart';
 import 'package:work_log/app/work/presentation/widget/register_work_button.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
 
-class WorkList extends HookWidget {
+class WorkList extends HookConsumerWidget {
   const WorkList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const header = <String>['ID', '時間', '商品名', '作業内容', '作業メモ'];
     const maxInputWorkListLength = 1;
     const flexRate = [1, 1, 3, 3, 3];
@@ -55,6 +57,9 @@ class WorkList extends HookWidget {
             ),
           ));
         }
+        final notifier =
+            ref.read(selectedProductIdNotifierProvider(index).notifier);
+        notifier.updateState(work.productId);
 
         return WorkInputRow(
           workId: work.id,
@@ -190,7 +195,7 @@ class WorkList extends HookWidget {
                 productList: productList,
               ),
               buildHeader(),
-              ...(inputWorkList.value),
+              ...inputWorkList.value,
               Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
@@ -210,9 +215,7 @@ class WorkList extends HookWidget {
                                   ...inputWorkList.value,
                                   removeInputWorkList.removeAt(0)
                                 ];
-                                print("inputWorkList: $inputWorkList");
-                                print(
-                                    "removeInputWorkList: $removeInputWorkList");
+
                                 return;
                               }
 
@@ -261,9 +264,6 @@ class WorkList extends HookWidget {
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(
                             onPressed: () {
-                              print("press ー button");
-                              print(
-                                  "removeInputWorkList: $removeInputWorkList");
                               if (inputWorkList.value.length >
                                   maxInputWorkListLength) {
                                 List<WorkInputRow> tmpList =
@@ -272,8 +272,6 @@ class WorkList extends HookWidget {
                                 removeInputWorkList.add(tmpList.removeLast());
                                 inputWorkList.value = tmpList;
                               }
-                              print(
-                                  "removeInputWorkList: $removeInputWorkList");
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.black,

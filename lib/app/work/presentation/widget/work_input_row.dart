@@ -27,10 +27,10 @@ class WorkInputRow extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _WorkInputRowState createState() => _WorkInputRowState();
+  WorkInputRowState createState() => WorkInputRowState();
 }
 
-class _WorkInputRowState extends State<WorkInputRow>
+class WorkInputRowState extends State<WorkInputRow>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
