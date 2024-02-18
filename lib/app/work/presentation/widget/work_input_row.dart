@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/app/work/presentation/widget/prudct_drop_down_button.dart';
 
-class WorkInputRow extends HookWidget {
+class WorkInputRow extends StatefulWidget {
   final int? workId;
   final DateTime workDateTime;
   final List<int> flexRate = [1, 3, 3, 3];
   final List<DropdownMenuItem<String>> dropDownButtonMenu;
   final TextEditingController workDetailController;
   final TextEditingController workMemoController;
-  int? selectedProductId;
+  final int? selectedProductId;
   final DateFormat formatter = DateFormat('HH:mm');
   final String productName;
   final int index;
@@ -28,11 +27,20 @@ class WorkInputRow extends HookWidget {
   }) : super(key: key);
 
   @override
+  _WorkInputRowState createState() => _WorkInputRowState();
+}
+
+class _WorkInputRowState extends State<WorkInputRow>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     // TODO: dropDownButtonMenuが空の場合の処理を追加
 
-    final before30Days =
-        workDateTime.isAfter(DateTime.now().subtract(const Duration(days: 30)));
+    final before30Days = widget.workDateTime
+        .isAfter(DateTime.now().subtract(const Duration(days: 30)));
 
     return Row(
       children: <Widget>[
@@ -41,30 +49,31 @@ class WorkInputRow extends HookWidget {
           flex: 1,
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: Text(workId == null ? 'null' : workId.toString()),
+            child:
+                Text(widget.workId == null ? 'null' : widget.workId.toString()),
           ),
         ),
         Expanded(
-          flex: flexRate[0],
+          flex: widget.flexRate[0],
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: Text(formatter.format(workDateTime)),
+            child: Text(widget.formatter.format(widget.workDateTime)),
           ),
         ),
         Expanded(
-          flex: flexRate[1],
+          flex: widget.flexRate[1],
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            child:
-                ProductDropDownButton(workDateTime: workDateTime, index: index),
+            child: ProductDropDownButton(
+                workDateTime: widget.workDateTime, index: widget.index),
           ),
         ),
         Expanded(
-          flex: flexRate[2],
+          flex: widget.flexRate[2],
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: TextFormField(
-              controller: workDetailController,
+              controller: widget.workDetailController,
               style: const TextStyle(fontSize: 10),
               enabled: before30Days,
               decoration: const InputDecoration(
@@ -73,11 +82,11 @@ class WorkInputRow extends HookWidget {
           ),
         ),
         Expanded(
-          flex: flexRate[3],
+          flex: widget.flexRate[3],
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: TextFormField(
-              controller: workMemoController,
+              controller: widget.workMemoController,
               style: const TextStyle(fontSize: 10),
               enabled: before30Days,
               decoration: const InputDecoration(

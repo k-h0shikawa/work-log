@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
-import 'package:intl/intl.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/date_select_button.dart';
 import 'package:work_log/app/work/presentation/widget/register_work_button.dart';
@@ -16,8 +15,6 @@ class WorkList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     const header = <String>['ID', '時間', '商品名', '作業内容', '作業メモ'];
-    final targetDateFormatter = DateFormat('yyyy/MM/dd');
-    final targetDate = useState(DateTime.now());
     const maxInputWorkListLength = 1;
     const flexRate = [1, 1, 3, 3, 3];
     final workList = useState(<Work>[]);
@@ -169,6 +166,7 @@ class WorkList extends HookWidget {
         padding: const EdgeInsets.all(30.0),
         child: Center(
           child: ListView(
+            addAutomaticKeepAlives: true,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -189,7 +187,7 @@ class WorkList extends HookWidget {
               ),
               const DateSelectButton(),
               buildHeader(),
-              ...inputWorkList.value,
+              ...(inputWorkList.value),
               Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
@@ -200,10 +198,6 @@ class WorkList extends HookWidget {
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(
                             onPressed: () {
-                              print("press ＋ button");
-                              print("inputWorkList: $inputWorkList");
-                              print(
-                                  "removeInputWorkList: $removeInputWorkList");
                               if (workList.value.last.workDateTime.hour == 9) {
                                 return;
                               }
