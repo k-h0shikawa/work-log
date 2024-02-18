@@ -107,7 +107,7 @@ class WorkList extends HookWidget {
           dropDownButtonMenu.add(DropdownMenuItem<String>(
             value: work.selectedProductId.toString(),
             child: Text(
-              work.productName,
+              work.productName!,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 10),
             ),
@@ -160,8 +160,8 @@ class WorkList extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('作業入力画面')),
-      floatingActionButton: RegisterButton(
-          inputWorkList: inputWorkList.value, workList: workList),
+      floatingActionButton:
+          RegisterButton(inputWorkList: inputWorkList, workList: workList),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(

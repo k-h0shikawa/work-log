@@ -43,13 +43,10 @@ class WorkListUsecase {
       targetEndTime = DateTime(
           workDateTime.year, workDateTime.month, workDateTime.day + 1, 9, 0, 0);
     }
-    print("targetStartTime : $targetStartTime");
-    print("targetEndTime : $targetEndTime");
 
     try {
       final targetWorkList = await _repository.getWorksWithinDateRange(
           targetStartTime, targetEndTime);
-      print(targetWorkList);
       // 対象日の業務がない場合はデフォルトの業務を返す
       if (targetWorkList.isEmpty) return defaultWorkList;
       return targetWorkList;
@@ -64,7 +61,7 @@ class WorkListUsecase {
     var updateList = <Work>[];
 
     // idの有無に応じて、insertかupdateかを判定
-    for (var e in workList) {
+    for (final e in workList) {
       if (e.id == null) {
         insertList.add(Work(
             id: e.id,

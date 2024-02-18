@@ -22,9 +22,9 @@ class ProductDropDownButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(inProgressProductListNotifierProvider.future);
     final selectedProduct = ref.watch(selectedProductIdNotifierProvider(index));
+
     final notifier =
         ref.read(selectedProductIdNotifierProvider(index).notifier);
-    // notifier.updateState(const SelectedProduct(id: 6, productName: "いいいいい"));
 
     return FutureBuilder(
       future: ref.watch(inProgressProductListNotifierProvider.future),
@@ -70,10 +70,6 @@ class ProductDropDownButton extends ConsumerWidget {
           // dropdownButtonMenuが空または、workDateTimeが1か月以上前の場合は、ドロップダウンリストを無効にする
           final isDropDownButtonEnabled =
               dropDownButtonMenu.isNotEmpty && before30Days;
-
-          // Use a logging framework instead of print
-          debugPrint("dropDownButtonMenu : $dropDownButtonMenu");
-          debugPrint("selectedProduct : $selectedProduct");
 
           return DropdownButton<String>(
             isExpanded: true,

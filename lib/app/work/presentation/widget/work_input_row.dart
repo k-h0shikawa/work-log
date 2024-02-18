@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:work_log/app/work/presentation/widget/prudct_drop_down_button.dart';
+import 'package:work_log/app/work/presentation/widget/product_drop_down_button.dart';
 
 class WorkInputRow extends StatefulWidget {
   final int? workId;
@@ -11,7 +11,7 @@ class WorkInputRow extends StatefulWidget {
   final TextEditingController workMemoController;
   final int? selectedProductId;
   final DateFormat formatter = DateFormat('HH:mm');
-  final String productName;
+  final String? productName;
   final int index;
 
   WorkInputRow({
@@ -22,7 +22,7 @@ class WorkInputRow extends StatefulWidget {
     required this.workMemoController,
     required this.dropDownButtonMenu,
     required this.selectedProductId,
-    required this.productName,
+    this.productName,
     required this.index,
   }) : super(key: key);
 
@@ -37,6 +37,7 @@ class _WorkInputRowState extends State<WorkInputRow>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     // TODO: dropDownButtonMenuが空の場合の処理を追加
 
     final before30Days = widget.workDateTime
