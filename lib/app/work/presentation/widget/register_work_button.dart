@@ -27,18 +27,23 @@ class RegisterButton extends ConsumerWidget {
         final registerWorks = <Work>[];
         for (final entry in inputWorkList.value.asMap().entries) {
           final index = entry.key;
-          final selectedProduct =
-              ref.read(selectedProductIdNotifierProvider(index));
 
-          final value = entry.value;
-          final inputWork = Work(
-            id: value.workId,
-            workDateTime: value.workDateTime,
-            workDetail: value.workDetailController.text,
-            workMemo: value.workMemoController.text,
-            productId: selectedProduct,
-          );
-          registerWorks.add(inputWork);
+          ref.read(selectedProductIdNotifierProvider(index)).when(
+              data: (data) {
+                final selectedProduct = data;
+
+                final value = entry.value;
+                final inputWork = Work(
+                  id: value.workId,
+                  workDateTime: value.workDateTime,
+                  workDetail: value.workDetailController.text,
+                  workMemo: value.workMemoController.text,
+                  productId: selectedProduct,
+                );
+                registerWorks.add(inputWork);
+              },
+              error: (error, stackTrace) => const Text('Error'),
+              loading: () => const CircularProgressIndicator());
         }
 
         // 作業リストを登録

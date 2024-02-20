@@ -7,7 +7,7 @@ part of 'selected_product_id_notifier.dart';
 // **************************************************************************
 
 String _$selectedProductIdNotifierHash() =>
-    r'1476bdca786a9a54446ed0d605b8254414fa9fe5';
+    r'dd02c37ffbb02000ec1f87e09d1bb3b93e96808c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$SelectedProductIdNotifier
-    extends BuildlessAutoDisposeNotifier<int> {
+    extends BuildlessAutoDisposeAsyncNotifier<int> {
   late final int index;
 
-  int build(
+  FutureOr<int> build(
     int index,
   );
 }
@@ -44,7 +44,7 @@ abstract class _$SelectedProductIdNotifier
 const selectedProductIdNotifierProvider = SelectedProductIdNotifierFamily();
 
 /// See also [SelectedProductIdNotifier].
-class SelectedProductIdNotifierFamily extends Family<int> {
+class SelectedProductIdNotifierFamily extends Family<AsyncValue<int>> {
   /// See also [SelectedProductIdNotifier].
   const SelectedProductIdNotifierFamily();
 
@@ -83,7 +83,8 @@ class SelectedProductIdNotifierFamily extends Family<int> {
 
 /// See also [SelectedProductIdNotifier].
 class SelectedProductIdNotifierProvider
-    extends AutoDisposeNotifierProviderImpl<SelectedProductIdNotifier, int> {
+    extends AutoDisposeAsyncNotifierProviderImpl<SelectedProductIdNotifier,
+        int> {
   /// See also [SelectedProductIdNotifier].
   SelectedProductIdNotifierProvider(
     int index,
@@ -114,7 +115,7 @@ class SelectedProductIdNotifierProvider
   final int index;
 
   @override
-  int runNotifierBuild(
+  FutureOr<int> runNotifierBuild(
     covariant SelectedProductIdNotifier notifier,
   ) {
     return notifier.build(
@@ -139,7 +140,7 @@ class SelectedProductIdNotifierProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<SelectedProductIdNotifier, int>
+  AutoDisposeAsyncNotifierProviderElement<SelectedProductIdNotifier, int>
       createElement() {
     return _SelectedProductIdNotifierProviderElement(this);
   }
@@ -158,14 +159,14 @@ class SelectedProductIdNotifierProvider
   }
 }
 
-mixin SelectedProductIdNotifierRef on AutoDisposeNotifierProviderRef<int> {
+mixin SelectedProductIdNotifierRef on AutoDisposeAsyncNotifierProviderRef<int> {
   /// The parameter `index` of this provider.
   int get index;
 }
 
 class _SelectedProductIdNotifierProviderElement
-    extends AutoDisposeNotifierProviderElement<SelectedProductIdNotifier, int>
-    with SelectedProductIdNotifierRef {
+    extends AutoDisposeAsyncNotifierProviderElement<SelectedProductIdNotifier,
+        int> with SelectedProductIdNotifierRef {
   _SelectedProductIdNotifierProviderElement(super.provider);
 
   @override
