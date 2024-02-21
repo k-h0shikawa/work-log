@@ -6,14 +6,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
 
 class ProductDropDownButton extends ConsumerWidget {
-  final DateTime workDateTime;
+  final bool before30Days;
   final int? initProductId;
   final String? initProductName;
   final int index;
 
   const ProductDropDownButton(
       {super.key,
-      required this.workDateTime,
+      required this.before30Days,
       this.initProductId,
       this.initProductName,
       required this.index});
@@ -26,9 +26,11 @@ class ProductDropDownButton extends ConsumerWidget {
     return ref.watch(inProgressProductListNotifierProvider).when(
         data: (data) {
           final productList = data;
+          print("update product list");
           return ref.watch(selectedProductIdNotifierProvider(index)).when(
               data: (data) {
                 final selectedProduct = data;
+                print("update selectedProductId");
 
                 // 進行中の商品名のドロップダウンリストを作成
                 final dropDownButtonMenu =
@@ -60,8 +62,8 @@ class ProductDropDownButton extends ConsumerWidget {
                   ));
                 }
 
-                final before30Days = workDateTime
-                    .isAfter(DateTime.now().subtract(const Duration(days: 30)));
+                print("dropDownButtonMenu : $dropDownButtonMenu");
+
                 // dropdownButtonMenuが空または、workDateTimeが1か月以上前の場合は、ドロップダウンリストを無効にする
                 final isDropDownButtonEnabled =
                     dropDownButtonMenu.isNotEmpty && before30Days;

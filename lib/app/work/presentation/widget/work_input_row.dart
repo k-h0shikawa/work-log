@@ -67,7 +67,9 @@ class WorkInputRowState extends State<WorkInputRow>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: ProductDropDownButton(
-                workDateTime: widget.workDateTime, index: widget.index),
+                before30Days: widget.workDateTime
+                    .isAfter(DateTime.now().subtract(const Duration(days: 30))),
+                index: widget.index),
           ),
         ),
         Expanded(
