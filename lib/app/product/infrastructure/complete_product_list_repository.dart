@@ -42,4 +42,28 @@ class CompleteProductListRepository {
       rethrow;
     }
   }
+
+  Future<List<ProductEntity>> fetchInProgressProductList() async {
+    try {
+      List<Map<String, dynamic>> results = await _database.query("product",
+          where: "isCompleted = 0", orderBy: "id");
+
+      return results.map((Map<String, dynamic> m) {
+        int id = m["id"];
+        String productName = m["productName"];
+        int isCompleted = m["isCompleted"];
+        String createdOn = m["createdOn"];
+        String createdBy = m["createdBy"];
+
+        return ProductEntity(
+            id: id,
+            productName: productName,
+            isCompleted: isCompleted,
+            createdOn: createdOn,
+            createdBy: createdBy);
+      }).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
