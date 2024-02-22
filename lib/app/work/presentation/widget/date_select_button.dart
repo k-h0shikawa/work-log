@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
+import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
 import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
 import 'package:work_log/app/work/application/state/work_date.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
@@ -31,32 +32,17 @@ class DateSelectButton extends ConsumerWidget {
         final index = entry.key;
         final work = entry.value;
         // 進行中の商品名のドロップダウンリストを作成
-        final dropDownButtonMenu =
-            productList.value.map<DropdownMenuItem<String>>(
-          (InProgressProduct product) {
-            return DropdownMenuItem<String>(
-              value: product.id.toString(),
-              child: Text(
-                product.productName,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 10),
-              ),
-            );
-          },
-        ).toList();
+        final dropDownButtonMenu = <int, String>{};
+
+        for (final product in productList.value) {
+          dropDownButtonMenu[product.id!] = product.productName;
+        }
 
         // 未登録の商品をドロップダウンリストに追加
         if (productList.value
             .where((element) => element.id == work.productId)
             .isEmpty) {
-          dropDownButtonMenu.add(DropdownMenuItem<String>(
-            value: work.productId.toString(),
-            child: Text(
-              work.productName!,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10),
-            ),
-          ));
+          dropDownButtonMenu[work.productId] = work.productName!;
         }
 
         // 商品IDのstateを更新
@@ -64,12 +50,16 @@ class DateSelectButton extends ConsumerWidget {
             ref.read(selectedProductIdNotifierProvider(index).notifier);
         notifier.updateState(work.productId);
 
+        // 商品IDのstateを更新
+        final dropDownButtonNotifier = ref.read(
+            ProductDropDownButtonItemListNotifierProvider(index).notifier);
+        dropDownButtonNotifier.updateState(dropDownButtonMenu);
+
         return WorkInputRow(
           workId: work.id,
           workDateTime: work.workDateTime,
           workDetailController: work.workDetailController,
           workMemoController: work.workMemoController,
-          dropDownButtonMenu: dropDownButtonMenu,
           selectedProductId: work.productId,
           productName: work.productName!,
           index: index,

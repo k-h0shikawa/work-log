@@ -6,7 +6,6 @@ class WorkInputRow extends StatefulWidget {
   final int? workId;
   final DateTime workDateTime;
   final List<int> flexRate = [1, 3, 3, 3];
-  final List<DropdownMenuItem<String>> dropDownButtonMenu;
   final TextEditingController workDetailController;
   final TextEditingController workMemoController;
   final int? selectedProductId;
@@ -20,7 +19,6 @@ class WorkInputRow extends StatefulWidget {
     required this.workDateTime,
     required this.workDetailController,
     required this.workMemoController,
-    required this.dropDownButtonMenu,
     required this.selectedProductId,
     this.productName,
     required this.index,
@@ -39,7 +37,6 @@ class WorkInputRowState extends State<WorkInputRow>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // TODO: dropDownButtonMenuが空の場合の処理を追加
 
     final before30Days = widget.workDateTime
         .isAfter(DateTime.now().subtract(const Duration(days: 30)));

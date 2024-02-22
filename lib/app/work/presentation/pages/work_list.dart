@@ -66,7 +66,6 @@ class WorkList extends HookConsumerWidget {
           workDateTime: work.workDateTime,
           workDetailController: work.workDetailController,
           workMemoController: work.workMemoController,
-          dropDownButtonMenu: dropDownButtonMenu,
           selectedProductId: work.productId,
           productName: work.productName!,
           index: index,
@@ -124,7 +123,6 @@ class WorkList extends HookConsumerWidget {
           workDateTime: work.workDateTime,
           workDetailController: work.workDetailController,
           workMemoController: work.workMemoController,
-          dropDownButtonMenu: dropDownButtonMenu,
           selectedProductId: work.selectedProductId,
           productName: work.productName,
           index: index,
@@ -171,8 +169,6 @@ class WorkList extends HookConsumerWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         context.push('/product');
-                        inputWorkList.value =
-                            convertInputWorkListToInputWorkList(workList.value);
                       },
                       child: const Text('商品一覧画面'),
                     ),
@@ -216,18 +212,6 @@ class WorkList extends HookConsumerWidget {
                                       .add(const Duration(minutes: 30)),
                                   workDetailController: TextEditingController(),
                                   workMemoController: TextEditingController(),
-                                  dropDownButtonMenu: productList.value
-                                      .map<DropdownMenuItem<String>>(
-                                          (InProgressProduct product) {
-                                    return DropdownMenuItem<String>(
-                                      value: product.id.toString(),
-                                      child: Text(
-                                        product.productName,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
-                                    );
-                                  }).toList(),
                                   selectedProductId: productList.value.first.id,
                                   productName:
                                       productList.value.first.productName,

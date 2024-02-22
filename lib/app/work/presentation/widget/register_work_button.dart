@@ -61,7 +61,6 @@ class RegisterButton extends ConsumerWidget {
             workDateTime: value.workDateTime,
             workDetailController: TextEditingController(text: value.workDetail),
             workMemoController: TextEditingController(text: value.workMemo),
-            dropDownButtonMenu: const [],
             selectedProductId: value.productId,
             index: entry.key,
           );
