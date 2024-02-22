@@ -144,7 +144,18 @@ class WorkListRepository {
       DateTime startDateTime, DateTime endDateTime) async {
     // TODO: *をなくす
     final result = await _database.rawQuery('''
-      SELECT work.*, product.productName, product.isCompleted, product.createdOn, product.createdBy
+      SELECT 
+        work.id
+        , work.workDateTime
+        , work.workDetail
+        , work.workMemo
+        , work.productId
+        , work.createdOn
+        , work.createdBy
+        , work.updatedOn
+        , work.updatedBy
+        , product.productName
+        , product.isCompleted
       FROM work
       INNER JOIN product ON work.productId = product.id
       WHERE work.workDateTime BETWEEN ? AND ?
