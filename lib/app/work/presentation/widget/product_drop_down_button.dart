@@ -57,8 +57,6 @@ class ProductDropDownButton extends ConsumerWidget {
                   ));
                 }
 
-                print("dropDownButtonMenu : $dropDownButtonMenu");
-
                 // dropdownButtonMenuが空または、workDateTimeが1か月以上前の場合は、ドロップダウンリストを無効にする
                 final isDropDownButtonEnabled =
                     dropDownButtonMenu.isNotEmpty && before30Days;

@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
-import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/date_select_button.dart';
 import 'package:work_log/app/work/presentation/widget/register_work_button.dart';
@@ -20,7 +19,6 @@ class WorkList extends HookConsumerWidget {
     const maxInputWorkListLength = 1;
     const flexRate = [1, 1, 3, 3, 3];
     final workList = useState(<Work>[]);
-    // 入力された作業情報を保持するリスト
     final inputWorkList = useState(<WorkInputRow>[]);
     final productList = useState(<InProgressProduct>[]);
     final removeInputWorkList = <WorkInputRow>[];
@@ -29,37 +27,6 @@ class WorkList extends HookConsumerWidget {
       return workList.asMap().entries.map((entry) {
         final index = entry.key;
         final work = entry.value;
-        // 進行中の商品名のドロップダウンリストを作成
-        final dropDownButtonMenu =
-            productList.value.map<DropdownMenuItem<String>>(
-          (InProgressProduct product) {
-            return DropdownMenuItem<String>(
-              value: product.id.toString(),
-              child: Text(
-                product.productName,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 10),
-              ),
-            );
-          },
-        ).toList();
-
-        // 未登録の商品をドロップダウンリストに追加
-        if (productList.value
-            .where((element) => element.id == work.productId)
-            .isEmpty) {
-          dropDownButtonMenu.add(DropdownMenuItem<String>(
-            value: work.productId.toString(),
-            child: Text(
-              work.productName!,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10),
-            ),
-          ));
-        }
-        final notifier =
-            ref.read(selectedProductIdNotifierProvider(index).notifier);
-        notifier.updateState(work.productId);
 
         return WorkInputRow(
           workId: work.id,
@@ -83,52 +50,6 @@ class WorkList extends HookConsumerWidget {
       }();
       return null;
     }, []);
-
-    List<WorkInputRow> convertInputWorkListToInputWorkList(
-        List<Work> workList) {
-      return inputWorkList.value.asMap().entries.map((entry) {
-        final index = entry.key;
-        final work = entry.value;
-        // 進行中の商品名のドロップダウンリストを作成
-        final dropDownButtonMenu =
-            productList.value.map<DropdownMenuItem<String>>(
-          (InProgressProduct product) {
-            return DropdownMenuItem<String>(
-              value: product.id.toString(),
-              child: Text(
-                product.productName,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 10),
-              ),
-            );
-          },
-        ).toList();
-
-        // 未登録の商品をドロップダウンリストに追加
-        if (productList.value
-            .where((element) => element.id == work.selectedProductId)
-            .isEmpty) {
-          dropDownButtonMenu.add(DropdownMenuItem<String>(
-            value: work.selectedProductId.toString(),
-            child: Text(
-              work.productName!,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10),
-            ),
-          ));
-        }
-
-        return WorkInputRow(
-          workId: work.workId,
-          workDateTime: work.workDateTime,
-          workDetailController: work.workDetailController,
-          workMemoController: work.workMemoController,
-          selectedProductId: work.selectedProductId,
-          productName: work.productName,
-          index: index,
-        );
-      }).toList();
-    }
 
     Widget buildHeader() {
       return Row(
