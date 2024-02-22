@@ -6,13 +6,13 @@ import 'package:work_log/app/work/infrastructure/work_list_repository.dart';
 class WorkListUsecase {
   final _logger = Logger();
   final WorkListRepository _repository;
-  static const startWorkTime = 9;
+  static const startWorkTime = 8;
 
   final defaultWorkList = <Work>[
     for (var i = 0; i < 20; i++)
       Work(
           workDateTime: DateTime(DateTime.now().year, DateTime.now().month,
-                  DateTime.now().day, 9, 30)
+                  DateTime.now().day, 9, 00)
               .add(Duration(minutes: 30 * i)),
           workDetail: '',
           workMemo: '',
