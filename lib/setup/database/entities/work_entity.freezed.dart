@@ -25,6 +25,7 @@ mixin _$WorkEntity {
   String get workDetail => throw _privateConstructorUsedError;
   String get workMemo => throw _privateConstructorUsedError;
   int get productId => throw _privateConstructorUsedError;
+  String? get productName => throw _privateConstructorUsedError;
   String? get createdOn => throw _privateConstructorUsedError;
   String? get createdBy => throw _privateConstructorUsedError;
   String? get updatedOn => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $WorkEntityCopyWith<$Res> {
       String workDetail,
       String workMemo,
       int productId,
+      String? productName,
       String? createdOn,
       String? createdBy,
       String? updatedOn,
@@ -72,6 +74,7 @@ class _$WorkEntityCopyWithImpl<$Res, $Val extends WorkEntity>
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
+    Object? productName = freezed,
     Object? createdOn = freezed,
     Object? createdBy = freezed,
     Object? updatedOn = freezed,
@@ -98,6 +101,10 @@ class _$WorkEntityCopyWithImpl<$Res, $Val extends WorkEntity>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as int,
+      productName: freezed == productName
+          ? _value.productName
+          : productName // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
@@ -132,6 +139,7 @@ abstract class _$$WorkEntityImplCopyWith<$Res>
       String workDetail,
       String workMemo,
       int productId,
+      String? productName,
       String? createdOn,
       String? createdBy,
       String? updatedOn,
@@ -154,6 +162,7 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
     Object? workDetail = null,
     Object? workMemo = null,
     Object? productId = null,
+    Object? productName = freezed,
     Object? createdOn = freezed,
     Object? createdBy = freezed,
     Object? updatedOn = freezed,
@@ -180,6 +189,10 @@ class __$$WorkEntityImplCopyWithImpl<$Res>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as int,
+      productName: freezed == productName
+          ? _value.productName
+          : productName // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdOn: freezed == createdOn
           ? _value.createdOn
           : createdOn // ignore: cast_nullable_to_non_nullable
@@ -209,6 +222,7 @@ class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
       required this.workDetail,
       required this.workMemo,
       required this.productId,
+      this.productName = null,
       this.createdOn = null,
       this.createdBy = null,
       this.updatedOn = null,
@@ -231,6 +245,9 @@ class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
   final int productId;
   @override
   @JsonKey()
+  final String? productName;
+  @override
+  @JsonKey()
   final String? createdOn;
   @override
   @JsonKey()
@@ -244,7 +261,7 @@ class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'WorkEntity(id: $id, workDateTime: $workDateTime, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
+    return 'WorkEntity(id: $id, workDateTime: $workDateTime, workDetail: $workDetail, workMemo: $workMemo, productId: $productId, productName: $productName, createdOn: $createdOn, createdBy: $createdBy, updatedOn: $updatedOn, updatedBy: $updatedBy)';
   }
 
   @override
@@ -257,6 +274,7 @@ class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('workDetail', workDetail))
       ..add(DiagnosticsProperty('workMemo', workMemo))
       ..add(DiagnosticsProperty('productId', productId))
+      ..add(DiagnosticsProperty('productName', productName))
       ..add(DiagnosticsProperty('createdOn', createdOn))
       ..add(DiagnosticsProperty('createdBy', createdBy))
       ..add(DiagnosticsProperty('updatedOn', updatedOn))
@@ -277,6 +295,8 @@ class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
                 other.workMemo == workMemo) &&
             (identical(other.productId, productId) ||
                 other.productId == productId) &&
+            (identical(other.productName, productName) ||
+                other.productName == productName) &&
             (identical(other.createdOn, createdOn) ||
                 other.createdOn == createdOn) &&
             (identical(other.createdBy, createdBy) ||
@@ -289,8 +309,18 @@ class _$WorkEntityImpl extends _WorkEntity with DiagnosticableTreeMixin {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, workDateTime, workDetail,
-      workMemo, productId, createdOn, createdBy, updatedOn, updatedBy);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      workDateTime,
+      workDetail,
+      workMemo,
+      productId,
+      productName,
+      createdOn,
+      createdBy,
+      updatedOn,
+      updatedBy);
 
   @JsonKey(ignore: true)
   @override
@@ -313,6 +343,7 @@ abstract class _WorkEntity extends WorkEntity {
       required final String workDetail,
       required final String workMemo,
       required final int productId,
+      final String? productName,
       final String? createdOn,
       final String? createdBy,
       final String? updatedOn,
@@ -332,6 +363,8 @@ abstract class _WorkEntity extends WorkEntity {
   String get workMemo;
   @override
   int get productId;
+  @override
+  String? get productName;
   @override
   String? get createdOn;
   @override

@@ -14,6 +14,7 @@ abstract class WorkEntity implements _$WorkEntity {
       required String workDetail,
       required String workMemo,
       required int productId,
+      @Default(null) String? productName,
       @Default(null) String? createdOn,
       @Default(null) String? createdBy,
       @Default(null) String? updatedOn,
@@ -32,10 +33,24 @@ abstract class WorkEntity implements _$WorkEntity {
       workDetail: workDetail,
       workMemo: workMemo,
       productId: productId,
+      productName: productName,
       createdOn: createdOn != null ? DateTime.parse(createdOn!) : null,
       createdBy: createdBy,
       updatedOn: updatedOn != null ? DateTime.parse(updatedOn!) : null,
       updatedBy: updatedBy,
     );
+  }
+
+  Map<String, dynamic> toUpdateJson() {
+    return {
+      'id': id,
+      'workDateTime': workDateTime,
+      'workDetail': workDetail,
+      'workMemo': workMemo,
+      'productId': productId,
+      'productName': productName,
+      'updatedBy': updatedBy,
+      'updatedOn': updatedOn,
+    };
   }
 }

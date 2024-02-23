@@ -73,6 +73,7 @@ void main() {
           workDetail: 'Detail1',
           workMemo: 'Memo1',
           productId: 1,
+          productName: 'Product1',
           createdOn: DateTime.parse('2024-01-30 00:00:00.000'),
           createdBy: 'user',
           updatedOn: DateTime.parse('2024-01-30 00:00:00.000'),

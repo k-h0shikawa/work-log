@@ -13,6 +13,7 @@ abstract class Work implements _$Work {
     required String workDetail,
     required String workMemo,
     required int productId,
+    String? productName,
     @Default(null) DateTime? createdOn,
     @Default(null) String? createdBy,
     @Default(null) DateTime? updatedOn,

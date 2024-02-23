@@ -2,38 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
-import 'package:intl/intl.dart';
-import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
-import 'package:work_log/app/work/presentation/input/input_work.dart';
+import 'package:work_log/app/work/presentation/widget/date_select_button.dart';
+import 'package:work_log/app/work/presentation/widget/register_work_button.dart';
+import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
 
-class WorkList extends HookWidget {
+class WorkList extends HookConsumerWidget {
   const WorkList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    const header = <String>['時間', '商品名', '作業内容', '作業メモ'];
-    final formatter = DateFormat('HH:mm');
-    final targetDateFormatter = DateFormat('yyyy/MM/dd');
-    final targetDate = useState(DateTime.now());
-    const maxWorkListLength = 1;
-    const flexRate = [1, 3, 3, 3];
+  Widget build(BuildContext context, WidgetRef ref) {
+    const header = <String>['ID', '時間', '商品名', '作業内容', '作業メモ'];
+    const maxInputWorkListLength = 1;
+    const flexRate = [1, 1, 3, 3, 3];
     final workList = useState(<Work>[]);
-    // 入力された作業情報を保持するリスト
-    var inputWorkList = <InputWork>[];
+    final inputWorkList = useState(<WorkInputRow>[]);
+    final productList = useState(<InProgressProduct>[]);
+    final removeInputWorkList = <WorkInputRow>[];
 
-    Future<void> selectDate(BuildContext context) async {
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: targetDate.value,
-          firstDate: DateTime(2016),
-          lastDate: DateTime.now().add(const Duration(days: 360)));
-      if (picked != null && picked != targetDate.value) {
-        targetDate.value = picked;
-      }
+    List<WorkInputRow> convertWorkListToInputWorkList(List<Work> workList) {
+      return workList.asMap().entries.map((entry) {
+        final index = entry.key;
+        final work = entry.value;
+
+        return WorkInputRow(
+          workId: work.id,
+          workDateTime: work.workDateTime,
+          workDetailController: work.workDetailController,
+          workMemoController: work.workMemoController,
+          selectedProductId: work.productId,
+          productName: work.productName!,
+          index: index,
+        );
+      }).toList();
     }
+
+    useEffect(() {
+      () async {
+        productList.value =
+            await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
+        workList.value =
+            await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
+        inputWorkList.value = convertWorkListToInputWorkList(workList.value);
+      }();
+      return null;
+    }, []);
 
     Widget buildHeader() {
       return Row(
@@ -55,108 +71,15 @@ class WorkList extends HookWidget {
       );
     }
 
-    List<Widget> buildTaskList() {
-      final productList = useState(<InProgressProduct>[]);
-      useEffect(() {
-        () async {
-          productList.value =
-              await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
-          workList.value =
-              await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
-        }();
-        return null;
-      }, []);
-
-      return workList.value.map((work) {
-        final workDetailController =
-            useTextEditingController(text: work.workDetail);
-        final workMemoController =
-            useTextEditingController(text: work.workMemo);
-
-        var inputWork = InputWork(
-            workId: work.id,
-            workDateTime: work.workDateTime,
-            workDetailController: workDetailController,
-            workMemoController: workMemoController,
-            selectedProductId: useState<int>(work.productId));
-
-        inputWorkList.add(inputWork);
-
-        return Row(
-          children: <Widget>[
-            Expanded(
-              flex: flexRate[0],
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: Text(formatter.format(inputWork.workDateTime)),
-              ),
-            ),
-            Expanded(
-              flex: flexRate[1],
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  itemHeight: null,
-                  iconSize: 0,
-                  value: inputWork.selectedProductId.value.toString(),
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      inputWork.selectedProductId.value = int.parse(newValue);
-                    }
-                  },
-                  items: productList.value.map<DropdownMenuItem<String>>(
-                    (InProgressProduct product) {
-                      return DropdownMenuItem<String>(
-                        value: product.id.toString(),
-                        child: Text(
-                          product.productName,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: flexRate[2],
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: TextFormField(
-                  controller: inputWork.workDetailController,
-                  style: const TextStyle(fontSize: 10),
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 5)),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: flexRate[3],
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: TextFormField(
-                  controller: inputWork.workMemoController,
-                  style: const TextStyle(fontSize: 10),
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 5)),
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                ),
-              ),
-            ),
-          ],
-        );
-      }).toList();
-    }
-
     return Scaffold(
       appBar: AppBar(title: const Text('作業入力画面')),
+      floatingActionButton:
+          RegisterButton(inputWorkList: inputWorkList, workList: workList),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
           child: ListView(
+            addAutomaticKeepAlives: true,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -167,33 +90,18 @@ class WorkList extends HookWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         context.push('/product');
-                        // TODO: 画面遷移後に最新の進行中商品リストを取得する。
                       },
                       child: const Text('商品一覧画面'),
                     ),
                   ))
                 ],
               ),
-              Row(
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(targetDateFormatter.format(targetDate.value)),
-                    ),
-                  ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                          onPressed: () => selectDate(context),
-                          child: const Text('日付選択')),
-                    ),
-                  ),
-                ],
+              DateSelectButton(
+                inputWorkList: inputWorkList,
+                productList: productList,
               ),
               buildHeader(),
-              ...buildTaskList(),
+              ...inputWorkList.value,
               Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
@@ -207,18 +115,29 @@ class WorkList extends HookWidget {
                               if (workList.value.last.workDateTime.hour == 9) {
                                 return;
                               }
-                              workList.value = [
-                                ...workList.value,
-                                Work(
-                                    id: workList.value.length,
-                                    workDateTime: workList
-                                        .value.last.workDateTime
-                                        .add(const Duration(minutes: 30)),
-                                    workDetail: '',
-                                    workMemo: '',
-                                    productId: 1,
-                                    createdOn: DateTime.now(),
-                                    createdBy: 'user')
+
+                              if (removeInputWorkList.isNotEmpty) {
+                                inputWorkList.value = [
+                                  ...inputWorkList.value,
+                                  removeInputWorkList.removeAt(0)
+                                ];
+
+                                return;
+                              }
+
+                              inputWorkList.value = [
+                                ...inputWorkList.value,
+                                WorkInputRow(
+                                  workDateTime: inputWorkList
+                                      .value.last.workDateTime
+                                      .add(const Duration(minutes: 30)),
+                                  workDetailController: TextEditingController(),
+                                  workMemoController: TextEditingController(),
+                                  selectedProductId: productList.value.first.id,
+                                  productName:
+                                      productList.value.first.productName,
+                                  index: inputWorkList.value.length,
+                                )
                               ];
                             },
                             style: ElevatedButton.styleFrom(
@@ -239,11 +158,13 @@ class WorkList extends HookWidget {
                           alignment: Alignment.centerLeft,
                           child: ElevatedButton(
                             onPressed: () {
-                              if (workList.value.length > maxWorkListLength) {
-                                List<Work> tmpList =
-                                    List<Work>.from(workList.value);
-                                tmpList.removeLast();
-                                workList.value = tmpList;
+                              if (inputWorkList.value.length >
+                                  maxInputWorkListLength) {
+                                List<WorkInputRow> tmpList =
+                                    List<WorkInputRow>.from(
+                                        inputWorkList.value);
+                                removeInputWorkList.add(tmpList.removeLast());
+                                inputWorkList.value = tmpList;
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -259,50 +180,6 @@ class WorkList extends HookWidget {
                         ),
                       ),
                       const Spacer(),
-                      Flexible(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              final scaffoldMessenger =
-                                  ScaffoldMessenger.of(context);
-                              // 登録対象の作業リストを作成
-                              var registerWorks = inputWorkList
-                                  .map((inputWork) => Work(
-                                        id: inputWork.workId,
-                                        workDateTime: inputWork.workDateTime,
-                                        workDetail:
-                                            inputWork.workDetailController.text,
-                                        workMemo:
-                                            inputWork.workMemoController.text,
-                                        productId:
-                                            inputWork.selectedProductId.value,
-                                        createdOn: DateTime.now(),
-                                        createdBy: 'user',
-                                      ))
-                                  .toList();
-
-                              workList.value = await GetIt.I<WorkListUsecase>()
-                                  .saveWork(registerWorks);
-                              scaffoldMessenger.showSnackBar(
-                                const SnackBar(
-                                  backgroundColor: Colors.green,
-                                  content: Text(Messages.successRegisterWork),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.black,
-                            ),
-                            child: const Text(
-                              "登録",
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ))
             ],
