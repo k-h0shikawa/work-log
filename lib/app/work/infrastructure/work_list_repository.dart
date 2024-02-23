@@ -142,7 +142,6 @@ class WorkListRepository {
 
   Future<List<Work>> getWorksWithinDateRange(
       DateTime startDateTime, DateTime endDateTime) async {
-    // TODO: *をなくす
     final result = await _database.rawQuery('''
       SELECT 
         work.id

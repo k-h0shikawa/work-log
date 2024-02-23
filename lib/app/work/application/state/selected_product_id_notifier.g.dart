@@ -7,7 +7,7 @@ part of 'selected_product_id_notifier.dart';
 // **************************************************************************
 
 String _$selectedProductIdNotifierHash() =>
-    r'6add2b4a2516fe8d810756baf75648b4bb893414';
+    r'227353cbdcd1259d529cebe14a41e9502d2a09ae';
 
 /// Copied from Dart SDK
 class _SystemHash {

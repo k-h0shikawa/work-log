@@ -7,16 +7,15 @@ import 'package:work_log/app/domain/entities/work.dart';
 import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
 import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
 import 'package:work_log/app/work/application/state/work_date.dart';
+import 'package:work_log/app/work/application/state/work_input_list.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
 
 class DateSelectButton extends ConsumerWidget {
-  final ValueNotifier<List<WorkInputRow>> inputWorkList;
   final ValueNotifier<List<InProgressProduct>> productList;
 
   const DateSelectButton({
     super.key,
-    required this.inputWorkList,
     required this.productList,
   });
 
@@ -82,8 +81,9 @@ class DateSelectButton extends ConsumerWidget {
             await GetIt.I<WorkListUsecase>().fetchWorkListByDate(picked);
 
         // workListの内容をinputWorkListへ詰め替える
-        inputWorkList.value.clear();
-        inputWorkList.value = convertWorkListToInputWorkList(workList);
+        final workInputListNotifier = ref.read(workInputListProvider.notifier);
+        workInputListNotifier
+            .setState(convertWorkListToInputWorkList(workList));
       }
     }
 

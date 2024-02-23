@@ -11,7 +11,7 @@ class SelectedProductIdNotifier extends _$SelectedProductIdNotifier {
     // すでに作業リストがある場合は、その商品IDを返す
     final workList =
         await GetIt.I<WorkListUsecase>().initWorkList(DateTime.now());
-    if (workList.isNotEmpty) {
+    if (index < workList.length && workList[index].id != null) {
       return workList[index].productId;
     }
 

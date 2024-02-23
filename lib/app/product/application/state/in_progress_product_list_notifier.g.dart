@@ -7,7 +7,7 @@ part of 'in_progress_product_list_notifier.dart';
 // **************************************************************************
 
 String _$inProgressProductListNotifierHash() =>
-    r'a16d5e494002f0f1442ee490eead0722ed942f42';
+    r'e5888f54d598ad6a2b8795109dc219cf0eba46a1';
 
 /// See also [InProgressProductListNotifier].
 @ProviderFor(InProgressProductListNotifier)

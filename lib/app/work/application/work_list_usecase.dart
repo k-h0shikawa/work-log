@@ -118,7 +118,7 @@ class WorkListUsecase {
         return defaultWorkList.map((work) {
           return Work(
             workDateTime: DateTime(workDateTime.year, workDateTime.month,
-                    workDateTime.day, 9, 30)
+                    workDateTime.day, 9, 00)
                 .add(Duration(minutes: 30 * defaultWorkList.indexOf(work))),
             workDetail: work.workDetail,
             workMemo: work.workMemo,
