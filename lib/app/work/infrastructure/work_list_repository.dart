@@ -31,8 +31,8 @@ class WorkListRepository {
     }
   }
 
-  Future<List<int>> saveWork(
-      List<Work> insertWorkList, List<Work> updateWorkList) async {
+  Future<List<int>> saveWork(List<Work> insertWorkList,
+      List<Work> updateWorkList, DateTime startDate, DateTime endDate) async {
     try {
       var insertIds = <int>[];
       var updateIds = <int>[];
@@ -43,6 +43,7 @@ class WorkListRepository {
         if (updateWorkList.isNotEmpty) {
           updateIds = await _updateWork(updateWorkList, txn);
         }
+        _deleteWork(insertIds + updateIds, startDate, endDate);
       });
       return insertIds + updateIds;
     } catch (e) {
@@ -164,5 +165,22 @@ class WorkListRepository {
     return result.map((Map<String, dynamic> m) {
       return WorkEntity.fromMap(m).toWork();
     }).toList();
+  }
+
+  void _deleteWork(List<int> notTargetWork, DateTime startDateTime,
+      DateTime endDateTime) async {
+    try {
+      // workDateTimeが対象日であるかつ、notTargetWorkに含まれないworkを削除
+      await _database.delete('work',
+          where:
+              'workDateTime BETWEEN ? AND ? AND id NOT IN (${notTargetWork.map((id) => '?').join(', ')})',
+          whereArgs: [
+            formatter.format(startDateTime),
+            formatter.format(endDateTime),
+            ...notTargetWork
+          ]);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

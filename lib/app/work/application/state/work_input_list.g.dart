@@ -6,7 +6,7 @@ part of 'work_input_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$workInputListHash() => r'8d940bd04c10501d6548838913b78be05b07b289';
+String _$workInputListHash() => r'18ae51c70694fb50b82fb539e61ffb53ef9d2b19';
 
 /// See also [WorkInputList].
 @ProviderFor(WorkInputList)

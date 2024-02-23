@@ -31,17 +31,20 @@ class WorkListUsecase {
     final hour = workDateTime.hour;
 
     if (hour < startWorkTime) {
-      // 9時より前の場合は前日の9時から当日の9時までの業務を表示
+      // 8時より前の場合は前日の9時から当日の9時までの業務を表示
       targetStartTime = DateTime(
-          workDateTime.year, workDateTime.month, workDateTime.day - 1, 9, 0, 0);
+              workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0)
+          .add(const Duration(days: -1));
+
       targetEndTime = DateTime(
-          workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0);
+          workDateTime.year, workDateTime.month, workDateTime.day, 8, 30, 0);
     } else {
-      // 9時以降の場合は当日の9時から翌日の9時までの業務を表示
+      // 8時以降の場合は当日の9時から翌日の9時までの業務を表示
       targetStartTime = DateTime(
           workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0);
       targetEndTime = DateTime(
-          workDateTime.year, workDateTime.month, workDateTime.day + 1, 9, 0, 0);
+              workDateTime.year, workDateTime.month, workDateTime.day, 8, 30, 0)
+          .add(const Duration(days: 1));
     }
 
     try {
@@ -59,6 +62,21 @@ class WorkListUsecase {
   Future<List<Work>> saveWork(List<Work> workList) async {
     var insertList = <Work>[];
     var updateList = <Work>[];
+    final startTargetWorkDate = DateTime(
+        workList.first.workDateTime.year,
+        workList.first.workDateTime.month,
+        workList.first.workDateTime.day,
+        9,
+        0,
+        0);
+    final endTargetWorkDate = DateTime(
+            workList.first.workDateTime.year,
+            workList.first.workDateTime.month,
+            workList.first.workDateTime.day,
+            8,
+            30,
+            0)
+        .add(const Duration(days: 1));
 
     // idの有無に応じて、insertかupdateかを判定
     for (final e in workList) {
@@ -84,7 +102,8 @@ class WorkListUsecase {
     }
 
     try {
-      final savedIds = await _repository.saveWork(insertList, updateList);
+      final savedIds = await _repository.saveWork(
+          insertList, updateList, startTargetWorkDate, endTargetWorkDate);
       final savedWorks = _repository.fetchWorksById(savedIds);
       return savedWorks;
     } catch (e) {
@@ -106,7 +125,8 @@ class WorkListUsecase {
     final targetStartTime = DateTime(
         workDateTime.year, workDateTime.month, workDateTime.day, 9, 0, 0);
     final targetEndTime = DateTime(
-        workDateTime.year, workDateTime.month, workDateTime.day + 1, 9, 0, 0);
+            workDateTime.year, workDateTime.month, workDateTime.day, 8, 30, 0)
+        .add(const Duration(days: 1));
 
     try {
       final targetWorkList = await _repository.getWorksWithinDateRange(
