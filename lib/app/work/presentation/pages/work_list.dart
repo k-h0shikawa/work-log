@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
+import 'package:work_log/app/work/presentation/widget/add_work_button.dart';
 import 'package:work_log/app/work/presentation/widget/date_select_button.dart';
+import 'package:work_log/app/work/presentation/widget/minus_work_button.dart';
 import 'package:work_log/app/work/presentation/widget/register_work_button.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_table.dart';
 
@@ -52,47 +54,25 @@ class WorkList extends HookConsumerWidget {
                 productList: productList,
               ),
               const WorkInputTable(),
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
+              const Padding(
+                  padding: EdgeInsets.all(10.0),
                   child: Row(
                     children: [
                       Flexible(
                         flex: 1,
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.black,
-                            ),
-                            child: const Text(
-                              "＋",
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
+                          child: AddWorkButton(),
                         ),
                       ),
                       Flexible(
                         flex: 1,
                         child: Align(
                           alignment: Alignment.centerLeft,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.black,
-                            ),
-                            child: const Text(
-                              "ー",
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
+                          child: MinusWorkButton(),
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                     ],
                   ))
             ],

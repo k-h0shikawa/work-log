@@ -35,7 +35,6 @@ class WorkInputTable extends ConsumerWidget {
         return Column(
           children: [
             buildHeader(),
-            // おそらく、ListViewを使用しているのが問題
             ...workInputRows,
           ],
         );

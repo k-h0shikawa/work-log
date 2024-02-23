@@ -8,7 +8,6 @@ class WorkInputRow extends StatefulWidget {
   final List<int> flexRate = [1, 3, 3, 3];
   final TextEditingController workDetailController;
   final TextEditingController workMemoController;
-  final int? selectedProductId;
   final DateFormat formatter = DateFormat('HH:mm');
   final String? productName;
   final int index;
@@ -19,7 +18,6 @@ class WorkInputRow extends StatefulWidget {
     required this.workDateTime,
     required this.workDetailController,
     required this.workMemoController,
-    required this.selectedProductId,
     this.productName,
     required this.index,
   }) : super(key: key);

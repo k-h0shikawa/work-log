@@ -59,7 +59,6 @@ class DateSelectButton extends ConsumerWidget {
           workDateTime: work.workDateTime,
           workDetailController: work.workDetailController,
           workMemoController: work.workMemoController,
-          selectedProductId: work.productId,
           productName: work.productName!,
           index: index,
         );

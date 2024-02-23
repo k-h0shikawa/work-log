@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:work_log/app/domain/entities/work.dart';
@@ -17,7 +18,6 @@ class WorkInputList extends _$WorkInputList {
         workDateTime: work.workDateTime,
         workDetailController: work.workDetailController,
         workMemoController: work.workMemoController,
-        selectedProductId: work.productId,
         productName: work.productName!,
         index: index,
       );
@@ -35,5 +35,38 @@ class WorkInputList extends _$WorkInputList {
 
   void setState(List<WorkInputRow> inputWorkList) {
     state = AsyncValue.data(inputWorkList);
+  }
+
+  void addDefaultWorkInputRow() {
+    state.when(
+        data: (data) {
+          final workList = data;
+          // stateにデフォルトのWorkInputRowを追加
+          final workInputRow = WorkInputRow(
+            workId: null,
+            workDateTime:
+                workList.last.workDateTime.add(const Duration(minutes: 30)),
+            workDetailController: TextEditingController(),
+            workMemoController: TextEditingController(),
+            productName: null,
+            index: workList.length,
+          );
+          workList.add(workInputRow);
+          state = AsyncValue.data(workList);
+        },
+        error: (error, stackTrace) => {},
+        loading: () => {});
+  }
+
+  void minusWorkInputRow() {
+    state.when(
+        data: (data) {
+          final workList = data;
+          // stateにデフォルトのWorkInputRowを追加
+          workList.removeAt(workList.length - 1);
+          state = AsyncValue.data(workList);
+        },
+        error: (error, stackTrace) => {},
+        loading: () => {});
   }
 }

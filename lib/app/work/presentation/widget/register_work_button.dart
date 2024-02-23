@@ -66,7 +66,6 @@ class RegisterButton extends ConsumerWidget {
                       TextEditingController(text: value.workDetail),
                   workMemoController:
                       TextEditingController(text: value.workMemo),
-                  selectedProductId: value.productId,
                   index: entry.key,
                 );
                 inputWorkListValue.add(inputWork);
