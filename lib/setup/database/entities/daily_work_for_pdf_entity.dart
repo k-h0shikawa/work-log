@@ -18,7 +18,7 @@ abstract class DailyWorkForPDFEntity implements _$DailyWorkForPDFEntity {
       workDate: DateTime.parse(workDate),
       productName: productName,
       workDetail: workDetail,
-      workTimeByWorkDetail: workCount * 0.5,
+      workTimeByWorkDetail: workCount * 5,
     );
   }
 }

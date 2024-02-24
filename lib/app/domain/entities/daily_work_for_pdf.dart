@@ -7,6 +7,6 @@ class DailyWorkForPDF with _$DailyWorkForPDF {
     required String productName,
     required DateTime workDate,
     required String workDetail,
-    required double workTimeByWorkDetail,
+    required int workTimeByWorkDetail,
   }) = _DailyWorkForPDF;
 }

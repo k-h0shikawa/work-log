@@ -19,7 +19,7 @@ mixin _$DailyWorkForPDF {
   String get productName => throw _privateConstructorUsedError;
   DateTime get workDate => throw _privateConstructorUsedError;
   String get workDetail => throw _privateConstructorUsedError;
-  double get workTimeByWorkDetail => throw _privateConstructorUsedError;
+  int get workTimeByWorkDetail => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DailyWorkForPDFCopyWith<DailyWorkForPDF> get copyWith =>
@@ -36,7 +36,7 @@ abstract class $DailyWorkForPDFCopyWith<$Res> {
       {String productName,
       DateTime workDate,
       String workDetail,
-      double workTimeByWorkDetail});
+      int workTimeByWorkDetail});
 }
 
 /// @nodoc
@@ -73,7 +73,7 @@ class _$DailyWorkForPDFCopyWithImpl<$Res, $Val extends DailyWorkForPDF>
       workTimeByWorkDetail: null == workTimeByWorkDetail
           ? _value.workTimeByWorkDetail
           : workTimeByWorkDetail // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ) as $Val);
   }
 }
@@ -90,7 +90,7 @@ abstract class _$$DailyWorkForPDFImplCopyWith<$Res>
       {String productName,
       DateTime workDate,
       String workDetail,
-      double workTimeByWorkDetail});
+      int workTimeByWorkDetail});
 }
 
 /// @nodoc
@@ -125,7 +125,7 @@ class __$$DailyWorkForPDFImplCopyWithImpl<$Res>
       workTimeByWorkDetail: null == workTimeByWorkDetail
           ? _value.workTimeByWorkDetail
           : workTimeByWorkDetail // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -146,7 +146,7 @@ class _$DailyWorkForPDFImpl implements _DailyWorkForPDF {
   @override
   final String workDetail;
   @override
-  final double workTimeByWorkDetail;
+  final int workTimeByWorkDetail;
 
   @override
   String toString() {
@@ -185,7 +185,7 @@ abstract class _DailyWorkForPDF implements DailyWorkForPDF {
       {required final String productName,
       required final DateTime workDate,
       required final String workDetail,
-      required final double workTimeByWorkDetail}) = _$DailyWorkForPDFImpl;
+      required final int workTimeByWorkDetail}) = _$DailyWorkForPDFImpl;
 
   @override
   String get productName;
@@ -194,7 +194,7 @@ abstract class _DailyWorkForPDF implements DailyWorkForPDF {
   @override
   String get workDetail;
   @override
-  double get workTimeByWorkDetail;
+  int get workTimeByWorkDetail;
   @override
   @JsonKey(ignore: true)
   _$$DailyWorkForPDFImplCopyWith<_$DailyWorkForPDFImpl> get copyWith =>
