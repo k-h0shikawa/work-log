@@ -10,8 +10,9 @@ import 'package:work_log/app/product/application/in_progress_product_list_usecas
 
 class CreatePDFButton extends StatelessWidget {
   final int productId;
+  final formatter = DateFormat('yyyy/MM/dd');
 
-  const CreatePDFButton({required this.productId, Key? key}) : super(key: key);
+  CreatePDFButton({required this.productId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,14 +90,13 @@ class CreatePDFButton extends StatelessWidget {
               result['clientPerson'] ?? '',
               result['supplier'] ?? '',
               result['supplierPerson'] ?? '');
+          scaffoldMessenger.showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text('PDFを作成しました'),
+            ),
+          );
         }
-
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text('PDFを作成しました'),
-          ),
-        );
       },
       child: const Text('PDF出力'),
     );
@@ -162,7 +162,6 @@ class CreatePDFButton extends StatelessWidget {
 
     // 表のボディを作成
     final body = List.generate(maxRowCount, (int index) {
-      final formatter = DateFormat('MM/dd');
       final workDate = index < dailyWork.length
           ? formatter.format(dailyWork[index].workDate)
           : ''; // 日付を取得
