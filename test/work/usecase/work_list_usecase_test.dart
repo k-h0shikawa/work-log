@@ -38,7 +38,7 @@ void main() {
       final dateTime = DateTime(2024, 02, 09, 10, 30, 00);
       when(mockRepository.getWorksWithinDateRange(
               DateTime(2024, 02, 09, 09, 00, 00),
-              DateTime(2024, 02, 10, 09, 00, 00)))
+              DateTime(2024, 02, 10, 08, 30, 00)))
           .thenAnswer((_) async => expected);
 
       final result = await usecase.initWorkList(dateTime);
@@ -91,7 +91,8 @@ void main() {
 
       var ids = <int>[1, 3];
 
-      when(mockRepository.saveWork(any, any)).thenAnswer((_) async => ids);
+      when(mockRepository.saveWork(any, any, any, any))
+          .thenAnswer((_) async => ids);
 
       when(mockRepository.fetchWorksById(ids))
           .thenAnswer((_) async => expectedWorkList);

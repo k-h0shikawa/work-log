@@ -69,6 +69,8 @@ class MockWorkListRepository extends _i1.Mock
   _i4.Future<List<int>> saveWork(
     List<_i5.Work>? insertWorkList,
     List<_i5.Work>? updateWorkList,
+    DateTime? startDate,
+    DateTime? endDate,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -76,6 +78,8 @@ class MockWorkListRepository extends _i1.Mock
           [
             insertWorkList,
             updateWorkList,
+            startDate,
+            endDate,
           ],
         ),
         returnValue: _i4.Future<List<int>>.value(<int>[]),

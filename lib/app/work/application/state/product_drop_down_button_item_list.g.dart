@@ -7,7 +7,7 @@ part of 'product_drop_down_button_item_list.dart';
 // **************************************************************************
 
 String _$productDropDownButtonItemListNotifierHash() =>
-    r'8bb2f59cf2e2183fd9d23f6bb6281186c1d5a713';
+    r'e6a50498d79901e46b5fda513b0215c6420322ac';
 
 /// Copied from Dart SDK
 class _SystemHash {
