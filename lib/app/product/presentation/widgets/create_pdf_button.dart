@@ -69,8 +69,24 @@ class CreatePDFButton extends StatelessWidget {
         );
 
         if (result != null) {
-          await createPDF(result['client'] ?? '', result['clientPerson'] ?? '',
-              result['supplier'] ?? '', result['supplierPerson'] ?? '');
+          final dailyWorkForPDF = await GetIt.I<InProgressProductListUsecase>()
+              .fetchDailyWorkForPDF(productId);
+          if (dailyWorkForPDF.isEmpty) {
+            scaffoldMessenger.showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.red,
+                content: Text('作業内容が存在しないので、PDFを作成できませんでした'),
+              ),
+            );
+            return;
+          }
+
+          await createPDF(
+              dailyWorkForPDF,
+              result['client'] ?? '',
+              result['clientPerson'] ?? '',
+              result['supplier'] ?? '',
+              result['supplierPerson'] ?? '');
         }
 
         scaffoldMessenger.showSnackBar(
@@ -84,7 +100,11 @@ class CreatePDFButton extends StatelessWidget {
     );
   }
 
-  Future<void> createPDF(String client, String clientPerson, String supplier,
+  Future<void> createPDF(
+      List<List<DailyWorkForPDF>> dailyWorkForPDF,
+      String client,
+      String clientPerson,
+      String supplier,
       String supplierPerson) async {
     WidgetsFlutterBinding.ensureInitialized();
     final pdf = pw.Document();
@@ -95,9 +115,6 @@ class CreatePDFButton extends StatelessWidget {
 
     // 表の行数と列数を定義
     const int maxRowCount = 22;
-
-    final dailyWorkForPDF = await GetIt.I<InProgressProductListUsecase>()
-        .fetchDailyWorkForPDF(productId);
 
     final productName = dailyWorkForPDF.first.first.productName;
 

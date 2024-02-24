@@ -72,11 +72,16 @@ class InProgressProductListUsecase {
         return [];
       }
 
+      const int maxSizePerPdfPage = 22; // PDFページに収まる要素数に基づく。
+
       // dailyWOrkForDPFを22この要素ごとに分割する
       final dividedDailyWorkForPDF = <List<DailyWorkForPDF>>[];
-      for (var i = 0; i < dailyWorkForPDF.length; i += 22) {
-        dividedDailyWorkForPDF.add(dailyWorkForPDF.sublist(i,
-            i + 22 > dailyWorkForPDF.length ? dailyWorkForPDF.length : i + 22));
+      for (var i = 0; i < dailyWorkForPDF.length; i += maxSizePerPdfPage) {
+        dividedDailyWorkForPDF.add(dailyWorkForPDF.sublist(
+            i,
+            i + maxSizePerPdfPage > dailyWorkForPDF.length
+                ? dailyWorkForPDF.length
+                : i + maxSizePerPdfPage));
       }
 
       return dividedDailyWorkForPDF;
