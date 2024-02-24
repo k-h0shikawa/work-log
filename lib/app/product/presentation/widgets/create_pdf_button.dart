@@ -23,11 +23,13 @@ class CreatePDFButton extends StatelessWidget {
         final result = await showDialog<Map<String, String>>(
           context: context,
           builder: (BuildContext context) {
-            TextEditingController clientController = TextEditingController();
-            TextEditingController clientPersonController =
+            final TextEditingController clientController =
                 TextEditingController();
-            TextEditingController supplierController = TextEditingController();
-            TextEditingController supplierPersonController =
+            final TextEditingController clientPersonController =
+                TextEditingController();
+            final TextEditingController supplierController =
+                TextEditingController();
+            final TextEditingController supplierPersonController =
                 TextEditingController();
             return AlertDialog(
               title: const Text('PDFの記載内容を入力してください'),
