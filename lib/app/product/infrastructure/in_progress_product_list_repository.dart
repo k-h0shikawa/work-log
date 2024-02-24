@@ -1,4 +1,6 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:work_log/app/domain/entities/daily_work_for_pdf.dart';
+import 'package:work_log/setup/database/entities/daily_work_for_pdf_entity.dart';
 import 'package:work_log/setup/database/entities/product_entity.dart';
 
 class InProgressProductListRepository {
@@ -64,5 +66,28 @@ class InProgressProductListRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<List<DailyWorkForPDF>> fetchDailyWorkForPDF(int productId) async {
+    final result = await _database.rawQuery('''
+      SELECT 
+        DATE(work.workDateTime) as workDate
+        , work.workDetail as workDetail
+        , MAX(product.productName) as productName
+		    , COUNT(work.workDateTime) as workCount
+      FROM work
+      INNER JOIN product ON work.productId = product.id
+      WHERE product.id = ?
+	  GROUP BY DATE(work.workDateTime), work.workDetail
+    ''', [productId]);
+
+    return result.map((Map<String, dynamic> m) {
+      return DailyWorkForPDFEntity(
+              workDate: m["workDate"],
+              workDetail: m["workDetail"],
+              productName: m["productName"],
+              workCount: m["workCount"])
+          .toDailyWorkForPDFEntity();
+    }).toList();
   }
 }

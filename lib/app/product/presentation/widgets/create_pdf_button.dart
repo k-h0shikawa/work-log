@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:work_log/app/product/application/in_progress_product_list_usecase.dart';
 
 // TODO: ページを複数枚作成できるようにする
 class CreatePDFButton extends StatelessWidget {
-  const CreatePDFButton({super.key});
+  final int productId;
+  const CreatePDFButton({required this.productId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +83,13 @@ class CreatePDFButton extends StatelessWidget {
     // 表を作成
     final table =
         pw.Table(border: pw.TableBorder.all(), children: [headerRow, ...body]);
+
+    final dailyWorkForPDF = await GetIt.I<InProgressProductListUsecase>()
+        .fetchDailyWorkForPDF(productId);
+
+    for (final dailyWork in dailyWorkForPDF) {
+      print(dailyWork);
+    }
 
     // PDFドキュメントに表を追加
     pdf.addPage(pw.Page(
