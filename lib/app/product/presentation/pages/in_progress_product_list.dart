@@ -70,7 +70,7 @@ class InProgressProductList extends ConsumerWidget {
                       flex: 5,
                       child: Text(product.productName),
                     ),
-                    const Flexible(child: CreatePDFButton()),
+                    Flexible(child: CreatePDFButton(productId: product.id!)),
                     const SizedBox(width: 8.0), // ボタン間のスペース
                     Flexible(
                       child: ElevatedButton(

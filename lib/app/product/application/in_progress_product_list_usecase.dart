@@ -1,4 +1,5 @@
 import 'package:logger/logger.dart';
+import 'package:work_log/app/domain/entities/daily_work_for_pdf.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/setup/database/entities/product_entity.dart';
 import 'package:work_log/app/product/infrastructure/in_progress_product_list_repository.dart';
@@ -55,6 +56,35 @@ class InProgressProductListUsecase {
           createdBy: product.createdBy));
 
       return fetchInProgressProductList();
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  Future<List<List<DailyWorkForPDF>>> fetchDailyWorkForPDF(
+      int productId) async {
+    try {
+      final dailyWorkForPDF = await _repository.fetchDailyWorkForPDF(productId);
+
+      // dailyWorkForPDFがnullの場合は空のリストを返す
+      if (dailyWorkForPDF.isEmpty) {
+        return [];
+      }
+
+      const int maxSizePerPdfPage = 22; // PDFページに収まる要素数に基づく。
+
+      // dailyWOrkForDPFを22この要素ごとに分割する
+      final dividedDailyWorkForPDF = <List<DailyWorkForPDF>>[];
+      for (var i = 0; i < dailyWorkForPDF.length; i += maxSizePerPdfPage) {
+        dividedDailyWorkForPDF.add(dailyWorkForPDF.sublist(
+            i,
+            i + maxSizePerPdfPage > dailyWorkForPDF.length
+                ? dailyWorkForPDF.length
+                : i + maxSizePerPdfPage));
+      }
+
+      return dividedDailyWorkForPDF;
     } catch (e) {
       _logger.e(e);
       rethrow;

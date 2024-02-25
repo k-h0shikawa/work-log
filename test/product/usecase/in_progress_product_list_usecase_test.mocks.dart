@@ -6,6 +6,7 @@
 import 'dart:async' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:work_log/app/domain/entities/daily_work_for_pdf.dart' as _i5;
 import 'package:work_log/app/product/infrastructure/in_progress_product_list_repository.dart'
     as _i2;
 import 'package:work_log/setup/database/entities/product_entity.dart' as _i4;
@@ -73,4 +74,15 @@ class MockInProgressProductListRepository extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<List<_i5.DailyWorkForPDF>> fetchDailyWorkForPDF(int? productId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchDailyWorkForPDF,
+          [productId],
+        ),
+        returnValue: _i3.Future<List<_i5.DailyWorkForPDF>>.value(
+            <_i5.DailyWorkForPDF>[]),
+      ) as _i3.Future<List<_i5.DailyWorkForPDF>>);
 }

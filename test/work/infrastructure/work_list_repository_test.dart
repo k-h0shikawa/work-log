@@ -118,8 +118,8 @@ void main() {
       ];
 
       // Act
-      final result = await repository.saveWork(
-          insertWork, updateWork, DateTime.now(), DateTime.now());
+      final result = await repository.saveWork(insertWork, updateWork,
+          DateTime(2024, 02, 09, 09, 00), DateTime(2024, 02, 10, 08, 30));
 
       // Assert
       expect(result.length, 2);
