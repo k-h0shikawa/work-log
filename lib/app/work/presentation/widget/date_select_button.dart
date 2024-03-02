@@ -25,15 +25,16 @@ class DateSelectButton extends StatefulWidget {
 
 class DateSelectButtonState extends State<DateSelectButton>
     with AutomaticKeepAliveClientMixin {
+  static final targetDateFormatter = DateFormat('yyyy/MM/dd');
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer(builder: (context, ref, child) {
-      final targetDateFormatter = DateFormat('yyyy/MM/dd');
 
+    return Consumer(builder: (context, ref, child) {
       // providerを使ってtargetDateを取得
       final targetDate = ref.watch(workDateNotifierProvider);
 
@@ -76,12 +77,17 @@ class DateSelectButtonState extends State<DateSelectButton>
         }).toList();
       }
 
+      // テストを実施しやすくするためメソッドを切り分け
+      DateTime getFutureDate() {
+        return DateTime.now().add(const Duration(days: 360));
+      }
+
       Future<void> selectDate(BuildContext context) async {
         final DateTime? picked = await showDatePicker(
             context: context,
             initialDate: targetDate,
             firstDate: DateTime(2016),
-            lastDate: DateTime.now().add(const Duration(days: 360)));
+            lastDate: getFutureDate());
         if (picked != null && picked != targetDate) {
           final notifier = ref.read(workDateNotifierProvider.notifier);
           notifier.updateState(picked);
