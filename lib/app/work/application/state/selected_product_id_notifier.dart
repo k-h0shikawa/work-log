@@ -21,7 +21,7 @@ class SelectedProductIdNotifier extends _$SelectedProductIdNotifier {
     if (productIdList.isEmpty) {
       return -1;
     }
-    return productIdList.first.id!;
+    return productIdList.last.id!;
   }
 
   void updateState(int productId) {
