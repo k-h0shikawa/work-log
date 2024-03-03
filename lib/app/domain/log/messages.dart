@@ -23,8 +23,8 @@ class Messages {
   // PDFフォームのバリデーションメッセージ
   static const String failureClientNameLength = 'クライアント名は20文字以内で入力してください';
   static const String failureClientPersonNameLength =
-      'クライアント担当者名は20文字以内で入力してください';
+      'クライアント担当者名は10文字以内で入力してください';
   static const String failureSupplierNameLength = 'サプライヤー名は20文字以内で入力してください';
   static const String failureSupplierPersonNameLength =
-      'サプライヤー担当者名は20文字以内で入力してください';
+      'サプライヤー担当者名は10文字以内で入力してください';
 }
