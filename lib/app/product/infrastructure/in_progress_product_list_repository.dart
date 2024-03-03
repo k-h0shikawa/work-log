@@ -90,4 +90,10 @@ class InProgressProductListRepository {
           .toDailyWorkForPDFEntity();
     }).toList();
   }
+
+  Future<bool> isDuplicated(String productName) async {
+    final result = await _database
+        .query("product", where: "productName = ?", whereArgs: [productName]);
+    return result.isNotEmpty;
+  }
 }

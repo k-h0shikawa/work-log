@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:work_log/app/domain/config/product_config.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/product/application/in_progress_product_list_usecase.dart';
@@ -129,7 +130,7 @@ class InProgressProductList extends ConsumerWidget {
           child: TextField(
             controller: controller,
             decoration: const InputDecoration(label: Text('新規商品')),
-            maxLength: 20,
+            maxLength: ProductConfig.nameLength,
           ),
         ),
         Flexible(
@@ -140,6 +141,21 @@ class InProgressProductList extends ConsumerWidget {
                 final scaffoldMessenger = ScaffoldMessenger.of(context);
 
                 try {
+                  // バリデーション
+                  final errorMessage =
+                      await GetIt.I<InProgressProductListUsecase>()
+                          .validateProductName(controller.text);
+                  if (errorMessage.isNotEmpty) {
+                    scaffoldMessenger.showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text(errorMessage),
+                      ),
+                    );
+                    return;
+                  }
+
+                  // 正常系
                   final productList =
                       await GetIt.I<InProgressProductListUsecase>()
                           .insertProduct(InProgressProduct(
@@ -148,7 +164,6 @@ class InProgressProductList extends ConsumerWidget {
                               createdOn: DateTime.now(),
                               createdBy: 'user'));
                   notifier.updateState(productList);
-                  // 成功時のフィードバック
                   scaffoldMessenger.showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.green,
