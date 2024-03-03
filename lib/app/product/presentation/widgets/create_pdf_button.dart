@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:work_log/app/domain/config/product_pdf_config.dart';
 import 'package:work_log/app/domain/entities/daily_work_for_pdf.dart';
 import 'package:work_log/app/product/application/in_progress_product_list_usecase.dart';
 
@@ -38,18 +39,22 @@ class CreatePDFButton extends StatelessWidget {
                 children: <Widget>[
                   TextField(
                     controller: clientController,
+                    maxLength: ProductPdfConfig.corporationNameLength,
                     decoration: const InputDecoration(hintText: "クライアント名"),
                   ),
                   TextField(
                     controller: clientPersonController,
+                    maxLength: ProductPdfConfig.employeeNameLength,
                     decoration: const InputDecoration(hintText: "クライアント担当者名"),
                   ),
                   TextField(
                     controller: supplierController,
+                    maxLength: ProductPdfConfig.corporationNameLength,
                     decoration: const InputDecoration(hintText: "自社名"),
                   ),
                   TextField(
                     controller: supplierPersonController,
+                    maxLength: ProductPdfConfig.employeeNameLength,
                     decoration: const InputDecoration(hintText: "自社担当者名"),
                   ),
                 ],
@@ -72,24 +77,37 @@ class CreatePDFButton extends StatelessWidget {
         );
 
         if (result != null) {
+          final client = result['client'] ?? '';
+          final clientPerson = result['clientPerson'] ?? '';
+          final supplier = result['supplier'] ?? '';
+          final supplierPerson = result['supplierPerson'] ?? '';
+          final errorMessage = GetIt.I<InProgressProductListUsecase>()
+              .validatePDFForm(client, clientPerson, supplier, supplierPerson);
+
+          if (errorMessage.isNotEmpty) {
+            scaffoldMessenger.showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(errorMessage),
+              ),
+            );
+            return;
+          }
+
           final dailyWorkForPDF = await GetIt.I<InProgressProductListUsecase>()
               .fetchDailyWorkForPDF(productId);
           if (dailyWorkForPDF.isEmpty) {
             scaffoldMessenger.showSnackBar(
               const SnackBar(
                 backgroundColor: Colors.red,
-                content: Text('作業内容が存在しないので、PDFを作成できませんでした'),
+                content: Text('作業内容が存在しないので、PDFを作成できません'),
               ),
             );
             return;
           }
 
           await createPDF(
-              dailyWorkForPDF,
-              result['client'] ?? '',
-              result['clientPerson'] ?? '',
-              result['supplier'] ?? '',
-              result['supplierPerson'] ?? '');
+              dailyWorkForPDF, client, clientPerson, supplier, supplierPerson);
           scaffoldMessenger.showSnackBar(
             const SnackBar(
               backgroundColor: Colors.green,
@@ -116,13 +134,13 @@ class CreatePDFButton extends StatelessWidget {
     final ttf = pw.Font.ttf(font);
 
     // 表の行数と列数を定義
-    const int maxRowCount = 22;
+    const int maxWorkRow = ProductPdfConfig.maxWorkRow;
 
     final productName = dailyWorkForPDF.first.first.productName;
 
     for (final dailyWork in dailyWorkForPDF) {
       // PDFドキュメントに表を追加
-      pdf.addPage(createPage(dailyWork, productName, ttf, maxRowCount, client,
+      pdf.addPage(createPage(dailyWork, productName, ttf, maxWorkRow, client,
           clientPerson, supplier, supplierPerson));
     }
 
@@ -141,13 +159,13 @@ class CreatePDFButton extends StatelessWidget {
       List<DailyWorkForPDF> dailyWork,
       String productName,
       pw.Font ttf,
-      int maxRowCount,
+      int maxWorkRow,
       String client,
       String clientPerson,
       String supplier,
       String supplierPerson) {
     // 表のヘッダーを作成
-    const headers = ['日付', '作業内容', '作業時間合計'];
+    const headers = ProductPdfConfig.workTableHeader;
 
     final headerRow = pw.TableRow(
         children: headers
@@ -161,7 +179,7 @@ class CreatePDFButton extends StatelessWidget {
             .toList());
 
     // 表のボディを作成
-    final body = List.generate(maxRowCount, (int index) {
+    final body = List.generate(maxWorkRow, (int index) {
       final workDate = index < dailyWork.length
           ? formatter.format(dailyWork[index].workDate)
           : ''; // 日付を取得
@@ -217,7 +235,7 @@ class CreatePDFButton extends StatelessWidget {
           pw.Container(
             // 長方形を作成
             width: context.page.pageFormat.availableWidth, // 長方形の幅を最大の2/3に設定
-            height: 40.0, // 長方形の高さを3倍に設定
+            height: 55.0, // 長方形の高さを3倍に設定
             decoration: pw.BoxDecoration(
               border: pw.Border.all(width: 1.0), // 長方形の枠線
             ),
@@ -229,8 +247,10 @@ class CreatePDFButton extends StatelessWidget {
                     pw.Text('商品名 : $productName',
                         style:
                             pw.TextStyle(font: ttf, fontSize: 10)), // 長方形内のテキスト
-                    pw.Text(
-                        'クライアント（$client） 担当者（$clientPerson 様） $supplier 担当者（$supplierPerson）',
+                    pw.Text('クライアント（$client） 担当者（$clientPerson 様）',
+                        style:
+                            pw.TextStyle(font: ttf, fontSize: 10)), // 長方形内のテキスト
+                    pw.Text('$supplier 担当者 （$supplierPerson）',
                         style:
                             pw.TextStyle(font: ttf, fontSize: 10)), // 長方形内のテキスト
                   ]),

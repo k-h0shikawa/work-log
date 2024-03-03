@@ -45,7 +45,8 @@ class ProductDropDownButton extends ConsumerWidget {
                 // 進行中でないかつ、選択された商品がリストにない場合は、ドロップダウンリストに追加
                 if (initProductId != null &&
                     productList.entries
-                        .where((entry) => entry.value == initProductId)
+                        .where(
+                            (entry) => int.parse(entry.value) == initProductId)
                         .isEmpty) {
                   dropDownButtonMenu.add(DropdownMenuItem<String>(
                     value: initProductId.toString(),

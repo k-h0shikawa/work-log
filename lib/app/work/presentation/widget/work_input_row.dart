@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:work_log/app/domain/config/work_config.dart';
 import 'package:work_log/app/work/presentation/widget/product_drop_down_button.dart';
 
 class WorkInputRow extends StatefulWidget {
@@ -73,6 +74,7 @@ class WorkInputRowState extends State<WorkInputRow>
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: TextFormField(
               controller: widget.workDetailController,
+              maxLength: WorkConfig.workDetailLength,
               style: const TextStyle(fontSize: 10),
               enabled: before30Days,
               decoration: const InputDecoration(
@@ -86,6 +88,7 @@ class WorkInputRowState extends State<WorkInputRow>
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: TextFormField(
               controller: widget.workMemoController,
+              maxLength: WorkConfig.workMemoLength,
               style: const TextStyle(fontSize: 10),
               enabled: before30Days,
               decoration: const InputDecoration(
