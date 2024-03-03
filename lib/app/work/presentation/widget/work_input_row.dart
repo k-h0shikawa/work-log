@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:work_log/app/domain/config/work_config.dart';
@@ -6,7 +7,7 @@ import 'package:work_log/app/work/presentation/widget/product_drop_down_button.d
 class WorkInputRow extends StatefulWidget {
   final int? workId;
   final DateTime workDateTime;
-  final List<int> flexRate = [1, 3, 3, 3];
+  final List<int> flexRate = kDebugMode ? [1, 2, 2, 4, 4] : [1, 3, 3, 3];
   final TextEditingController workDetailController;
   final TextEditingController workMemoController;
   final DateFormat formatter = DateFormat('HH:mm');
@@ -42,15 +43,16 @@ class WorkInputRowState extends State<WorkInputRow>
 
     return Row(
       children: <Widget>[
-        // TODO : IDは最後に消す
-        Expanded(
-          flex: 1,
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child:
-                Text(widget.workId == null ? 'null' : widget.workId.toString()),
+        if (kDebugMode)
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                  widget.workId == null ? 'null' : widget.workId.toString()),
+            ),
           ),
-        ),
+        // kDebugMode
         Expanded(
           flex: widget.flexRate[0],
           child: Container(
@@ -63,9 +65,7 @@ class WorkInputRowState extends State<WorkInputRow>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: ProductDropDownButton(
-                before30Days: widget.workDateTime
-                    .isAfter(DateTime.now().subtract(const Duration(days: 30))),
-                index: widget.index),
+                before30Days: before30Days, index: widget.index),
           ),
         ),
         Expanded(

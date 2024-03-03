@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:work_log/app/work/application/state/work_input_list.dart';
 
 class WorkInputTable extends ConsumerWidget {
-  static const header = <String>['ID', '時間', '商品名', '作業内容', '作業メモ'];
-  static const flexRate = <int>[1, 2, 2, 4, 4];
+  static const header = kDebugMode
+      ? ['ID', '時間', '商品名', '作業内容', '作業メモ']
+      : ['時間', '商品名', '作業内容', '作業メモ'];
+  static const flexRate = kDebugMode ? [1, 2, 2, 4, 4] : [1, 3, 3, 3];
   const WorkInputTable({super.key});
 
   Widget buildHeader() {

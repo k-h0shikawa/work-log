@@ -27,7 +27,7 @@ class WorkList extends HookConsumerWidget {
       return null;
     }, []);
 
-    const title = kReleaseMode ? '作業入力画面' : '作業入力画面（開発環境）';
+    const title = kDebugMode ? '作業入力画面（デバッグ環境）' : '作業入力画面';
 
     return Scaffold(
       appBar: AppBar(title: const Text(title)),
