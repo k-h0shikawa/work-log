@@ -85,4 +85,13 @@ class MockInProgressProductListRepository extends _i1.Mock
         returnValue: _i3.Future<List<_i5.DailyWorkForPDF>>.value(
             <_i5.DailyWorkForPDF>[]),
       ) as _i3.Future<List<_i5.DailyWorkForPDF>>);
+
+  @override
+  _i3.Future<bool> isDuplicated(String? productName) => (super.noSuchMethod(
+        Invocation.method(
+          #isDuplicated,
+          [productName],
+        ),
+        returnValue: _i3.Future<bool>.value(false),
+      ) as _i3.Future<bool>);
 }

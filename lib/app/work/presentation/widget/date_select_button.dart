@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
-import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
+import 'package:work_log/app/work/application/state/selected_product_notifier.dart';
 import 'package:work_log/app/work/application/state/work_date.dart';
 import 'package:work_log/app/work/application/state/work_input_list.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
@@ -58,7 +58,7 @@ class DateSelectButtonState extends State<DateSelectButton>
 
           // 商品IDのstateを更新
           final notifier =
-              ref.read(selectedProductIdNotifierProvider(index).notifier);
+              ref.read(selectedProductNotifierProvider(index).notifier);
           notifier.updateState(work.productId);
 
           // 商品IDのstateを更新

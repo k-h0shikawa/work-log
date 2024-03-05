@@ -183,4 +183,33 @@ class WorkListRepository {
       rethrow;
     }
   }
+
+  Future<InProgressProduct> fetchInProgressProductByWorkId(
+      int productId) async {
+    try {
+      final result = await _database.query('product',
+          where: 'id = ?', whereArgs: [productId], limit: 1);
+
+      return result
+          .map((Map<String, dynamic> m) {
+            int id = m["id"];
+            String productName = m["productName"];
+            int isCompleted = m["isCompleted"];
+            String createdOn = m["createdOn"];
+            String createdBy = m["createdBy"];
+
+            return ProductEntity(
+                id: id,
+                productName: productName,
+                isCompleted: isCompleted,
+                createdOn: createdOn,
+                createdBy: createdBy);
+          })
+          .toList()
+          .first
+          .toInProgressProduct();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

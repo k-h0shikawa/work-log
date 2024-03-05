@@ -156,4 +156,8 @@ class WorkListUsecase {
       rethrow;
     }
   }
+
+  Future<InProgressProduct> fetchInProgressProductByWorkId(int productId) {
+    return _repository.fetchInProgressProductByWorkId(productId);
+  }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
 
-import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
+import 'package:work_log/app/work/application/state/selected_product_notifier.dart';
 
 class ProductDropDownButton extends ConsumerWidget {
   final bool before30Days;
@@ -19,15 +19,17 @@ class ProductDropDownButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier =
-        ref.read(selectedProductIdNotifierProvider(index).notifier);
+    final notifier = ref.read(selectedProductNotifierProvider(index).notifier);
 
     return ref.watch(ProductDropDownButtonItemListNotifierProvider(index)).when(
         data: (data) {
           final productList = data;
-          return ref.watch(selectedProductIdNotifierProvider(index)).when(
+          return ref.watch(selectedProductNotifierProvider(index)).when(
               data: (data) {
                 final selectedProduct = data;
+
+                print('productList: $productList');
+                print('selectedProduct: $selectedProduct');
 
                 // 進行中の商品名のドロップダウンリストを作成
                 final dropDownButtonMenu =
@@ -43,15 +45,13 @@ class ProductDropDownButton extends ConsumerWidget {
                 }).toList();
 
                 // 進行中でないかつ、選択された商品がリストにない場合は、ドロップダウンリストに追加
-                if (initProductId != null &&
-                    productList.entries
-                        .where(
-                            (entry) => int.parse(entry.value) == initProductId)
-                        .isEmpty) {
+                if (productList.entries
+                    .where((entry) => entry.key == selectedProduct.id)
+                    .isEmpty) {
                   dropDownButtonMenu.add(DropdownMenuItem<String>(
-                    value: initProductId.toString(),
+                    value: selectedProduct.id.toString(),
                     child: Text(
-                      initProductName!,
+                      selectedProduct.productName,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 10),
                     ),
@@ -68,7 +68,7 @@ class ProductDropDownButton extends ConsumerWidget {
                   iconSize: 0,
                   value: dropDownButtonMenu.isEmpty
                       ? null
-                      : selectedProduct.toString(),
+                      : selectedProduct.id.toString(),
                   onChanged: isDropDownButtonEnabled
                       ? (String? value) {
                           if (value != null) {
