@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 part 'product_drop_down_button_item_list.g.dart';
 
@@ -30,9 +31,15 @@ class ProductDropDownButtonItemListNotifier
     state = AsyncValue<Map<int, String>>.data(productList);
   }
 
-  void removeItem(int productId) {
-    final productList = state as Map<int, String>;
-    productList.remove(productId);
+  void addItem(InProgressProduct product) {
+    final productList = state.value as Map<int, String>;
+    productList[product.id!] = product.productName;
+    state = AsyncValue<Map<int, String>>.data(productList);
+  }
+
+  void removeItem(int? id) {
+    final productList = state.value as Map<int, String>;
+    productList.remove(id);
     state = AsyncValue<Map<int, String>>.data(productList);
   }
 }

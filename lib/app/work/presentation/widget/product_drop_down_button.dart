@@ -28,9 +28,6 @@ class ProductDropDownButton extends ConsumerWidget {
               data: (data) {
                 final selectedProduct = data;
 
-                print('productList: $productList');
-                print('selectedProduct: $selectedProduct');
-
                 // 進行中の商品名のドロップダウンリストを作成
                 final dropDownButtonMenu =
                     productList.entries.map<DropdownMenuItem<String>>((entry) {
