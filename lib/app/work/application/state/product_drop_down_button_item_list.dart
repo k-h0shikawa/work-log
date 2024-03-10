@@ -12,9 +12,10 @@ class ProductDropDownButtonItemListNotifier
     final productList =
         await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
     final dropDownButtonItems = <int, String>{};
-    for (var e in productList) {
+    for (final e in productList) {
       dropDownButtonItems[e.id!] = e.productName;
     }
+    if (dropDownButtonItems.isEmpty) dropDownButtonItems[-1] = '進行中商品が存在しません';
     // idを使用してproductListを降順にソート
     dropDownButtonItems.entries.toList().sort((a, b) => b.key.compareTo(a.key));
     return dropDownButtonItems;

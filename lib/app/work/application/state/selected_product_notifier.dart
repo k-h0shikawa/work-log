@@ -22,10 +22,10 @@ class SelectedProductNotifier extends _$SelectedProductNotifier {
     final productIdList = await GetIt.I<InProgressProductListUsecase>()
         .fetchInProgressProductList();
     if (productIdList.isNotEmpty) {
-      // 進行中の商品がない場合は、ダミーの商品IDを返す
       return productIdList.last;
     }
-    return const InProgressProduct(id: -1, productName: 'dummy');
+    // 進行中の商品がない場合は、ダミーの商品IDを返す
+    return const InProgressProduct(id: -1, productName: '進行中商品が存在しません');
   }
 
   Future<void> updateState(int productId) async {

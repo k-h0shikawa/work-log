@@ -21,7 +21,7 @@ class ProductDropDownButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(selectedProductNotifierProvider(index).notifier);
 
-    return ref.watch(ProductDropDownButtonItemListNotifierProvider(index)).when(
+    return ref.watch(productDropDownButtonItemListNotifierProvider(index)).when(
         data: (data) {
           final productList = data;
           return ref.watch(selectedProductNotifierProvider(index)).when(
@@ -55,9 +55,9 @@ class ProductDropDownButton extends ConsumerWidget {
                   ));
                 }
 
-                // dropdownButtonMenuが空または、workDateTimeが1か月以上前の場合は、ドロップダウンリストを無効にする
+                // 進行中の商品が存在しないまたは、workDateTimeが1か月以上前の場合は、ドロップダウンリストを無効にする
                 final isDropDownButtonEnabled =
-                    dropDownButtonMenu.isNotEmpty && before30Days;
+                    selectedProduct.id! != -1 && before30Days;
 
                 return DropdownButton<String>(
                   isExpanded: true,

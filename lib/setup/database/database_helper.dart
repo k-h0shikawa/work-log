@@ -74,18 +74,5 @@ class DatabaseHelper {
             foreign key ($columnProductId) references $productTable($columnId)
           )
           ''');
-
-    // ダミーデータ
-    await db.execute('''
-INSERT INTO product (productName, isCompleted, createdOn, createdBy, updatedOn, updatedBy)
-VALUES ('Product1', 0, '2024-01-30', 'user', '2024-01-30', 'user'),
-       ('Product2', 1, '2024-01-30', 'user', '2024-01-30', 'user');
-      ''');
-    // ダミーデータ
-    await db.execute('''
-INSERT INTO work (workDateTime, productId, workDetail, workMemo,  createdOn, createdBy, updatedOn, updatedBy)
-VALUES ('2024-02-10 09:30:00', 1, 'Detail1', 'Memo1', '2024-01-30', 'user', '2024-01-30', 'user'),
-       ('2024-02-10 10:00:00', 2, 'Detail2', 'Memo2', '2024-01-30', 'user', '2024-01-30', 'user');
-      ''');
   }
 }

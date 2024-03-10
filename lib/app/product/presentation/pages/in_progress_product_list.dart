@@ -190,10 +190,29 @@ class InProgressProductList extends ConsumerWidget {
                   final addProduct = productList.last;
 
                   for (int index = 0; index < workListLength; index++) {
+                    final productDropDownButtonItemList = ref.read(
+                        productDropDownButtonItemListNotifierProvider(index));
                     final notifier = ref.read(
                         productDropDownButtonItemListNotifierProvider(index)
                             .notifier);
-                    notifier.addItem(addProduct);
+                    productDropDownButtonItemList.when(
+                        data: (data) {
+                          print(data.keys);
+                          if (data.keys.contains(-1)) {
+                            notifier.removeItem(-1);
+                          }
+                          final selectedProductId =
+                              ref.read(selectedProductNotifierProvider(index));
+                          if (selectedProductId.value!.id == -1) {
+                            final notifier = ref.read(
+                                selectedProductNotifierProvider(index)
+                                    .notifier);
+                            notifier.updateState(addProduct.id!);
+                          }
+                          notifier.addItem(addProduct);
+                        },
+                        loading: () {},
+                        error: (error, stackTrace) {});
                   }
 
                   scaffoldMessenger.showSnackBar(
