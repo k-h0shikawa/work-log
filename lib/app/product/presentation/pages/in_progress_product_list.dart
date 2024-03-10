@@ -195,24 +195,26 @@ class InProgressProductList extends ConsumerWidget {
                     final notifier = ref.read(
                         productDropDownButtonItemListNotifierProvider(index)
                             .notifier);
+                    // 進行中商品が存在しない場合のダミーデータを削除
                     productDropDownButtonItemList.when(
-                        data: (data) {
-                          print(data.keys);
-                          if (data.keys.contains(-1)) {
-                            notifier.removeItem(-1);
-                          }
-                          final selectedProductId =
-                              ref.read(selectedProductNotifierProvider(index));
-                          if (selectedProductId.value!.id == -1) {
-                            final notifier = ref.read(
-                                selectedProductNotifierProvider(index)
-                                    .notifier);
-                            notifier.updateState(addProduct.id!);
-                          }
-                          notifier.addItem(addProduct);
-                        },
-                        loading: () {},
-                        error: (error, stackTrace) {});
+                      data: (data) {
+                        if (data.containsKey(-1)) {
+                          notifier.removeItem(-1);
+                        }
+                        final selectedProductId =
+                            ref.read(selectedProductNotifierProvider(index));
+                        if (selectedProductId.value!.id == -1) {
+                          final selectedProductNotifier = ref.read(
+                              selectedProductNotifierProvider(index).notifier);
+                          selectedProductNotifier.updateState(addProduct.id!);
+                        }
+                      },
+                      loading: () {},
+                      error: (error, stackTrace) {},
+                    );
+
+                    // ドロップダウンボタンに新規商品を追加
+                    notifier.addItem(addProduct);
                   }
 
                   scaffoldMessenger.showSnackBar(
