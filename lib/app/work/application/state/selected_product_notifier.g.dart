@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'selected_product_id_notifier.dart';
+part of 'selected_product_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$selectedProductIdNotifierHash() =>
-    r'64621ba9b9e007f0e12f8e112fe95a03f0df8fdf';
+String _$selectedProductNotifierHash() =>
+    r'84b58cf67aa3d4ef16c259eceffd97fee7364c08';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,36 +30,37 @@ class _SystemHash {
   }
 }
 
-abstract class _$SelectedProductIdNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<int> {
+abstract class _$SelectedProductNotifier
+    extends BuildlessAutoDisposeAsyncNotifier<InProgressProduct> {
   late final int index;
 
-  FutureOr<int> build(
+  FutureOr<InProgressProduct> build(
     int index,
   );
 }
 
-/// See also [SelectedProductIdNotifier].
-@ProviderFor(SelectedProductIdNotifier)
-const selectedProductIdNotifierProvider = SelectedProductIdNotifierFamily();
+/// See also [SelectedProductNotifier].
+@ProviderFor(SelectedProductNotifier)
+const selectedProductNotifierProvider = SelectedProductNotifierFamily();
 
-/// See also [SelectedProductIdNotifier].
-class SelectedProductIdNotifierFamily extends Family<AsyncValue<int>> {
-  /// See also [SelectedProductIdNotifier].
-  const SelectedProductIdNotifierFamily();
+/// See also [SelectedProductNotifier].
+class SelectedProductNotifierFamily
+    extends Family<AsyncValue<InProgressProduct>> {
+  /// See also [SelectedProductNotifier].
+  const SelectedProductNotifierFamily();
 
-  /// See also [SelectedProductIdNotifier].
-  SelectedProductIdNotifierProvider call(
+  /// See also [SelectedProductNotifier].
+  SelectedProductNotifierProvider call(
     int index,
   ) {
-    return SelectedProductIdNotifierProvider(
+    return SelectedProductNotifierProvider(
       index,
     );
   }
 
   @override
-  SelectedProductIdNotifierProvider getProviderOverride(
-    covariant SelectedProductIdNotifierProvider provider,
+  SelectedProductNotifierProvider getProviderOverride(
+    covariant SelectedProductNotifierProvider provider,
   ) {
     return call(
       provider.index,
@@ -78,31 +79,31 @@ class SelectedProductIdNotifierFamily extends Family<AsyncValue<int>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'selectedProductIdNotifierProvider';
+  String? get name => r'selectedProductNotifierProvider';
 }
 
-/// See also [SelectedProductIdNotifier].
-class SelectedProductIdNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<SelectedProductIdNotifier,
-        int> {
-  /// See also [SelectedProductIdNotifier].
-  SelectedProductIdNotifierProvider(
+/// See also [SelectedProductNotifier].
+class SelectedProductNotifierProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<SelectedProductNotifier,
+        InProgressProduct> {
+  /// See also [SelectedProductNotifier].
+  SelectedProductNotifierProvider(
     int index,
   ) : this._internal(
-          () => SelectedProductIdNotifier()..index = index,
-          from: selectedProductIdNotifierProvider,
-          name: r'selectedProductIdNotifierProvider',
+          () => SelectedProductNotifier()..index = index,
+          from: selectedProductNotifierProvider,
+          name: r'selectedProductNotifierProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$selectedProductIdNotifierHash,
-          dependencies: SelectedProductIdNotifierFamily._dependencies,
+                  : _$selectedProductNotifierHash,
+          dependencies: SelectedProductNotifierFamily._dependencies,
           allTransitiveDependencies:
-              SelectedProductIdNotifierFamily._allTransitiveDependencies,
+              SelectedProductNotifierFamily._allTransitiveDependencies,
           index: index,
         );
 
-  SelectedProductIdNotifierProvider._internal(
+  SelectedProductNotifierProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -115,8 +116,8 @@ class SelectedProductIdNotifierProvider
   final int index;
 
   @override
-  FutureOr<int> runNotifierBuild(
-    covariant SelectedProductIdNotifier notifier,
+  FutureOr<InProgressProduct> runNotifierBuild(
+    covariant SelectedProductNotifier notifier,
   ) {
     return notifier.build(
       index,
@@ -124,10 +125,10 @@ class SelectedProductIdNotifierProvider
   }
 
   @override
-  Override overrideWith(SelectedProductIdNotifier Function() create) {
+  Override overrideWith(SelectedProductNotifier Function() create) {
     return ProviderOverride(
       origin: this,
-      override: SelectedProductIdNotifierProvider._internal(
+      override: SelectedProductNotifierProvider._internal(
         () => create()..index = index,
         from: from,
         name: null,
@@ -140,14 +141,14 @@ class SelectedProductIdNotifierProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<SelectedProductIdNotifier, int>
-      createElement() {
-    return _SelectedProductIdNotifierProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<SelectedProductNotifier,
+      InProgressProduct> createElement() {
+    return _SelectedProductNotifierProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SelectedProductIdNotifierProvider && other.index == index;
+    return other is SelectedProductNotifierProvider && other.index == index;
   }
 
   @override
@@ -159,18 +160,19 @@ class SelectedProductIdNotifierProvider
   }
 }
 
-mixin SelectedProductIdNotifierRef on AutoDisposeAsyncNotifierProviderRef<int> {
+mixin SelectedProductNotifierRef
+    on AutoDisposeAsyncNotifierProviderRef<InProgressProduct> {
   /// The parameter `index` of this provider.
   int get index;
 }
 
-class _SelectedProductIdNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<SelectedProductIdNotifier,
-        int> with SelectedProductIdNotifierRef {
-  _SelectedProductIdNotifierProviderElement(super.provider);
+class _SelectedProductNotifierProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<SelectedProductNotifier,
+        InProgressProduct> with SelectedProductNotifierRef {
+  _SelectedProductNotifierProviderElement(super.provider);
 
   @override
-  int get index => (origin as SelectedProductIdNotifierProvider).index;
+  int get index => (origin as SelectedProductNotifierProvider).index;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

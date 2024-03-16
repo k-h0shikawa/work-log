@@ -8,6 +8,9 @@ import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/product/application/in_progress_product_list_usecase.dart';
 import 'package:work_log/app/product/application/state/in_progress_product_list_notifier.dart';
 import 'package:work_log/app/product/presentation/widgets/create_pdf_button.dart';
+import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
+import 'package:work_log/app/work/application/state/selected_product_notifier.dart';
+import 'package:work_log/app/work/application/state/work_input_list.dart';
 
 class InProgressProductList extends ConsumerWidget {
   const InProgressProductList({super.key});
@@ -58,6 +61,7 @@ class InProgressProductList extends ConsumerWidget {
 
   Widget _buildProductList(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(inProgressProductListNotifierProvider.notifier);
+    final workListLength = ref.read(workInputListProvider).value!.length;
 
     return ref.watch(inProgressProductListNotifierProvider).when(
         data: (inProgressProductList) {
@@ -85,6 +89,33 @@ class InProgressProductList extends ConsumerWidget {
                                   await GetIt.I<InProgressProductListUsecase>()
                                       .finishProduct(product.id);
                               notifier.updateState(updateProductList);
+
+                              for (int index = 0;
+                                  index < workListLength;
+                                  index++) {
+                                final selectedProductId = ref.read(
+                                    selectedProductNotifierProvider(index));
+
+                                if (selectedProductId.value!.id == product.id) {
+                                  final selectedProductNotifier = ref.read(
+                                      selectedProductNotifierProvider(index)
+                                          .notifier);
+                                  if (updateProductList.isEmpty) {
+                                    // 進行中商品が存在しない場合、ダミーデータを追加
+                                    selectedProductNotifier.updateState(-1);
+                                  } else {
+                                    // 進行中商品が存在する場合、最新の商品を選択
+                                    selectedProductNotifier.updateState(
+                                        updateProductList.last.id!);
+                                  }
+                                }
+                                final notifier = ref.read(
+                                    productDropDownButtonItemListNotifierProvider(
+                                            index)
+                                        .notifier);
+                                notifier.removeItem(product.id);
+                              }
+
                               // 成功時のフィードバック
                               scaffoldMessenger.showSnackBar(
                                 SnackBar(
@@ -122,6 +153,8 @@ class InProgressProductList extends ConsumerWidget {
   Widget _buildAddProductRow(
       TextEditingController controller, BuildContext context, WidgetRef ref) {
     final notifier = ref.read(inProgressProductListNotifierProvider.notifier);
+    final workListLength = ref.read(workInputListProvider).value!.length;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -164,6 +197,37 @@ class InProgressProductList extends ConsumerWidget {
                               createdOn: DateTime.now(),
                               createdBy: 'user'));
                   notifier.updateState(productList);
+
+                  final addProduct = productList.last;
+
+                  for (int index = 0; index < workListLength; index++) {
+                    final productDropDownButtonItemList = ref.read(
+                        productDropDownButtonItemListNotifierProvider(index));
+                    final notifier = ref.read(
+                        productDropDownButtonItemListNotifierProvider(index)
+                            .notifier);
+                    // 進行中商品が存在しない場合のダミーデータを削除
+                    productDropDownButtonItemList.when(
+                      data: (data) {
+                        if (data.containsKey(-1)) {
+                          notifier.removeItem(-1);
+                        }
+                        final selectedProductId =
+                            ref.read(selectedProductNotifierProvider(index));
+                        if (selectedProductId.value!.id == -1) {
+                          final selectedProductNotifier = ref.read(
+                              selectedProductNotifierProvider(index).notifier);
+                          selectedProductNotifier.updateState(addProduct.id!);
+                        }
+                      },
+                      loading: () {},
+                      error: (error, stackTrace) {},
+                    );
+
+                    // ドロップダウンボタンに新規商品を追加
+                    notifier.addItem(addProduct);
+                  }
+
                   scaffoldMessenger.showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.green,

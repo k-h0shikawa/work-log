@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:work_log/app/domain/log/messages.dart';
-import 'package:work_log/app/work/application/state/selected_product_id_notifier.dart';
+import 'package:work_log/app/work/application/state/selected_product_notifier.dart';
 import 'package:work_log/app/work/application/state/work_input_list.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
@@ -34,7 +34,7 @@ class RegisterButton extends ConsumerWidget {
               for (final entry in inputWorkList.asMap().entries) {
                 final index = entry.key;
 
-                ref.read(selectedProductIdNotifierProvider(index)).when(
+                ref.read(selectedProductNotifierProvider(index)).when(
                     data: (data) {
                       final selectedProduct = data;
 
@@ -44,7 +44,7 @@ class RegisterButton extends ConsumerWidget {
                         workDateTime: value.workDateTime,
                         workDetail: value.workDetailController.text,
                         workMemo: value.workMemoController.text,
-                        productId: selectedProduct,
+                        productId: selectedProduct.id!,
                       );
                       registerWorks.add(inputWork);
                     },

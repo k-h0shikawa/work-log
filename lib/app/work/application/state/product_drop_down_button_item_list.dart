@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 part 'product_drop_down_button_item_list.g.dart';
 
@@ -11,9 +12,10 @@ class ProductDropDownButtonItemListNotifier
     final productList =
         await GetIt.I<WorkListUsecase>().fetchInProgressProductList();
     final dropDownButtonItems = <int, String>{};
-    for (var e in productList) {
+    for (final e in productList) {
       dropDownButtonItems[e.id!] = e.productName;
     }
+    if (dropDownButtonItems.isEmpty) dropDownButtonItems[-1] = '進行中商品が存在しません';
     // idを使用してproductListを降順にソート
     dropDownButtonItems.entries.toList().sort((a, b) => b.key.compareTo(a.key));
     return dropDownButtonItems;
@@ -30,9 +32,21 @@ class ProductDropDownButtonItemListNotifier
     state = AsyncValue<Map<int, String>>.data(productList);
   }
 
-  void removeItem(int productId) {
-    final productList = state as Map<int, String>;
-    productList.remove(productId);
+  void addItem(InProgressProduct product) {
+    final productList = state.value as Map<int, String>;
+    productList[product.id!] = product.productName;
+    if (product.id! != -1 && productList.containsKey(-1)) {
+      productList.remove(-1);
+    }
+    state = AsyncValue<Map<int, String>>.data(productList);
+  }
+
+  void removeItem(int? id) {
+    final productList = state.value as Map<int, String>;
+    productList.remove(id);
+    if (productList.isEmpty) {
+      productList[-1] = '進行中商品が存在しません';
+    }
     state = AsyncValue<Map<int, String>>.data(productList);
   }
 }

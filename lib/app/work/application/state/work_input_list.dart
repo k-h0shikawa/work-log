@@ -62,7 +62,7 @@ class WorkInputList extends _$WorkInputList {
     state.when(
         data: (data) {
           final workList = data;
-          // stateにデフォルトのWorkInputRowを追加
+          // 末尾のWorkInputRowを削除
           workList.removeAt(workList.length - 1);
           state = AsyncValue.data(workList);
         },
