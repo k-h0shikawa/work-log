@@ -35,12 +35,18 @@ class ProductDropDownButtonItemListNotifier
   void addItem(InProgressProduct product) {
     final productList = state.value as Map<int, String>;
     productList[product.id!] = product.productName;
+    if (product.id! != -1 && productList.containsKey(-1)) {
+      productList.remove(-1);
+    }
     state = AsyncValue<Map<int, String>>.data(productList);
   }
 
   void removeItem(int? id) {
     final productList = state.value as Map<int, String>;
     productList.remove(id);
+    if (productList.isEmpty) {
+      productList[-1] = '進行中商品が存在しません';
+    }
     state = AsyncValue<Map<int, String>>.data(productList);
   }
 }

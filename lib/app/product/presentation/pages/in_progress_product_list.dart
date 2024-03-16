@@ -95,14 +95,25 @@ class InProgressProductList extends ConsumerWidget {
                                   index++) {
                                 final selectedProductId = ref.read(
                                     selectedProductNotifierProvider(index));
-                                // productDropDownButtonItemにselectedProductIdが含まれていない場合、product.idを削除
-                                if (selectedProductId.value!.id != product.id) {
-                                  final notifier = ref.read(
-                                      productDropDownButtonItemListNotifierProvider(
-                                              index)
+
+                                if (selectedProductId.value!.id == product.id) {
+                                  final selectedProductNotifier = ref.read(
+                                      selectedProductNotifierProvider(index)
                                           .notifier);
-                                  notifier.removeItem(product.id);
+                                  if (updateProductList.isEmpty) {
+                                    // 進行中商品が存在しない場合、ダミーデータを追加
+                                    selectedProductNotifier.updateState(-1);
+                                  } else {
+                                    // 進行中商品が存在する場合、最新の商品を選択
+                                    selectedProductNotifier.updateState(
+                                        updateProductList.last.id!);
+                                  }
                                 }
+                                final notifier = ref.read(
+                                    productDropDownButtonItemListNotifierProvider(
+                                            index)
+                                        .notifier);
+                                notifier.removeItem(product.id);
                               }
 
                               // 成功時のフィードバック

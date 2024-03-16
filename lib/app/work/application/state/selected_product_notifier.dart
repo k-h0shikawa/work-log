@@ -29,6 +29,11 @@ class SelectedProductNotifier extends _$SelectedProductNotifier {
   }
 
   Future<void> updateState(int productId) async {
+    if (productId == -1) {
+      state = const AsyncValue.data(
+          InProgressProduct(id: -1, productName: '進行中商品が存在しません'));
+      return;
+    }
     state = AsyncValue.data(await GetIt.I<WorkListUsecase>()
         .fetchInProgressProductByWorkId(productId));
   }
