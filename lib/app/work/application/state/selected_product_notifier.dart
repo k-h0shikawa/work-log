@@ -32,7 +32,7 @@ class SelectedProductNotifier extends _$SelectedProductNotifier {
   }
 
   Future<void> updateState(int productId) async {
-    if (productId == -1) {
+    if (productId == NoProductStatus.productId) {
       state = const AsyncValue.data(InProgressProduct(
           id: NoProductStatus.productId,
           productName: NoProductStatus.productName));

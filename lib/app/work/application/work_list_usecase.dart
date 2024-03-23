@@ -2,6 +2,7 @@ import 'package:logger/logger.dart';
 import 'package:work_log/app/domain/config/no_product_status.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
+import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/work/infrastructure/work_list_repository.dart';
 
 class WorkListUsecase {
@@ -168,5 +169,20 @@ class WorkListUsecase {
 
   Future<InProgressProduct> fetchInProgressProductByWorkId(int productId) {
     return _repository.fetchInProgressProductByWorkId(productId);
+  }
+
+  String validateWorkList(List<Work> workList) {
+    for (final e in workList) {
+      if (e.productId == NoProductStatus.productId) {
+        return Messages.failureNoProductStatus;
+      }
+      if (e.workDetail.length > 20) {
+        return Messages.failureWorkDetailLength;
+      }
+      if (e.workMemo.length > 140) {
+        return Messages.failureWorkMemoLength;
+      }
+    }
+    return '';
   }
 }

@@ -27,4 +27,9 @@ class Messages {
   static const String failureSupplierNameLength = 'サプライヤー名は20文字以内で入力してください';
   static const String failureSupplierPersonNameLength =
       'サプライヤー担当者名は10文字以内で入力してください';
+
+  // 作業のバリデーションメッセージ
+  static const String failureNoProductStatus = '進行中の商品が存在しません';
+  static const String failureWorkDetailLength = '作業内容は20文字以内で入力してください';
+  static const String failureWorkMemoLength = '作業メモは140文字以内で入力してください';
 }
