@@ -1,4 +1,5 @@
 import 'package:logger/logger.dart';
+import 'package:work_log/app/domain/config/no_product_status.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:work_log/app/work/infrastructure/work_list_repository.dart';
@@ -131,26 +132,34 @@ class WorkListUsecase {
     try {
       final targetWorkList = await _repository.getWorksWithinDateRange(
           targetStartTime, targetEndTime);
-      // 対象日の業務がない場合はデフォルトの業務を返す
-      if (targetWorkList.isEmpty) {
-        final InProgressProduct inProgressProduct =
-            (await _repository.fetchInProgressProductList()).first;
-        return defaultWorkList.map((work) {
-          return Work(
-            workDateTime: DateTime(workDateTime.year, workDateTime.month,
-                    workDateTime.day, 9, 00)
-                .add(Duration(minutes: 30 * defaultWorkList.indexOf(work))),
-            workDetail: work.workDetail,
-            workMemo: work.workMemo,
-            productId: inProgressProduct.id!,
-            productName: inProgressProduct.productName,
-            createdOn: work.createdOn,
-            createdBy: work.createdBy,
-          );
-        }).toList();
-      } else {
+
+      // 対象日の業務がある場合は指定した日の業務を返す
+      if (targetWorkList.isNotEmpty) {
         return targetWorkList;
       }
+
+      // 対象日の業務がない場合はデフォルトの業務を返す
+      final inProgressProduct = await _repository.fetchInProgressProductList();
+      final productId = inProgressProduct.isEmpty
+          ? NoProductStatus.productId
+          : inProgressProduct.first.id!;
+      final productName = inProgressProduct.isEmpty
+          ? NoProductStatus.productName
+          : inProgressProduct.first.productName;
+
+      return defaultWorkList.map((work) {
+        return Work(
+          workDateTime: DateTime(workDateTime.year, workDateTime.month,
+                  workDateTime.day, 9, 00)
+              .add(Duration(minutes: 30 * defaultWorkList.indexOf(work))),
+          workDetail: work.workDetail,
+          workMemo: work.workMemo,
+          productId: productId,
+          productName: productName,
+          createdOn: work.createdOn,
+          createdBy: work.createdBy,
+        );
+      }).toList();
     } catch (e) {
       _logger.e(e);
       rethrow;

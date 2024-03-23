@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:work_log/app/domain/config/no_product_status.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/domain/entities/work.dart';
 import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
@@ -54,6 +55,12 @@ class DateSelectButtonState extends State<DateSelectButton>
               .where((element) => element.id == work.productId)
               .isEmpty) {
             dropDownButtonMenu[work.productId] = work.productName!;
+          }
+
+          //  進行中の商品が存在しないかつ未登録の場合の処理を追加
+          if (dropDownButtonMenu.isEmpty) {
+            dropDownButtonMenu[NoProductStatus.productId] =
+                NoProductStatus.productName;
           }
 
           // 商品IDのstateを更新

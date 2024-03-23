@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:work_log/app/domain/config/no_product_status.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
 part 'product_drop_down_button_item_list.g.dart';
@@ -15,7 +16,10 @@ class ProductDropDownButtonItemListNotifier
     for (final e in productList) {
       dropDownButtonItems[e.id!] = e.productName;
     }
-    if (dropDownButtonItems.isEmpty) dropDownButtonItems[-1] = '進行中商品が存在しません';
+    if (dropDownButtonItems.isEmpty) {
+      dropDownButtonItems[NoProductStatus.productId] =
+          NoProductStatus.productName;
+    }
     // idを使用してproductListを降順にソート
     dropDownButtonItems.entries.toList().sort((a, b) => b.key.compareTo(a.key));
     return dropDownButtonItems;
@@ -45,7 +49,7 @@ class ProductDropDownButtonItemListNotifier
     final productList = state.value as Map<int, String>;
     productList.remove(id);
     if (productList.isEmpty) {
-      productList[-1] = '進行中商品が存在しません';
+      productList[NoProductStatus.productId] = NoProductStatus.productName;
     }
     state = AsyncValue<Map<int, String>>.data(productList);
   }

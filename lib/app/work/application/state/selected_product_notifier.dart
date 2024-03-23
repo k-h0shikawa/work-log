@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:work_log/app/domain/config/no_product_status.dart';
 import 'package:work_log/app/domain/entities/in_progress_product.dart';
 import 'package:work_log/app/product/application/in_progress_product_list_usecase.dart';
 import 'package:work_log/app/work/application/work_list_usecase.dart';
@@ -25,13 +26,16 @@ class SelectedProductNotifier extends _$SelectedProductNotifier {
       return productIdList.last;
     }
     // 進行中の商品がない場合は、ダミーの商品IDを返す
-    return const InProgressProduct(id: -1, productName: '進行中商品が存在しません');
+    return const InProgressProduct(
+        id: NoProductStatus.productId,
+        productName: NoProductStatus.productName);
   }
 
   Future<void> updateState(int productId) async {
     if (productId == -1) {
-      state = const AsyncValue.data(
-          InProgressProduct(id: -1, productName: '進行中商品が存在しません'));
+      state = const AsyncValue.data(InProgressProduct(
+          id: NoProductStatus.productId,
+          productName: NoProductStatus.productName));
       return;
     }
     state = AsyncValue.data(await GetIt.I<WorkListUsecase>()
