@@ -1,11 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
+import 'package:work_log/app/domain/config/no_product_status.dart';
 import 'package:work_log/app/domain/entities/complete_product.dart';
 import 'package:work_log/app/domain/log/messages.dart';
 import 'package:work_log/app/product/application/complete_product_list_usecase.dart';
 import 'package:work_log/app/product/application/state/complete_product_list_notifier.dart';
 import 'package:work_log/app/product/application/state/in_progress_product_list_notifier.dart';
+import 'package:work_log/app/work/application/state/product_drop_down_button_item_list.dart';
+import 'package:work_log/app/work/application/state/selected_product_notifier.dart';
+import 'package:work_log/app/work/application/state/work_input_list.dart';
 
 class CompleteProductList extends ConsumerWidget {
   const CompleteProductList({super.key});
@@ -76,6 +82,27 @@ class CompleteProductList extends ConsumerWidget {
       final inProgressProductList = await GetIt.I<CompleteProductListUsecase>()
           .fetchInProgressProductList();
       inProgressProductNotifier.updateState(inProgressProductList);
+      final workListLength = ref.read(workInputListProvider).value!.length;
+
+      // inProgressProductListをMap<int, String>へ変換
+      final dropDownButtonMenu = <int, String>{};
+      for (final e in inProgressProductList) {
+        dropDownButtonMenu[e.id!] = e.productName;
+      }
+
+      for (var index = 0; index < workListLength; index++) {
+        final notifier = ref.read(
+            productDropDownButtonItemListNotifierProvider(index).notifier);
+        notifier.updateState(dropDownButtonMenu);
+
+        final selectedProductId =
+            ref.read(selectedProductNotifierProvider(index));
+        if (selectedProductId.value!.id == NoProductStatus.productId) {
+          final selectedProductNotifier =
+              ref.read(selectedProductNotifierProvider(index).notifier);
+          selectedProductNotifier.updateState(product.id!);
+        }
+      }
       // 成功時のフィードバックを追加
       scaffoldMessenger.showSnackBar(
         SnackBar(
