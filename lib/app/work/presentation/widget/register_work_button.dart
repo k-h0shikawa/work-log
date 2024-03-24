@@ -52,6 +52,19 @@ class RegisterButton extends ConsumerWidget {
                     loading: () => const CircularProgressIndicator());
               }
 
+              // 作業リストのバリデーションを作成
+              final errorMessage =
+                  GetIt.I<WorkListUsecase>().validateWorkList(registerWorks);
+
+              if (errorMessage.isNotEmpty) {
+                scaffoldMessenger.showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text(errorMessage),
+                  ),
+                );
+                return;
+              }
               // 作業リストを登録
               final workList =
                   await GetIt.I<WorkListUsecase>().saveWork(registerWorks);
@@ -74,16 +87,15 @@ class RegisterButton extends ConsumerWidget {
               final workInputListNotifier =
                   ref.read(workInputListProvider.notifier);
               workInputListNotifier.setState(inputWorkListValue);
+              scaffoldMessenger.showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.green,
+                  content: Text(Messages.successRegisterWork),
+                ),
+              );
             },
             error: (error, stackTrace) => const Text('Error'),
             loading: () => const CircularProgressIndicator());
-
-        scaffoldMessenger.showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(Messages.successRegisterWork),
-          ),
-        );
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black,

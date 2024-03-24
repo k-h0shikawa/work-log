@@ -1,6 +1,7 @@
 class Messages {
   static const String failureUpdate = 'データの更新に失敗しました';
   static const String failureFetch = 'データの取得に失敗しました';
+
   static String successConvertProductToInProgress(String productName) {
     return '$productName のステータスを進行中に変更しました';
   }
@@ -27,4 +28,10 @@ class Messages {
   static const String failureSupplierNameLength = 'サプライヤー名は20文字以内で入力してください';
   static const String failureSupplierPersonNameLength =
       'サプライヤー担当者名は10文字以内で入力してください';
+
+  // 作業のバリデーションメッセージ
+  static const String failureWorkDateTime = '作業日時が30日以上前の日付です';
+  static const String failureNoProductStatus = '進行中の商品が存在しません';
+  static const String failureWorkDetailLength = '作業内容は20文字以内で入力してください';
+  static const String failureWorkMemoLength = '作業メモは140文字以内で入力してください';
 }
