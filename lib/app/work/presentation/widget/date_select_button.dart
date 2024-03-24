@@ -13,12 +13,7 @@ import 'package:work_log/app/work/application/work_list_usecase.dart';
 import 'package:work_log/app/work/presentation/widget/work_input_row.dart';
 
 class DateSelectButton extends StatefulWidget {
-  final ValueNotifier<List<InProgressProduct>> productList;
-
-  const DateSelectButton({
-    Key? key,
-    required this.productList,
-  }) : super(key: key);
+  const DateSelectButton({Key? key}) : super(key: key);
 
   @override
   DateSelectButtonState createState() => DateSelectButtonState();
@@ -39,19 +34,20 @@ class DateSelectButtonState extends State<DateSelectButton>
       // providerを使ってtargetDateを取得
       final targetDate = ref.watch(workDateNotifierProvider);
 
-      List<WorkInputRow> convertWorkListToInputWorkList(List<Work> workList) {
+      List<WorkInputRow> convertWorkListToInputWorkList(
+          List<Work> workList, List<InProgressProduct> productList) {
         return workList.asMap().entries.map((entry) {
           final index = entry.key;
           final work = entry.value;
           // 進行中の商品名のドロップダウンリストを作成
           final dropDownButtonMenu = <int, String>{};
 
-          for (final product in widget.productList.value) {
+          for (final product in productList) {
             dropDownButtonMenu[product.id!] = product.productName;
           }
 
           // 未登録の商品をドロップダウンリストに追加
-          if (widget.productList.value
+          if (productList
               .where((element) => element.id == work.productId)
               .isEmpty) {
             dropDownButtonMenu[work.productId] = work.productName!;
@@ -102,12 +98,14 @@ class DateSelectButtonState extends State<DateSelectButton>
           // targetDateが更新されたら、inputWorkListも更新する
           final workList =
               await GetIt.I<WorkListUsecase>().fetchWorkListByDate(picked);
+          final productList = await GetIt.I<WorkListUsecase>()
+              .fetchInProgressProductList(); // WorkListUsecaseからproductListを取得
 
           // workListの内容をinputWorkListへ詰め替える
           final workInputListNotifier =
               ref.read(workInputListProvider.notifier);
           workInputListNotifier
-              .setState(convertWorkListToInputWorkList(workList));
+              .setState(convertWorkListToInputWorkList(workList, productList));
         }
       }
 

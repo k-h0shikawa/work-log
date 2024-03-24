@@ -61,7 +61,8 @@ class InProgressProductList extends ConsumerWidget {
 
   Widget _buildProductList(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(inProgressProductListNotifierProvider.notifier);
-    final workListLength = ref.read(workInputListProvider).value!.length;
+    final workList = ref.read(workInputListProvider).value;
+    final workListLength = workList!.length;
 
     return ref.watch(inProgressProductListNotifierProvider).when(
         data: (inProgressProductList) {
@@ -97,23 +98,26 @@ class InProgressProductList extends ConsumerWidget {
                                     selectedProductNotifierProvider(index));
 
                                 if (selectedProductId.value!.id == product.id) {
-                                  final selectedProductNotifier = ref.read(
-                                      selectedProductNotifierProvider(index)
-                                          .notifier);
-                                  if (updateProductList.isEmpty) {
-                                    // 進行中商品が存在しない場合、ダミーデータを追加
-                                    selectedProductNotifier.updateState(-1);
-                                  } else {
-                                    // 進行中商品が存在する場合、最新の商品を選択
-                                    selectedProductNotifier.updateState(
-                                        updateProductList.last.id!);
+                                  if (workList[index].workId != null) {
+                                    final selectedProductNotifier = ref.read(
+                                        selectedProductNotifierProvider(index)
+                                            .notifier);
+                                    if (updateProductList.isEmpty) {
+                                      // 進行中商品が存在しない場合、ダミーデータを追加
+                                      selectedProductNotifier.updateState(-1);
+                                    } else {
+                                      // 進行中商品が存在する場合、最新の商品を選択
+                                      selectedProductNotifier.updateState(
+                                          updateProductList.last.id!);
+                                    }
                                   }
+                                } else {
+                                  final notifier = ref.read(
+                                      productDropDownButtonItemListNotifierProvider(
+                                              index)
+                                          .notifier);
+                                  notifier.removeItem(product.id);
                                 }
-                                final notifier = ref.read(
-                                    productDropDownButtonItemListNotifierProvider(
-                                            index)
-                                        .notifier);
-                                notifier.removeItem(product.id);
                               }
 
                               // 成功時のフィードバック

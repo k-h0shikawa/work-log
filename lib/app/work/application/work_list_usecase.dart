@@ -173,6 +173,10 @@ class WorkListUsecase {
 
   String validateWorkList(List<Work> workList) {
     for (final e in workList) {
+      if (e.workDateTime
+          .isBefore(DateTime.now().subtract(const Duration(days: 30)))) {
+        return Messages.failureWorkDateTime;
+      }
       if (e.productId == NoProductStatus.productId) {
         return Messages.failureNoProductStatus;
       }
